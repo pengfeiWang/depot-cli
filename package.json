@@ -25,9 +25,7 @@
     "url": "https://github.com/pengfeiWang/depot-cli/issues"
   },
   "homepage": "https://github.com/pengfeiWang/depot-cli.git",
-  "authors": [
-    "pengfeiWang"
-  ],
+  "authors": "pengfeiwang",
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.40",
     "@babel/core": "^7.0.0-beta.40",
@@ -104,18 +102,5 @@
     "eslint-config-umi": "^0.1.3",
     "fs-extra": "^5.0.0",
     "globby": "^7.1.1"
-  },
-  "files": [
-    "./packages/depot/lib",
-    "./packages/depot/src",
-    "./packages/depot/bin",
-    "./packages/depot/babel.js",
-    "./packages/depot/dynamic.d.ts",
-    "./packages/depot/link.d.ts",
-    "./packages/depot/router.d.ts",
-    "./packages/depot/event.d.ts",
-    "./packages/build-dev/lib",
-    "./packages/build-dev/src",
-    "./packages/build-dev/template"
-  ]
+  }
 }

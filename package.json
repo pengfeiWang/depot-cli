@@ -101,7 +101,7 @@
     "globby": "^7.1.1"
   },
   "bin": {
-    "depot": "./packages/bin/depot.js"
+    "depot": "./bin/depot.js"
   },
   "files": [
     "./packages/depot/lib",

@@ -11,7 +11,10 @@
     "publish": "./scripts/publish.js"
   },
   "lint-staged": {
-    "src/**/*.js": "eslint"
+    "*.js": [
+      "prettier --trailing-comma all --single-quote --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",

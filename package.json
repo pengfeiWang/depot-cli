@@ -50,7 +50,6 @@
     "vinyl-fs": "^3.0.2",
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
-    
     "address": "^1.0.3",
     "af-webpack": "^0.17.2",
     "antd": "^3.0.0",

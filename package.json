@@ -1,6 +1,6 @@
 {
   "name": "depot-cli",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "framework for React apps.",
   "bin": {
     "depot": "./bin/depot"
@@ -25,7 +25,9 @@
     "url": "https://github.com/pengfeiWang/depot-cli/issues"
   },
   "homepage": "https://github.com/pengfeiWang/depot-cli.git",
-  "authors": [ "pengfeiWang" ],
+  "authors": [
+    "pengfeiWang"
+  ],
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.40",
     "@babel/core": "^7.0.0-beta.40",

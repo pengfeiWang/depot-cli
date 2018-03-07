@@ -1,14 +1,12 @@
 {
-  "name": "depot",
+  "name": "depot-cli",
   "version": "2.0.0",
   "description": "framework for React apps.",
-  "private": true,
   "scripts": {
     "build": "node scripts/build.js",
     "debug": "lerna run debug",
     "lint": "eslint --ext .js packages",
-    "precommit": "lint-staged",
-    "publish": "./scripts/publish.js"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [
@@ -103,7 +101,7 @@
     "globby": "^7.1.1"
   },
   "bin": {
-    "depot": "./bin/depot.js"
+    "depot": "./packages/bin/depot.js"
   },
   "files": [
     "./packages/depot/lib",

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.PLACEHOLDER_HISTORY_MODIFIER = exports.PLACEHOLDER_ROUTER = exports.PLACEHOLDER_RENDER = exports.PLACEHOLDER_ROUTER_MODIFIER = exports.PLACEHOLDER_IMPORT = exports.GLOBAL_LESS = exports.COMMON_FILE_NAME = exports.PAGES_FILE_NAME = exports.MOCK_FILE_NAME = exports.CONFIG_FILES = exports.LIBRARY_NAME = exports.ROUTE_FILES = exports.ROUTES_CONFIG_FILE = void 0;
 const libraryName = 'depot';

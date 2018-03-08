@@ -1,16 +1,14 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.watch = watch;
 exports.unwatch = unwatch;
 
-var _chokidar = _interopRequireDefault(require('chokidar'));
+var _chokidar = _interopRequireDefault(require("chokidar"));
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // 按 key 存，值为数组
 const watchers = {};
@@ -21,7 +19,7 @@ function watch(key, files) {
   }
 
   const watcher = _chokidar.default.watch(files, {
-    ignoreInitial: true,
+    ignoreInitial: true
   });
 
   watchers[key].push(watcher);

@@ -1,27 +1,25 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = void 0;
 
-var _path = require('path');
+var _path = require("path");
 
-var _ejs = _interopRequireDefault(require('ejs'));
+var _ejs = _interopRequireDefault(require("ejs"));
 
-var _mkdirp = require('mkdirp');
+var _mkdirp = require("mkdirp");
 
-var _assert = _interopRequireDefault(require('assert'));
+var _assert = _interopRequireDefault(require("assert"));
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _htmlMinifier = require('html-minifier');
+var _htmlMinifier = require("html-minifier");
 
-var _normalizeEntry = _interopRequireDefault(require('./normalizeEntry'));
+var _normalizeEntry = _interopRequireDefault(require("./normalizeEntry"));
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const debug = require('debug')('umi:HtmlGenerator');
 
@@ -41,17 +39,16 @@ class HtmlGenerator {
   // /a/b  /a/b/index.html   /a/b.html
   */
 
+
   getHtmlPath(path) {
     const config = this.service.config;
-    const htmlSuffix =
-      config.exportStatic &&
-      typeof config.exportStatic === 'object' &&
-      config.exportStatic.htmlSuffix;
+    const htmlSuffix = config.exportStatic && typeof config.exportStatic === 'object' && config.exportStatic.htmlSuffix;
     path = path.slice(1);
 
     if (path === '') {
       return 'index.html';
     } // remove last slash
+
 
     path = path.replace(/\/$/, '');
 
@@ -62,11 +59,12 @@ class HtmlGenerator {
     }
   } // 仅在 build 时调用
 
+
   generate() {
     const _service = this.service,
-      config = _service.config,
-      routes = _service.routes,
-      paths = _service.paths;
+          config = _service.config,
+          routes = _service.routes,
+          paths = _service.paths;
 
     if (config.exportStatic) {
       const pagesConfig = config.pages || {};
@@ -74,12 +72,9 @@ class HtmlGenerator {
         const path = route.path;
         const content = this.getContent({
           route,
-          pageConfig: pagesConfig[path],
+          pageConfig: pagesConfig[path]
         });
-        const outputPath = (0, _path.join)(
-          paths.absOutputPath,
-          this.getHtmlPath(path),
-        );
+        const outputPath = (0, _path.join)(paths.absOutputPath, this.getHtmlPath(path));
         (0, _mkdirp.sync)((0, _path.dirname)(outputPath));
         (0, _fs.writeFileSync)(outputPath, content, 'utf-8');
       });
@@ -92,36 +87,30 @@ class HtmlGenerator {
 
   getContent(opts = {}) {
     const _opts$pageConfig = opts.pageConfig,
-      pageConfig = _opts$pageConfig === void 0 ? {} : _opts$pageConfig,
-      _opts$route = opts.route,
-      route = _opts$route === void 0 ? {} : _opts$route;
+          pageConfig = _opts$pageConfig === void 0 ? {} : _opts$pageConfig,
+          _opts$route = opts.route,
+          route = _opts$route === void 0 ? {} : _opts$route;
     const _service2 = this.service,
-      paths = _service2.paths,
-      webpackConfig = _service2.webpackConfig;
+          paths = _service2.paths,
+          webpackConfig = _service2.webpackConfig;
     const document = pageConfig.document,
-      context = pageConfig.context; // e.g.
+          context = pageConfig.context; // e.g.
     // path: /user.html
     // component: ./user/page.js
     // entry: ./user
 
     const path = route.path,
-      component = route.component;
-    const customDocPath = document
-      ? (0, _path.join)(paths.cwd, document)
-      : paths.absPageDocumentPath;
-    const docPath = (0, _fs.existsSync)(customDocPath)
-      ? customDocPath
-      : paths.defaultDocumentPath;
+          component = route.component;
+    const customDocPath = document ? (0, _path.join)(paths.cwd, document) : paths.absPageDocumentPath;
+    const docPath = (0, _fs.existsSync)(customDocPath) ? customDocPath : paths.defaultDocumentPath;
     const tpl = (0, _fs.readFileSync)(docPath, 'utf-8');
 
     let html = _ejs.default.render(tpl, context, {
       _with: false,
-      localsName: 'context',
+      localsName: 'context'
     });
 
-    let relPath = path
-      ? new Array(path.slice(1).split(_path.sep).length).join('../')
-      : '';
+    let relPath = path ? new Array(path.slice(1).split(_path.sep).length).join('../') : '';
     relPath = relPath === '' ? './' : relPath; // set publicPath
 
     let publicPath = webpackConfig.output.publicPath;
@@ -130,27 +119,16 @@ class HtmlGenerator {
     let pathToScript = publicPath;
     debug(`publicPath: ${publicPath}`);
 
-    if (
-      !(
-        publicPath.charAt(0) === '/' ||
-        publicPath.indexOf('http://') === 0 ||
-        publicPath.indexOf('https://') === 0 ||
-        /* 变量 */
-        publicPath === '{{ publicPath }}'
-      )
-    ) {
+    if (!(publicPath.charAt(0) === '/' || publicPath.indexOf('http://') === 0 || publicPath.indexOf('https://') === 0 ||
+    /* 变量 */
+    publicPath === '{{ publicPath }}')) {
       // 相对路径时需和 routerBase 匹配使用，否则子文件夹路由会出错
-      resourceBaseUrl = `location.origin + window.routerBase + '${stripFirstSlash(
-        publicPath,
-      )}'`;
+      resourceBaseUrl = `location.origin + window.routerBase + '${stripFirstSlash(publicPath)}'`;
       pathToScript = `${relPath}${publicPath}`;
     }
 
     function getAssetsPath(file) {
-      return `${pathToScript}${stripFirstSlash(file)}`.replace(
-        /^\.\/\.\//,
-        './',
-      );
+      return `${pathToScript}${stripFirstSlash(file)}`.replace(/^\.\/\.\//, './');
     }
 
     let routerBase;
@@ -158,10 +136,7 @@ class HtmlGenerator {
     if (process.env.BASE_URL) {
       routerBase = JSON.stringify(process.env.BASE_URL);
     } else {
-      routerBase = path
-        ? `location.pathname.split('/').slice(0, -${path.split('/').length -
-            1}).concat('').join('/')`
-        : `'/'`;
+      routerBase = path ? `location.pathname.split('/').slice(0, -${path.split('/').length - 1}).concat('').join('/')` : `'/'`;
     }
 
     let inlineScriptContent = `
@@ -171,17 +146,13 @@ class HtmlGenerator {
 </script>
     `.trim();
     inlineScriptContent = this.service.applyPlugins('modifyHTMLScript', {
-      initialValue: inlineScriptContent,
+      initialValue: inlineScriptContent
     });
     const isDev = process.env.NODE_ENV === 'development';
     const cssFiles = isDev ? [] : this.getCSSFiles(component);
-    const cssContent = cssFiles
-      .map(file => `<link rel="stylesheet" href="${getAssetsPath(file)}" />`)
-      .join('\r\n');
+    const cssContent = cssFiles.map(file => `<link rel="stylesheet" href="${getAssetsPath(file)}" />`).join('\r\n');
     const jsFiles = this.getJSFiles(component);
-    const jsContent = jsFiles
-      .map(file => `<script src="${getAssetsPath(file)}"></script>`)
-      .join('\r\n');
+    const jsContent = jsFiles.map(file => `<script src="${getAssetsPath(file)}"></script>`).join('\r\n');
     const injectContent = `
 ${cssContent}
 ${inlineScriptContent}
@@ -192,17 +163,14 @@ ${jsContent}
     html = this.service.applyPlugins('modifyHTML', {
       initialValue: html,
       args: {
-        route,
-      },
+        route
+      }
     }); // Minify html content
 
-    if (
-      process.env.NODE_ENV === 'production' &&
-      process.env.COMPRESS !== 'none'
-    ) {
+    if (process.env.NODE_ENV === 'production' && process.env.COMPRESS !== 'none') {
       html = (0, _htmlMinifier.minify)(html, {
         removeAttributeQuotes: true,
-        collapseWhitespace: true,
+        collapseWhitespace: true
       });
     }
 
@@ -211,14 +179,13 @@ ${jsContent}
 
   getJSFiles(component) {
     const _service3 = this.service,
-      libraryName = _service3.libraryName,
-      config = _service3.config;
+          libraryName = _service3.libraryName,
+          config = _service3.config;
     const files = [];
 
     try {
       files.push(this.getFile(libraryName, '.js'));
-    } catch (e) {
-      // do nothing
+    } catch (e) {// do nothing
     }
 
     const isDev = process.env.NODE_ENV === 'development';
@@ -226,18 +193,14 @@ ${jsContent}
     if (!isDev && config.exportStatic) {
       try {
         files.push(this.getFile(`__common-${libraryName}`, '.js'));
-      } catch (e) {
-        // do nothing
+      } catch (e) {// do nothing
       }
 
       try {
         if (component) {
-          files.push(
-            this.getFile((0, _normalizeEntry.default)(component), '.js'),
-          );
+          files.push(this.getFile((0, _normalizeEntry.default)(component), '.js'));
         }
-      } catch (e) {
-        // do nothing
+      } catch (e) {// do nothing
       }
     }
 
@@ -250,18 +213,14 @@ ${jsContent}
 
     try {
       files.push(this.getFile(libraryName, '.css'));
-    } catch (e) {
-      // do nothing
+    } catch (e) {// do nothing
     }
 
     try {
       if (component) {
-        files.push(
-          this.getFile((0, _normalizeEntry.default)(component), '.css'),
-        );
+        files.push(this.getFile((0, _normalizeEntry.default)(component), '.css'));
       }
-    } catch (e) {
-      // do nothing
+    } catch (e) {// do nothing
     }
 
     return files;
@@ -273,22 +232,13 @@ ${jsContent}
     }
 
     const files = this.chunksMap[name];
-    (0, _assert.default)(
-      files,
-      `name ${name} don't exists in chunksMap ${JSON.stringify(
-        this.chunksMap,
-      )}`,
-    );
+    (0, _assert.default)(files, `name ${name} don't exists in chunksMap ${JSON.stringify(this.chunksMap)}`);
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-      for (
-        var _iterator = files[Symbol.iterator](), _step;
-        !(_iteratorNormalCompletion = (_step = _iterator.next()).done);
-        _iteratorNormalCompletion = true
-      ) {
+      for (var _iterator = files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         const file = _step.value;
 
         if ((0, _path.extname)(file) === type) {
@@ -310,12 +260,9 @@ ${jsContent}
       }
     }
 
-    throw new Error(
-      `getFile failed:\nmap: ${JSON.stringify(
-        this.chunksMap,
-      )}\nname: ${name}\ntype: ${type}`,
-    );
+    throw new Error(`getFile failed:\nmap: ${JSON.stringify(this.chunksMap)}\nname: ${name}\ntype: ${type}`);
   }
+
 }
 
 exports.default = HtmlGenerator;

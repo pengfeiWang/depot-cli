@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
-var _path = require('path');
+var _path = require("path");
 
-var _fs = require('fs');
+var _fs = require("fs");
 
 const EXTNAMES = ['.js', '.jsx', '.ts', '.tsx'];
 
@@ -18,9 +18,7 @@ function _default(api) {
   function get404JS() {
     for (var _i = 0; _i < EXTNAMES.length; _i++) {
       const extname = EXTNAMES[_i];
-      const filePath = winPath(
-        (0, _path.join)(paths.absPagesPath, `404${extname}`),
-      );
+      const filePath = winPath((0, _path.join)(paths.absPagesPath, `404${extname}`));
 
       if ((0, _fs.existsSync)(filePath)) {
         return filePath;
@@ -28,7 +26,9 @@ function _default(api) {
     }
   }
 
-  api.register('modifyRoutesContent', ({ memo }) => {
+  api.register('modifyRoutesContent', ({
+    memo
+  }) => {
     const filePath = get404JS();
 
     if (filePath) {
@@ -37,25 +37,19 @@ function _default(api) {
 
     return memo;
   });
-  api.register('beforeServer', ({ args: { devServer } }) => {
+  api.register('beforeServer', ({
+    args: {
+      devServer
+    }
+  }) => {
     function UMI_PLUGIN_404(req, res, next) {
       if (req.accepts('html')) {
-        let pageContent = (0, _fs.readFileSync)(
-          (0, _path.join)(__dirname, '../../../template/404.html'),
-          'utf-8',
-        );
-        pageContent = pageContent
-          .replace('<%= PAGES_PATH %>', paths.pagesPath)
-          .replace(
-            '<%= PAGES_LIST %>',
-            api.service.routes
-              .map(route => {
-                return `<li><a href="${route.path}">${route.path}</a></li>`;
-              })
-              .join('\r\n'),
-          );
+        let pageContent = (0, _fs.readFileSync)((0, _path.join)(__dirname, '../../../template/404.html'), 'utf-8');
+        pageContent = pageContent.replace('<%= PAGES_PATH %>', paths.pagesPath).replace('<%= PAGES_LIST %>', api.service.routes.map(route => {
+          return `<li><a href="${route.path}">${route.path}</a></li>`;
+        }).join('\r\n'));
         res.writeHead(404, {
-          'Content-Type': 'text/html',
+          'Content-Type': 'text/html'
         });
         res.write(pageContent);
         res.end();

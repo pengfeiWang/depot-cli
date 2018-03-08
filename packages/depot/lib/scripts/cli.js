@@ -1,20 +1,18 @@
-'use strict';
+"use strict";
 
-var _slash = _interopRequireDefault(require('slash'));
+var _slash = _interopRequireDefault(require("slash"));
 
-var _mkdirp = require('mkdirp');
+var _mkdirp = require("mkdirp");
 
-var _path = require('path');
+var _path = require("path");
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _chalk = _interopRequireDefault(require('chalk'));
+var _chalk = _interopRequireDefault(require("chalk"));
 
-var _fsExtra = require('fs-extra');
+var _fsExtra = require("fs-extra");
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import fork from '../../../build-dev/lib/fork';
 // fork(require.resolve('./realDev.js'));
@@ -65,10 +63,7 @@ if ((0, _fs.existsSync)(directory)) {
 
 console.log(_chalk.default.green(`Commands: cli `));
 console.log(_chalk.default.green(`  Create: ${directory}`));
-(0, _fsExtra.copySync)(
-  winPath((0, _path.join)(__dirname, '../../template')),
-  directory,
-);
+(0, _fsExtra.copySync)(winPath((0, _path.join)(__dirname, '../../template')), directory);
 (0, _fsExtra.removeSync)(winPath((0, _path.join)(directory, '.DS_Store')));
 (0, _fs.readdirSync)(directory).forEach(file => {
   const filePath = winPath((0, _path.join)(directory, file));

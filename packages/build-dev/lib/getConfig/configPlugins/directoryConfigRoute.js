@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
@@ -12,9 +12,9 @@ function _default(api) {
 
     onChange() {
       api.service.restart(
-        /* why */
-        'Config directoryConfigRoute Changed',
-      );
-    },
+      /* why */
+      'Config directoryConfigRoute Changed');
+    }
+
   };
 }

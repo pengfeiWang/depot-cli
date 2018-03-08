@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
-var _path = require('path');
+var _path = require("path");
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _constants = require('./constants');
+var _constants = require("./constants");
 
 function test(path) {
   return (0, _fs.existsSync)(path) && (0, _fs.statSync)(path).isDirectory();
@@ -21,9 +21,9 @@ function template(path) {
 
 function _default(service) {
   const cwd = service.cwd,
-    tmpDirectory = service.tmpDirectory,
-    outputPath = service.outputPath,
-    libraryName = service.libraryName;
+        tmpDirectory = service.tmpDirectory,
+        outputPath = service.outputPath,
+        libraryName = service.libraryName;
   let pagesPath = _constants.PAGES_FILE_NAME;
 
   if (process.env.PAGES_PATH) {
@@ -35,6 +35,7 @@ function _default(service) {
   } // if (test(join(cwd, 'src/pages'))) {
   //   pagesPath = 'src/pages';
   // }
+
 
   const absPagesPath = (0, _path.join)(cwd, pagesPath);
   const absSrcPath = (0, _path.join)(cwd, './src');
@@ -54,14 +55,11 @@ function _default(service) {
     absGlobalStyle: (0, _path.join)(absSrcPath, _constants.GLOBAL_LESS),
     absRouterJSPath: (0, _path.join)(absTmpDirPath, 'router.js'),
     absLibraryJSPath: (0, _path.join)(absTmpDirPath, `${libraryName}.js`),
-    absRegisterSWJSPath: (0, _path.join)(
-      absTmpDirPath,
-      'registerServiceWorker.js',
-    ),
+    absRegisterSWJSPath: (0, _path.join)(absTmpDirPath, 'registerServiceWorker.js'),
     absPageDocumentPath: (0, _path.join)(absPagesPath, 'document.ejs'),
     defaultEntryTplPath: template('entry.js.tpl'),
     defaultRouterTplPath: template('router.js.tpl'),
     defaultRegisterSWTplPath: template('registerServiceWorker.js'),
-    defaultDocumentPath: template('document.ejs'),
+    defaultDocumentPath: template('document.ejs')
   };
 }

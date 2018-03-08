@@ -1,36 +1,19 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _path = require('path');
+var _path = require("path");
 
-var _winPath = _interopRequireDefault(require('./winPath'));
+var _winPath = _interopRequireDefault(require("./winPath"));
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _extends() {
-  _extends =
-    Object.assign ||
-    function(target) {
-      for (var i = 1; i < arguments.length; i++) {
-        var source = arguments[i];
-        for (var key in source) {
-          if (Object.prototype.hasOwnProperty.call(source, key)) {
-            target[key] = source[key];
-          }
-        }
-      }
-      return target;
-    };
-  return _extends.apply(this, arguments);
-}
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _default(paths, config = {}) {
   // let routes = [];
@@ -39,15 +22,10 @@ function _default(paths, config = {}) {
   if (config.exportStatic) {
     routes.forEach(route => {
       if (route.path.indexOf(':') > -1) {
-        throw new Error(
-          `Variable path ${route.path} don\'t work with exportStatic`,
-        );
+        throw new Error(`Variable path ${route.path} don\'t work with exportStatic`);
       }
 
-      if (
-        typeof config.exportStatic === 'object' &&
-        config.exportStatic.htmlSuffix
-      ) {
+      if (typeof config.exportStatic === 'object' && config.exportStatic.htmlSuffix) {
         route.path = addHtmlSuffix(route.path);
       }
     });
@@ -73,11 +51,7 @@ function renderPath(modulePath) {
     return '/';
   }
 
-  if (
-    /^\.\/[\w]+/.test(modulePath) ||
-    /\/$/.test(modulePath) ||
-    /\./.test(modulePath)
-  ) {
+  if (/^\.\/[\w]+/.test(modulePath) || /\/$/.test(modulePath) || /\./.test(modulePath)) {
     if (/\.jsx?$/.test(modulePath)) {
       return modulePath;
     }
@@ -88,16 +62,17 @@ function renderPath(modulePath) {
   }
 } // 目录型
 
+
 function getRoutesByPagesDir(paths, dirPath = '', config) {
   const closeModules = config.closeModules;
   const cwd = paths.cwd,
-    absPagesPath = paths.absPagesPath;
+        absPagesPath = paths.absPagesPath;
   let ret = []; // eslint-disable-line
   // 保存1级 routePath
 
   const routeJsonInfo = {
     cwd,
-    routeJSON: {},
+    routeJSON: {}
   }; // eslint-disable-line
 
   const path = (0, _path.join)(absPagesPath, dirPath);
@@ -126,7 +101,7 @@ function getRoutesByPagesDir(paths, dirPath = '', config) {
               }
 
               routeJsonInfo.routeJSON[config.routePath] = _extends({}, config, {
-                moduleRoot,
+                moduleRoot
               }); // const tmpObj = {
               //   config,
               //   cwd,
@@ -150,7 +125,7 @@ function getRoutesByPagesDir(paths, dirPath = '', config) {
 function getChildRouteByPagesDir(routeJsonInfo) {
   let ret = [];
   const routeJSON = routeJsonInfo.routeJSON,
-    cwd = routeJsonInfo.cwd;
+        cwd = routeJsonInfo.cwd;
   const routeArr = Object.keys(routeJSON);
   routeArr.forEach(it => {
     // 通过 key 取 值
@@ -162,34 +137,26 @@ function getChildRouteByPagesDir(routeJsonInfo) {
 function getRouteJsonToArray(routeItem, cwd) {
   const ret = [];
   const routePath = routeItem.routePath,
-    children = routeItem.children,
-    modulePath = routeItem.modulePath,
-    title = routeItem.title,
-    icon = routeItem.icon,
-    layout = routeItem.layout,
-    moduleRoot = routeItem.moduleRoot;
+        children = routeItem.children,
+        modulePath = routeItem.modulePath,
+        title = routeItem.title,
+        icon = routeItem.icon,
+        layout = routeItem.layout,
+        moduleRoot = routeItem.moduleRoot;
   let componentPath = modulePath;
   const filePath = (0, _path.relative)(cwd, moduleRoot);
-  componentPath = `${filePath}/${renderPath(
-    modulePath,
-    (0, _path.relative)(cwd, moduleRoot),
-  )}`;
+  componentPath = `${filePath}/${renderPath(modulePath, (0, _path.relative)(cwd, moduleRoot))}`;
   const currentRoot = routePath;
 
   function getChild(childrenItem, patentPath = '') {
     if (!childrenItem.modulePath) return;
     const patentPathLast = patentPath ? `${patentPath}/` : '/';
-    const childModPath = `${filePath}/${renderPath(
-      childrenItem.modulePath,
-      (0, _path.relative)(cwd, moduleRoot),
-    )}`;
+    const childModPath = `${filePath}/${renderPath(childrenItem.modulePath, (0, _path.relative)(cwd, moduleRoot))}`;
     if (childModPath === moduleRoot) return;
     ret.push({
-      path: replacePath(
-        `${currentRoot}/${patentPathLast}${childrenItem.routePath}`,
-      ),
+      path: replacePath(`${currentRoot}/${patentPathLast}${childrenItem.routePath}`),
       exact: true,
-      component: childModPath,
+      component: childModPath
     });
   }
 
@@ -199,7 +166,7 @@ function getRouteJsonToArray(routeItem, cwd) {
       exact: true,
       title,
       icon,
-      component: componentPath,
+      component: componentPath
     });
     children.forEach(it => {
       if (it.children && it.children.length) {
@@ -214,7 +181,7 @@ function getRouteJsonToArray(routeItem, cwd) {
       exact: true,
       title,
       icon,
-      component: componentPath,
+      component: componentPath
     });
   }
 

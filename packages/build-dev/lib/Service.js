@@ -1,112 +1,80 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = void 0;
 
-var _rimraf = require('rimraf');
+var _rimraf = require("rimraf");
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _path = require('path');
+var _path = require("path");
 
-var _getUserConfig = _interopRequireWildcard(
-  require('af-webpack/getUserConfig'),
-);
+var _getUserConfig = _interopRequireWildcard(require("af-webpack/getUserConfig"));
 
-var _reactDevUtils = require('af-webpack/react-dev-utils');
+var _reactDevUtils = require("af-webpack/react-dev-utils");
 
-var _chalk = _interopRequireDefault(require('chalk'));
+var _chalk = _interopRequireDefault(require("chalk"));
 
-var _getPaths = _interopRequireDefault(require('./getPaths'));
+var _getPaths = _interopRequireDefault(require("./getPaths"));
 
-var _getRouteConfig = _interopRequireDefault(require('./getRouteConfig'));
+var _getRouteConfig = _interopRequireDefault(require("./getRouteConfig"));
 
-var _registerBabel = _interopRequireDefault(require('./registerBabel'));
+var _registerBabel = _interopRequireDefault(require("./registerBabel"));
 
-var _watch = require('./getConfig/watch');
+var _watch = require("./getConfig/watch");
 
-var _UserConfig = _interopRequireDefault(require('./UserConfig'));
+var _UserConfig = _interopRequireDefault(require("./UserConfig"));
 
-var _getPlugins = _interopRequireDefault(require('./getPlugins'));
+var _getPlugins = _interopRequireDefault(require("./getPlugins"));
 
-var _getWebpackConfig = _interopRequireDefault(require('./getWebpackConfig'));
+var _getWebpackConfig = _interopRequireDefault(require("./getWebpackConfig"));
 
-var _chunksToMap = _interopRequireDefault(require('./utils/chunksToMap'));
+var _chunksToMap = _interopRequireDefault(require("./utils/chunksToMap"));
 
-var _send = _interopRequireWildcard(require('./send'));
+var _send = _interopRequireWildcard(require("./send"));
 
-var _FilesGenerator = _interopRequireDefault(require('./FilesGenerator'));
+var _FilesGenerator = _interopRequireDefault(require("./FilesGenerator"));
 
-var _HtmlGenerator = _interopRequireDefault(require('./HtmlGenerator'));
+var _HtmlGenerator = _interopRequireDefault(require("./HtmlGenerator"));
 
-var _createRouteMiddleware = _interopRequireDefault(
-  require('./createRouteMiddleware'),
-);
+var _createRouteMiddleware = _interopRequireDefault(require("./createRouteMiddleware"));
 
-var _PluginAPI = _interopRequireDefault(require('./PluginAPI'));
+var _PluginAPI = _interopRequireDefault(require("./PluginAPI"));
 
-var _constants = require('./constants');
+var _constants = require("./constants");
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) {
-  if (obj && obj.__esModule) {
-    return obj;
-  } else {
-    var newObj = {};
-    if (obj != null) {
-      for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc =
-            Object.defineProperty && Object.getOwnPropertyDescriptor
-              ? Object.getOwnPropertyDescriptor(obj, key)
-              : {};
-          if (desc.get || desc.set) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
-        }
-      }
-    }
-    newObj.default = obj;
-    return newObj;
-  }
-}
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 const debug = require('debug')(`${_constants.LIBRARY_NAME} dev: Service`);
 
 class Service {
-  constructor(
-    cwd,
-    {
-      plugins: pluginFiles,
-      babel,
-      entryJSTpl,
-      routerTpl,
-      hash,
-      preact,
-      extraResolveModules,
-      libraryName = _constants.LIBRARY_NAME,
-      staticDirectory = 'static',
-      tmpDirectory = `.${_constants.LIBRARY_NAME}`,
-      outputPath = './dist',
-    },
-  ) {
-    Object.defineProperty(this, 'reload', {
+  constructor(cwd, {
+    plugins: pluginFiles,
+    babel,
+    entryJSTpl,
+    routerTpl,
+    hash,
+    preact,
+    extraResolveModules,
+    libraryName = _constants.LIBRARY_NAME,
+    staticDirectory = 'static',
+    tmpDirectory = `.${_constants.LIBRARY_NAME}`,
+    outputPath = './dist'
+  }) {
+    Object.defineProperty(this, "reload", {
       configurable: true,
       enumerable: true,
       writable: true,
       value: () => {
         if (!this.devServer) return;
         this.devServer.sockWrite(this.devServer.sockets, 'content-changed');
-      },
+      }
     });
-    Object.defineProperty(this, 'printWarn', {
+    Object.defineProperty(this, "printWarn", {
       configurable: true,
       enumerable: true,
       writable: true,
@@ -114,9 +82,9 @@ class Service {
         if (!this.devServer) return;
         messages = typeof messages === 'string' ? [messages] : messages;
         this.devServer.sockWrite(this.devServer.sockets, 'warns', messages);
-      },
+      }
     });
-    Object.defineProperty(this, 'printError', {
+    Object.defineProperty(this, "printError", {
       configurable: true,
       enumerable: true,
       writable: true,
@@ -124,24 +92,22 @@ class Service {
         if (!this.devServer) return;
         messages = typeof messages === 'string' ? [messages] : messages;
         this.devServer.sockWrite(this.devServer.sockets, 'errors', messages);
-      },
+      }
     });
-    Object.defineProperty(this, 'restart', {
+    Object.defineProperty(this, "restart", {
       configurable: true,
       enumerable: true,
       writable: true,
       value: why => {
         if (!this.devServer) return;
         (0, _reactDevUtils.clearConsole)();
-        console.log(
-          _chalk.default.green(`Since ${why}, try to restart server`),
-        );
+        console.log(_chalk.default.green(`Since ${why}, try to restart server`));
         (0, _watch.unwatch)();
         this.devServer.close();
         process.send({
-          type: 'RESTART',
+          type: 'RESTART'
         });
-      },
+      }
     });
     this.cwd = cwd || process.cwd();
     this.pluginFiles = pluginFiles;
@@ -158,7 +124,7 @@ class Service {
     this.paths = (0, _getPaths.default)(this);
     this.pluginMethods = {};
     (0, _registerBabel.default)(this.babel, {
-      cwd: this.cwd,
+      cwd: this.cwd
     });
   }
 
@@ -169,7 +135,7 @@ class Service {
   getWebpackRCConfig() {
     return (0, _getUserConfig.default)({
       cwd: this.cwd,
-      disabledConfigs: ['entry', 'outputPath', 'hash'],
+      disabledConfigs: ['entry', 'outputPath', 'hash']
     });
   }
 
@@ -179,7 +145,7 @@ class Service {
 
     try {
       this.config = userConfig.getConfig({
-        force: true,
+        force: true
       });
     } catch (e) {
       console.error(_chalk.default.red(e.message));
@@ -224,7 +190,7 @@ class Service {
       filesGenerator.generate({
         onChange: () => {
           this.sendPageList();
-        },
+        }
       });
     } catch (e) {
       console.error(_chalk.default.red(e.message));
@@ -234,7 +200,7 @@ class Service {
         onChange: () => {
           filesGenerator.unwatch();
           this.dev();
-        },
+        }
       });
       return;
     }
@@ -242,13 +208,12 @@ class Service {
     const webpackConfig = (0, _getWebpackConfig.default)(this);
     this.webpackConfig = webpackConfig;
     const extraMiddlewares = this.applyPlugins('modifyMiddlewares', {
-      initialValue: [
-        (0, _createRouteMiddleware.default)(this, {
-          rebuildEntry() {
-            filesGenerator.rebuild();
-          },
-        }),
-      ],
+      initialValue: [(0, _createRouteMiddleware.default)(this, {
+        rebuildEntry() {
+          filesGenerator.rebuild();
+        }
+
+      })]
     }); // return;
 
     require('af-webpack/dev').default({
@@ -258,16 +223,16 @@ class Service {
       beforeServer: devServer => {
         this.applyPlugins('beforeServer', {
           args: {
-            devServer,
-          },
+            devServer
+          }
         });
       },
       afterServer: devServer => {
         this.devServer = devServer;
         this.applyPlugins('afterServer', {
           args: {
-            devServer,
-          },
+            devServer
+          }
         });
         returnedWatchWebpackRCConfig(devServer);
         userConfig.setConfig(this.config);
@@ -277,26 +242,26 @@ class Service {
       onCompileDone: stats => {
         this.applyPlugins('onCompileDone', {
           args: {
-            stats,
-          },
+            stats
+          }
         });
       },
       proxy: this.webpackRCConfig.proxy || {},
       // 支付宝 IDE 里不自动打开浏览器
       openBrowser: !process.env.ALIPAY_EDITOR,
-      historyApiFallback: false,
+      historyApiFallback: false
     });
   }
 
   initRoutes() {
     this.routes = this.applyPlugins('modifyRoutes', {
-      initialValue: (0, _getRouteConfig.default)(this.paths, this.config),
+      initialValue: (0, _getRouteConfig.default)(this.paths, this.config)
     });
   }
 
   initPlugins() {
     const config = _UserConfig.default.getConfig({
-      cwd: this.cwd,
+      cwd: this.cwd
     });
 
     debug(`user config: ${JSON.stringify(config)}`);
@@ -304,17 +269,19 @@ class Service {
       configPlugins: config.plugins || [],
       pluginsFromOpts: this.pluginFiles,
       cwd: this.cwd,
-      babel: this.babel,
+      babel: this.babel
     });
     this.config = config;
     debug(`plugins: ${this.plugins.map(p => p.id).join(' | ')}`);
-    this.plugins.forEach(({ id, apply, opts }) => {
+    this.plugins.forEach(({
+      id,
+      apply,
+      opts
+    }) => {
       try {
         apply(new _PluginAPI.default(id, this), opts);
       } catch (e) {
-        console.error(
-          _chalk.default.red(`Plugin ${id} initialize failed, ${e.message}`),
-        );
+        console.error(_chalk.default.red(`Plugin ${id} initialize failed, ${e.message}`));
         console.error(e);
         process.exit(1);
       }
@@ -322,11 +289,13 @@ class Service {
   }
 
   applyPlugins(key, opts = {}) {
-    return (this.pluginMethods[key] || []).reduce((memo, { fn }) => {
+    return (this.pluginMethods[key] || []).reduce((memo, {
+      fn
+    }) => {
       try {
         return fn({
           memo,
-          args: opts.args,
+          args: opts.args
         });
       } catch (e) {
         console.error(_chalk.default.red(`Plugin apply failed: ${e.message}`));
@@ -338,12 +307,12 @@ class Service {
   sendPageList() {
     const pageList = this.routes.map(route => {
       return {
-        path: route.path,
+        path: route.path
       };
     });
     (0, _send.default)({
       type: _send.PAGE_LIST,
-      payload: pageList,
+      payload: pageList
     });
   }
 
@@ -367,7 +336,9 @@ class Service {
       require('af-webpack/build').default({
         // eslint-disable-line
         webpackConfig,
-        success: ({ stats }) => {
+        success: ({
+          stats
+        }) => {
           if (process.env.RM_TMPDIR !== 'none') {
             debug(`Clean tmp dir ${this.paths.tmpDirPath}`); // rimraf(this.paths.absTmpDirPath);
           }
@@ -377,7 +348,7 @@ class Service {
 
           try {
             const hg = new _HtmlGenerator.default(this, {
-              chunksMap,
+              chunksMap
             });
             hg.generate();
           } catch (e) {
@@ -385,15 +356,8 @@ class Service {
           }
 
           debug('Move service-worker.js');
-          const sourceSW = (0, _path.join)(
-            this.paths.absOutputPath,
-            this.staticDirectory,
-            'service-worker.js',
-          );
-          const targetSW = (0, _path.join)(
-            this.paths.absOutputPath,
-            'service-worker.js',
-          );
+          const sourceSW = (0, _path.join)(this.paths.absOutputPath, this.staticDirectory, 'service-worker.js');
+          const targetSW = (0, _path.join)(this.paths.absOutputPath, 'service-worker.js');
 
           if ((0, _fs.existsSync)(sourceSW)) {
             (0, _fs.renameSync)(sourceSW, targetSW);
@@ -401,13 +365,14 @@ class Service {
 
           this.applyPlugins('buildSuccess');
           (0, _send.default)({
-            type: _send.BUILD_DONE,
+            type: _send.BUILD_DONE
           });
           resolve();
-        },
+        }
       });
     });
   }
+
 }
 
 exports.default = Service;

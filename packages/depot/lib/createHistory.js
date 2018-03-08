@@ -1,19 +1,15 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
-var _createBrowserHistory = _interopRequireDefault(
-  require('history/createBrowserHistory'),
-);
+var _createBrowserHistory = _interopRequireDefault(require("history/createBrowserHistory"));
 
-var _utils = require('./utils');
+var _utils = require("./utils");
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // aa
 function _default(opts) {
@@ -23,11 +19,11 @@ function _default(opts) {
     var oldPush = history.push;
     var oldReplace = history.replace;
 
-    history.push = function(path, state) {
+    history.push = function (path, state) {
       oldPush((0, _utils.normalizePath)(path), state);
     };
 
-    history.replace = function(path, state) {
+    history.replace = function (path, state) {
       oldReplace((0, _utils.normalizePath)(path), state);
     };
   }

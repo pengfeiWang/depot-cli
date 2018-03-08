@@ -27,7 +27,7 @@ document.addEventListener(
     return memo;
   });
   api.register('modifyAFWebpackOpts', ({ memo }) => {
-    // 期一个带 umi 前缀的别名，是为了后面可以修改他
+    // 期一个带 前缀的别名，是为了后面可以修改他
     memo.alias[`${libraryName}-fastclick`] = require.resolve('fastclick');
     return memo;
   });

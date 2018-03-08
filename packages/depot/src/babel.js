@@ -1,5 +1,5 @@
 export default function(context, opts = {}) {
-  const libraryName = /* opts.libraryName ||  */'depot';
+  const libraryName = /* opts.libraryName ||  */ 'depot';
   return {
     presets: [
       [

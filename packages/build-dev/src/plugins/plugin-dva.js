@@ -12,12 +12,14 @@ export default function(api) {
   const isProduction = process.env.NODE_ENV === 'production';
 
   function getModels() {
-    const pattern = ['src/models/*.{ts,js}', relative(api.service.cwd, `${paths.absPagesPath}/**/models/*.{ts,js}`)];
+    const pattern = [
+      'src/models/*.{ts,js}',
+      relative(api.service.cwd, `${paths.absPagesPath}/**/models/*.{ts,js}`),
+    ];
 
     const modelPaths = globby.sync(pattern, {
       cwd: paths.absSrcPath,
     });
-
 
     return modelPaths
       .map(path =>
@@ -33,11 +35,12 @@ export default function(api) {
     // const fileName = basename(filePath);
 
     // if (ROUTE_FILES.indexOf(fileName) > -1) {
-      const root = dirname(filePath);
-      const modelPaths = globby.sync('../models/*.{ts,js}', {
+    const root = dirname(filePath);
+    const modelPaths =
+      globby.sync('../models/*.{ts,js}', {
         cwd: root,
       }) || [];
-      return modelPaths.map(m => join(root, m));
+    return modelPaths.map(m => join(root, m));
     // } else {
     //   return [];
     // }
@@ -85,7 +88,7 @@ export default function(api) {
     return memo
       .replace(
         IMPORT,
-`
+        `
 import { routerRedux } from 'dva/router';
 ${isProduction ? `import _dvaDynamic from 'dva/dynamic';` : ''}
 ${IMPORT}
@@ -118,12 +121,11 @@ _dvaDynamic({
           `
 app: window.g_app,
 models: () => [
-  ${models.map(
-      model => {
-        return `/* webpackChunkName: '${chunkName(model)}' */
-        import('${relative(paths.absTmpDirPath, model)}')`;
-      },
-    )
+  ${models
+    .map(model => {
+      return `/* webpackChunkName: '${chunkName(model)}' */
+        import('${winPath(relative(paths.absTmpDirPath, model))}')`;
+    })
     .join(',\r\n  ')}
 ],
       `.trim(),

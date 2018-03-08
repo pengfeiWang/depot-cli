@@ -1,6 +1,6 @@
 import createHistory from 'history/createBrowserHistory';
 import { normalizePath } from './utils';
-
+// aa
 export default function(opts) {
   const history = createHistory(opts);
   if (__UMI_HTML_SUFFIX) {

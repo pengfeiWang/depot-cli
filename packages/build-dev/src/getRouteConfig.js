@@ -11,8 +11,8 @@ export default function(paths, config = {}) {
   const routeConfigFile = routesConfigExists(paths.cwd);
   const { directoryConfigRoute } = config;
   let routes = [];
+  return [...getDirConfigRoutes(paths, config)];
   if (directoryConfigRoute) {
-    routes = [...getDirConfigRoutes(paths, config)];
   } else {
     routes = routeConfigFile
     ? getRoutesByConfig(routeConfigFile)

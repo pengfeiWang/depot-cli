@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = send;
 exports.BUILD_DONE = exports.PAGE_LIST = void 0;
 
-const debug = require('debug')('umi-build-dev:send');
+const debug = require('debug')('build-dev:send');
 
 const PAGE_LIST = 'PAGE_LIST';
 exports.PAGE_LIST = PAGE_LIST;

@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-const debug = require('debug')('umi-build-dev:getWebpackConfig');
+const debug = require('debug')('build-dev:getWebpackConfig');
 
 function _default(service = {}) {
   const cwd = service.cwd,
@@ -72,7 +72,7 @@ function _default(service = {}) {
     'antd-mobile': (0, _path.dirname)(require.resolve('antd-mobile/package')),
     antd: (0, _path.dirname)(require.resolve('antd/package')),
     'react-router-dom': (0, _path.dirname)(require.resolve('react-router-dom/package')),
-    history: (0, _path.dirname)(require.resolve('umi-history/package'))
+    history: (0, _path.dirname)(require.resolve('history/package'))
   }; // 支持用户指定 antd 和 antd-mobile 的版本
   // TODO: 出错处理，用户可能指定了依赖，但未指定 npm install
 

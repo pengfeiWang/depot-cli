@@ -26,10 +26,9 @@ function _default(paths, config = {}) {
   const routeConfigFile = routesConfigExists(paths.cwd);
   const directoryConfigRoute = config.directoryConfigRoute;
   let routes = [];
+  return [...(0, _getDirectoryRouteConfig.default)(paths, config)];
 
-  if (directoryConfigRoute) {
-    routes = [...(0, _getDirectoryRouteConfig.default)(paths, config)];
-  } else {
+  if (directoryConfigRoute) {} else {
     routes = routeConfigFile ? getRoutesByConfig(routeConfigFile) : getRoutesByPagesDir(paths);
 
     if (config.exportStatic) {

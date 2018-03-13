@@ -4,7 +4,7 @@ import getConfig from 'af-webpack/getConfig';
 import { webpackHotDevClientPath } from 'af-webpack/react-dev-utils';
 import defaultBrowsers from './defaultConfigs/browsers';
 
-const debug = require('debug')('umi-build-dev:getWebpackConfig');
+const debug = require('debug')('build-dev:getWebpackConfig');
 
 export default function(service = {}) {
   const {
@@ -67,7 +67,7 @@ export default function(service = {}) {
     'antd-mobile': dirname(require.resolve('antd-mobile/package')),
     antd: dirname(require.resolve('antd/package')),
     'react-router-dom': dirname(require.resolve('react-router-dom/package')),
-    history: dirname(require.resolve('umi-history/package')),
+    history: dirname(require.resolve('history/package')),
   };
   // 支持用户指定 antd 和 antd-mobile 的版本
   // TODO: 出错处理，用户可能指定了依赖，但未指定 npm install

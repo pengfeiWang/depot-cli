@@ -19,7 +19,7 @@ function _sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; 
 
 function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return _sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
 
-const debug = require('debug')('umi-build-dev:getPlugin');
+const debug = require('debug')('build-dev:getPlugin');
 
 function _default(opts = {}) {
   const _opts$configPlugins = opts.configPlugins,
@@ -63,7 +63,7 @@ function _default(opts = {}) {
   } // 内置插件
 
 
-  const builtInPlugins = ['./plugins/global-css', './plugins/layout', './plugins/fastclick', './plugins/hd', './plugins/mock', './plugins/hash-history', './plugins/plugin-dva', './plugins/plugin-generator-menu', './plugins/404'];
+  const builtInPlugins = ['./plugins/global-css', './plugins/layout', './plugins/fastclick', './plugins/hd', './plugins/mock', './plugins/hash-history', './plugins/plugin-dva', './plugins/plugin-generator-menu', './plugins/entryHTMLScript', './plugins/404'];
   const plugins = [// builtIn 的在最前面
   ...builtInPlugins.map(p => {
     const apply = require(p); // eslint-disable-line

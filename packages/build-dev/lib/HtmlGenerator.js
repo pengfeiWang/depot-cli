@@ -21,7 +21,9 @@ var _normalizeEntry = _interopRequireDefault(require("./normalizeEntry"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const debug = require('debug')('umi:HtmlGenerator');
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+const debug = require('debug')('depot:HtmlGenerator');
 
 class HtmlGenerator {
   constructor(service, opts = {}) {
@@ -79,7 +81,10 @@ class HtmlGenerator {
         (0, _fs.writeFileSync)(outputPath, content, 'utf-8');
       });
     } else {
-      const content = this.getContent();
+      // const content = this.getContent();
+      const content = this.service.applyPlugins('modifyHTML', {
+        initialValue: this.getContent()
+      });
       const outputPath = (0, _path.join)(paths.absOutputPath, 'index.html');
       (0, _fs.writeFileSync)(outputPath, content, 'utf-8');
     }
@@ -89,7 +94,8 @@ class HtmlGenerator {
     const _opts$pageConfig = opts.pageConfig,
           pageConfig = _opts$pageConfig === void 0 ? {} : _opts$pageConfig,
           _opts$route = opts.route,
-          route = _opts$route === void 0 ? {} : _opts$route;
+          route = _opts$route === void 0 ? {} : _opts$route,
+          ct = opts.context;
     const _service2 = this.service,
           paths = _service2.paths,
           webpackConfig = _service2.webpackConfig;
@@ -102,10 +108,12 @@ class HtmlGenerator {
     const path = route.path,
           component = route.component;
     const customDocPath = document ? (0, _path.join)(paths.cwd, document) : paths.absPageDocumentPath;
-    const docPath = (0, _fs.existsSync)(customDocPath) ? customDocPath : paths.defaultDocumentPath;
+    let docPath = (0, _fs.existsSync)(customDocPath) ? customDocPath : paths.defaultDocumentPath || (0, _path.join)(__dirname, '../template', 'document.ejs'); // 再次判断下文件是否存在
+
+    docPath = (0, _fs.existsSync)(paths.defaultDocumentPath) ? paths.defaultDocumentPath : (0, _path.join)(__dirname, '../template', 'document.ejs');
     const tpl = (0, _fs.readFileSync)(docPath, 'utf-8');
 
-    let html = _ejs.default.render(tpl, context, {
+    let html = _ejs.default.render(tpl, _extends({}, context || ct), {
       _with: false,
       localsName: 'context'
     });

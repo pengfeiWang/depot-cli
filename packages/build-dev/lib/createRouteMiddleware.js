@@ -15,9 +15,9 @@ var _HtmlGenerator = _interopRequireDefault(require("./HtmlGenerator"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 let config = null;
-const COMPILING_PREFIX = '/__umi_dev/compiling';
+const COMPILING_PREFIX = '/__depot_dev/compiling';
 
-function handleUmiDev(req, res, service, opts) {
+function handleDev(req, res, service, opts) {
   const path = req.path;
   const routePath = path.replace(COMPILING_PREFIX, '');
   const route = service.routes.filter(r => {
@@ -40,7 +40,7 @@ function createRouteMiddleware(service, opts = {}) {
     const path = req.path;
 
     if (path.startsWith(COMPILING_PREFIX)) {
-      return handleUmiDev(req, res, service, opts);
+      return handleDev(req, res, service, opts);
     }
 
     const route = service.routes.filter(r => {
@@ -59,7 +59,13 @@ function createRouteMiddleware(service, opts = {}) {
         pageConfig: (config.pages || {})[path],
         route
       } : {};
-      const content = htmlGenerator.getContent(gcOpts);
+      let content = htmlGenerator.getContent(gcOpts); // TODO: 新增, 后期改善
+      // 不确定是否还有更优的流程
+
+      if (config.context) {
+        content = htmlGenerator.getContent(config);
+      }
+
       res.setHeader('Content-Type', 'text/html');
       res.send(content);
     } else {

@@ -2,7 +2,7 @@ import resolve from 'resolve';
 import assert from 'assert';
 import registerBabel, { addBabelRegisterFiles } from './registerBabel';
 
-const debug = require('debug')('umi-build-dev:getPlugin');
+const debug = require('debug')('build-dev:getPlugin');
 
 export default function(opts = {}) {
   const { configPlugins = [], pluginsFromOpts = [], babel, cwd } = opts;
@@ -54,6 +54,7 @@ export default function(opts = {}) {
     './plugins/hash-history',
     './plugins/plugin-dva',
     './plugins/plugin-generator-menu',
+    './plugins/entryHTMLScript',
     './plugins/404', // 404 must after mock
   ];
   const plugins = [

@@ -10,7 +10,7 @@ var _assert = _interopRequireDefault(require("assert"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const debug = require('debug')('umi-build-dev:requestCache'); // Urls user requested
+const debug = require('debug')('build-dev:requestCache'); // Urls user requested
 
 
 const requested = {};

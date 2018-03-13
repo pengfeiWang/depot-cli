@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-const debug = require('debug')('umi-build-dev:requestCache');
+const debug = require('debug')('build-dev:requestCache');
 
 // Urls user requested
 const requested = {};

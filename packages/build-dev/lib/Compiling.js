@@ -35,7 +35,7 @@ function (_Component) {
   _createClass(Compiling, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      new Image().src = "".concat(window.resourceBaseUrl, "__umi_dev/compiling").concat(this.props.route);
+      new Image().src = "".concat(window.resourceBaseUrl, "__depot_dev/compiling").concat(this.props.route);
     }
   }, {
     key: "render",

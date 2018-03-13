@@ -75,7 +75,7 @@ export default function(opts = {}) {
     },
     {
       _with: false,
-      localsName: 'umi',
+      localsName: 'depot',
     },
   );
 
@@ -84,7 +84,7 @@ export default function(opts = {}) {
     {},
     {
       _with: false,
-      localsName: 'umi',
+      localsName: 'depot',
     },
   );
 

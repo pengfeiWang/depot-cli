@@ -262,7 +262,6 @@ class UserConfig {
         const newConfig = this.getConfig({
           force: true,
           setConfig: newConfig => {
-            console.log('set config');
             this.config = newConfig;
           }
         }); // 更新 middleware 的配置

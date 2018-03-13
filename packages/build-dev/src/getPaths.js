@@ -50,6 +50,8 @@ export default function(service) {
     defaultEntryTplPath: template('entry.js.tpl'),
     defaultRouterTplPath: template('router.js.tpl'),
     defaultRegisterSWTplPath: template('registerServiceWorker.js'),
-    defaultDocumentPath: template('document.ejs'),
+    // 源
+    // defaultDocumentPath: template('document.ejs'),
+    defaultDocumentPath: join(cwd, 'src/index.ejs'),
   };
 }

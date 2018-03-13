@@ -6,7 +6,7 @@ import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { minify } from 'html-minifier';
 import normalizeEntry from './normalizeEntry';
 
-const debug = require('debug')('umi:HtmlGenerator');
+const debug = require('debug')('depot:HtmlGenerator');
 
 export default class HtmlGenerator {
   constructor(service, opts = {}) {
@@ -63,14 +63,21 @@ export default class HtmlGenerator {
         writeFileSync(outputPath, content, 'utf-8');
       });
     } else {
-      const content = this.getContent();
+      // const content = this.getContent();
+      const content = this.service.applyPlugins('modifyHTML', {
+        initialValue: this.getContent()
+      });
       const outputPath = join(paths.absOutputPath, 'index.html');
       writeFileSync(outputPath, content, 'utf-8');
     }
   }
 
   getContent(opts = {}) {
-    const { pageConfig = {}, route = {} } = opts;
+    const {
+      pageConfig = {},
+      route = {},
+      context: ct
+    } = opts;
     const { paths, webpackConfig } = this.service;
     const { document, context } = pageConfig;
 
@@ -83,11 +90,17 @@ export default class HtmlGenerator {
     const customDocPath = document
       ? join(paths.cwd, document)
       : paths.absPageDocumentPath;
-    const docPath = existsSync(customDocPath)
+    let docPath = existsSync(customDocPath)
       ? customDocPath
-      : paths.defaultDocumentPath;
+      : paths.defaultDocumentPath || join(__dirname, '../template', 'document.ejs');
+
+    // 再次判断下文件是否存在
+    docPath = existsSync(paths.defaultDocumentPath)
+      ? paths.defaultDocumentPath
+      : join(__dirname, '../template', 'document.ejs');
+
     const tpl = readFileSync(docPath, 'utf-8');
-    let html = ejs.render(tpl, context, {
+    let html = ejs.render(tpl, { ...(context || ct) }, {
       _with: false,
       localsName: 'context',
     });
@@ -117,7 +130,7 @@ export default class HtmlGenerator {
       )}'`;
       pathToScript = `${relPath}${publicPath}`;
     }
-
+    
     function getAssetsPath(file) {
       return `${pathToScript}${stripFirstSlash(file)}`.replace(
         /^\.\/\.\//,
@@ -134,6 +147,7 @@ export default class HtmlGenerator {
             1}).concat('').join('/')`
         : `'/'`;
     }
+
     let inlineScriptContent = `
 <script>
   window.routerBase = ${routerBase};
@@ -141,7 +155,7 @@ export default class HtmlGenerator {
 </script>
     `.trim();
     inlineScriptContent = this.service.applyPlugins('modifyHTMLScript', {
-      initialValue: inlineScriptContent,
+      initialValue: inlineScriptContent
     });
 
     const isDev = process.env.NODE_ENV === 'development';
@@ -234,6 +248,7 @@ ${jsContent}
     }
 
     const files = this.chunksMap[name];
+    
     assert(
       files,
       `name ${name} don't exists in chunksMap ${JSON.stringify(

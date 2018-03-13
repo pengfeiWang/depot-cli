@@ -39,5 +39,6 @@
   "vsicons.dontShowNewVersionMessage": true,
   "sublimeTextKeymap.promptV3Features": true,
   "workbench.startupEditor": "newUntitledFile",
-  "todohighlight.isEnable": false
+  "todohighlight.isEnable": false,
+  // "workbench.iconTheme": "vscode-great-icons"
 }

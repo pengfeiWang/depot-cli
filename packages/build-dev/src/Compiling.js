@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Compiling extends Component {
   componentDidMount() {
-    new Image().src = `${window.resourceBaseUrl}__umi_dev/compiling${
+    new Image().src = `${window.resourceBaseUrl}__depot_dev/compiling${
       this.props.route
     }`;
   }

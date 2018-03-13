@@ -1,6 +1,8 @@
 # Depot
 
-framework for React apps.
+
+
+framework for React apps. [changelog](https://github.com/pengfeiWang/depot-cli/blob/master/changelog.md)
 
 # 安装
 

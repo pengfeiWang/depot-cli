@@ -31,7 +31,7 @@ var _constants = require("./constants");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const debug = require('debug')('umi:FilesGenerator');
+const debug = require('debug')('depot:FilesGenerator');
 
 class FilesGenerator {
   constructor(service) {
@@ -122,7 +122,7 @@ class FilesGenerator {
           config = _service.config,
           libraryName = _service.libraryName;
     this.service.applyPlugins('generateFiles');
-    this.generateRouterJS(); // Generate umi.js
+    this.generateRouterJS(); // Generate depot.js
 
     let entryContent = (0, _fs.readFileSync)(entryJSTpl || paths.defaultEntryTplPath, 'utf-8');
     entryContent = this.service.applyPlugins('modifyEntryFile', {

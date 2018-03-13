@@ -10,7 +10,6 @@ import { setConfig as setMiddlewareConfig } from './createRouteMiddleware';
 
 function normalizeConfig(config) {
   config = config.default || config;
-
   if (config.context && config.pages) {
     Object.keys(config.pages).forEach(key => {
       const page = config.pages[key];
@@ -206,7 +205,6 @@ class UserConfig {
         const newConfig = this.getConfig({
           force: true,
           setConfig: newConfig => {
-            console.log('set config');
             this.config = newConfig;
           },
         });

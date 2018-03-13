@@ -18,7 +18,7 @@ class PluginAPI {
     this.service = service;
     this.utils = {
       winPath,
-      debug: debug(`umi-plugin: ${id}`),
+      debug: debug(`depot-plugin: ${id}`),
     };
     this.placeholder = {
       IMPORT: PLACEHOLDER_IMPORT,

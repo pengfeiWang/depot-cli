@@ -17,7 +17,7 @@ import {
   PLACEHOLDER_ROUTER_MODIFIER,
 } from './constants';
 
-const debug = require('debug')('umi:FilesGenerator');
+const debug = require('debug')('depot:FilesGenerator');
 
 export default class FilesGenerator {
   constructor(service) {
@@ -107,7 +107,7 @@ export default class FilesGenerator {
 
     this.generateRouterJS();
 
-    // Generate umi.js
+    // Generate depot.js
     let entryContent = readFileSync(
       entryJSTpl || paths.defaultEntryTplPath,
       'utf-8',

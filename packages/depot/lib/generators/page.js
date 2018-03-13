@@ -64,12 +64,12 @@ function _default(opts = {}) {
     componentName
   }, {
     _with: false,
-    localsName: 'umi'
+    localsName: 'depot'
   });
 
   const cssContent = _ejs.default.render(cssTpl, {}, {
     _with: false,
-    localsName: 'umi'
+    localsName: 'depot'
   });
 
   (0, _fs.writeFileSync)(jsTargetPath, stripEmptyLine(jsContent), 'utf-8');

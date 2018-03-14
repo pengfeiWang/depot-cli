@@ -281,9 +281,9 @@ export default class Service {
     this.initRoutes();
 
     debug(`Clean tmp dir ${this.paths.tmpDirPath}`);
-    // rimraf(this.paths.absTmpDirPath);
+    rimraf(this.paths.absTmpDirPath);
     debug(`Clean output path ${this.paths.outputPath}`);
-    // rimraf(this.paths.absOutputPath);
+    rimraf(this.paths.absOutputPath);
     debug('Generate entry');
     const filesGenerator = new FilesGenerator(this);
     filesGenerator.generate();
@@ -297,7 +297,7 @@ export default class Service {
         success: ({ stats }) => {
           if (process.env.RM_TMPDIR !== 'none') {
             debug(`Clean tmp dir ${this.paths.tmpDirPath}`);
-            // rimraf(this.paths.absTmpDirPath);
+            rimraf(this.paths.absTmpDirPath);
           }
 
           debug(`Bundle html files`);

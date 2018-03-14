@@ -323,10 +323,10 @@ class Service {
     this.webpackRCConfig = this.getWebpackRCConfig().config;
     this.applyPlugins('onStart');
     this.initRoutes();
-    debug(`Clean tmp dir ${this.paths.tmpDirPath}`); // rimraf(this.paths.absTmpDirPath);
-
-    debug(`Clean output path ${this.paths.outputPath}`); // rimraf(this.paths.absOutputPath);
-
+    debug(`Clean tmp dir ${this.paths.tmpDirPath}`);
+    (0, _rimraf.sync)(this.paths.absTmpDirPath);
+    debug(`Clean output path ${this.paths.outputPath}`);
+    (0, _rimraf.sync)(this.paths.absOutputPath);
     debug('Generate entry');
     const filesGenerator = new _FilesGenerator.default(this);
     filesGenerator.generate();
@@ -340,7 +340,8 @@ class Service {
           stats
         }) => {
           if (process.env.RM_TMPDIR !== 'none') {
-            debug(`Clean tmp dir ${this.paths.tmpDirPath}`); // rimraf(this.paths.absTmpDirPath);
+            debug(`Clean tmp dir ${this.paths.tmpDirPath}`);
+            (0, _rimraf.sync)(this.paths.absTmpDirPath);
           }
 
           debug(`Bundle html files`);

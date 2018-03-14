@@ -17,8 +17,8 @@ class HttpMock {
   constructor({ cwd, devServer, api }) {
     this.devServer = devServer;
     this.api = api;
-    this.absMockPath = join(cwd, 'mock');
-    this.configPath = join(cwd, '.umirc.mock.js');
+    this.absMockPath = join(cwd, './src/mock');
+    this.configPath = join(cwd, '.depot.mock.js');
     this.api.registerBabel([this.configPath, this.absMockPath]);
     this.applyMock();
     this.watch();
@@ -98,7 +98,7 @@ class HttpMock {
     });
     devServer.use(MOCK_END);
 
-    // 调整 stack，把 UMI_PLUGIN_404 放到最后
+    // 调整 stack，把 PLUGIN_404 放到最后
     let umiPlugin404Index = null;
     let endIndex = null;
     app._router.stack.forEach((item, index) => {

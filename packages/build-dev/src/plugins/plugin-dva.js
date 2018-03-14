@@ -13,21 +13,22 @@ export default function(api) {
 
   function getModels() {
     const pattern = [
-      'src/models/*.{ts,js}',
-      relative(api.service.cwd, `${paths.absPagesPath}/**/models/*.{ts,js}`),
+      winPath(`${paths.absSrcPath}/models/*.{ts,js}`),
+      winPath(`${paths.absSrcPath}/modules/*/models/*.{ts,js}`)
     ];
-
     const modelPaths = globby.sync(pattern, {
       cwd: paths.absSrcPath,
     });
-
-    return modelPaths
+    const mds = modelPaths
       .map(path =>
         `
-    app.model({ ...(require('../${path}').default) });
+    app.model({ ...(require('${relative(paths.absTmpDirPath, path)}').default) });
   `.trim(),
       )
       .join('\r\n');
+    
+      return mds;
+
   }
 
   function getPageModels(pageJSFile) {

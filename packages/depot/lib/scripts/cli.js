@@ -2,6 +2,8 @@
 
 var _slash = _interopRequireDefault(require("slash"));
 
+var _nodeLs = _interopRequireDefault(require("node-ls"));
+
 var _mkdirp = require("mkdirp");
 
 var _path = require("path");
@@ -49,6 +51,7 @@ function printFileName(f) {
       if (stats.isDirectory()) {
         console.log(_chalk.default.bold.green('  Create'), ' ', `${f}/${file}`);
         printFileName(filePath);
+        return;
       } else {
         console.log(_chalk.default.bold.green('  Create'), ' ', `${f}/${file}`);
       }
@@ -76,6 +79,7 @@ console.log(_chalk.default.green(`  Create: ${directory}`));
 
     if (stats.isDirectory()) {
       printFileName(filePath);
+      return;
     }
   }
 });

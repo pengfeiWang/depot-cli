@@ -34,7 +34,7 @@ function _default(api) {
     });
 
     const mds = modelPaths.map(path => `
-    app.model({ ...(require('${(0, _path.relative)(paths.absTmpDirPath, path)}').default) });
+    app.model({ ...(require('${path}').default) });
   `.trim()).join('\r\n');
     return mds;
   }

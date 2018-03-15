@@ -27,7 +27,7 @@ function _default(api) {
   const isProduction = process.env.NODE_ENV === 'production';
 
   function getModels() {
-    const pattern = [winPath(`${paths.absSrcPath}/models/*.{ts,js}`), winPath(`${paths.absSrcPath}/modules/*/models/*.{ts,js}`)];
+    const pattern = [`${paths.absSrcPath}/models/*.{ts,js}`, `${paths.absSrcPath}/modules/*/models/*.{ts,js}`];
 
     const modelPaths = _globby.default.sync(pattern, {
       cwd: paths.absSrcPath

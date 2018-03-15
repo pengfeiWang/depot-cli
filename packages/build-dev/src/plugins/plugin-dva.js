@@ -22,7 +22,7 @@ export default function(api) {
     const mds = modelPaths
       .map(path =>
         `
-    app.model({ ...(require('${relative(paths.absTmpDirPath, path)}').default) });
+    app.model({ ...(require('${path}').default) });
   `.trim(),
       )
       .join('\r\n');

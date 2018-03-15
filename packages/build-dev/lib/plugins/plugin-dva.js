@@ -27,15 +27,16 @@ function _default(api) {
   const isProduction = process.env.NODE_ENV === 'production';
 
   function getModels() {
-    const pattern = ['src/models/*.{ts,js}', (0, _path.relative)(api.service.cwd, `${paths.absPagesPath}/**/models/*.{ts,js}`)];
+    const pattern = [`${paths.absSrcPath}/models/*.{ts,js}`, `${paths.absSrcPath}/modules/*/models/*.{ts,js}`];
 
     const modelPaths = _globby.default.sync(pattern, {
       cwd: paths.absSrcPath
     });
 
-    return modelPaths.map(path => `
-    app.model({ ...(require('../${path}').default) });
+    const mds = modelPaths.map(path => `
+    app.model({ ...(require('${(0, _path.relative)(paths.absTmpDirPath, path)}').default) });
   `.trim()).join('\r\n');
+    return mds;
   }
 
   function getPageModels(pageJSFile) {

@@ -8,10 +8,10 @@ export default class extends React.PureComponent {
   state = {
   };
   componentWillMount() {
-   
+
   }
-  componentWillReceiveProps(nextProps) {
-    
+  componentWillReceiveProps() {
+
   }
   render() {
     const { menuData } = this.props;

@@ -7,7 +7,6 @@
   "editor.tabSize": 2,
   "window.zoomLevel": 0,
   "workbench.colorTheme": "Material Neutral",
-  "workbench.iconTheme": "vscode-icons",
   "vsicons.projectDetection.disableDetect": true,
   "window.reopenFolders": "one",
   "editor.renderIndentGuides": true,
@@ -40,5 +39,5 @@
   "sublimeTextKeymap.promptV3Features": true,
   "workbench.startupEditor": "newUntitledFile",
   "todohighlight.isEnable": false,
-  // "workbench.iconTheme": "vscode-great-icons"
+  "workbench.iconTheme": "vscode-great-icons"
 }

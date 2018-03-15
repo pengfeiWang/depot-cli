@@ -85,7 +85,7 @@ function getRoutesByPagesDir(paths, dirPath = '', config) {
       const stats = (0, _fs.statSync)(moduleRoot);
 
       if (stats.isDirectory()) {
-        if ([...closeModules].includes((0, _path.basename)(moduleRoot))) return;
+        if (closeModules && closeModules.length && [...closeModules].includes((0, _path.basename)(moduleRoot))) return;
         const filePath = (0, _path.join)(path, file, './config.js');
 
         if ((0, _fs.existsSync)(filePath)) {

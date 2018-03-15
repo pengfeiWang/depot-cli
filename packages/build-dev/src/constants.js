@@ -5,7 +5,7 @@ export const ROUTE_FILES = ['page.js', 'page.ts', 'page.jsx', 'page.tsx'];
 
 export const LIBRARY_NAME = libraryName;
 export const CONFIG_FILES = [`.${libraryName}rc.js`];
-export const MOCK_FILE_NAME = [`.${libraryName}rc.mock.js`];
+export const MOCK_FILE_NAME = [`.${libraryName}.mock.js`];
 export const PAGES_FILE_NAME = 'modules';
 export const COMMON_FILE_NAME = 'common';
 

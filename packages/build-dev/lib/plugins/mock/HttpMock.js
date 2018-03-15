@@ -35,8 +35,8 @@ class HttpMock {
   }) {
     this.devServer = devServer;
     this.api = api;
-    this.absMockPath = (0, _path.join)(cwd, 'mock');
-    this.configPath = (0, _path.join)(cwd, '.umirc.mock.js');
+    this.absMockPath = (0, _path.join)(cwd, './src/mock');
+    this.configPath = (0, _path.join)(cwd, '.depot.mock.js');
     this.api.registerBabel([this.configPath, this.absMockPath]);
     this.applyMock();
     this.watch();
@@ -109,7 +109,7 @@ class HttpMock {
       (0, _assert.default)(typeof config[key] === 'function' || typeof config[key] === 'object', `mock value of ${key} should be function or object, but got ${typeof config[key]}`);
       app[keyParsed.method](keyParsed.path, this.createMockHandler(keyParsed.method, keyParsed.path, config[key]));
     });
-    devServer.use(MOCK_END); // 调整 stack，把 UMI_PLUGIN_404 放到最后
+    devServer.use(MOCK_END); // 调整 stack，把 PLUGIN_404 放到最后
 
     let umiPlugin404Index = null;
     let endIndex = null;

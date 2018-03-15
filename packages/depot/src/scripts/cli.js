@@ -1,8 +1,4 @@
-// import fork from '../../../build-dev/lib/fork';
-
-// fork(require.resolve('./realDev.js'));
 import slash from 'slash';
-import ls from 'node-ls';
 function winPath(path) {
   return slash(path);
 }

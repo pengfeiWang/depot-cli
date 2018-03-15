@@ -2,8 +2,6 @@
 
 var _slash = _interopRequireDefault(require("slash"));
 
-var _nodeLs = _interopRequireDefault(require("node-ls"));
-
 var _mkdirp = require("mkdirp");
 
 var _path = require("path");
@@ -16,8 +14,6 @@ var _fsExtra = require("fs-extra");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import fork from '../../../build-dev/lib/fork';
-// fork(require.resolve('./realDev.js'));
 function winPath(path) {
   return (0, _slash.default)(path);
 }

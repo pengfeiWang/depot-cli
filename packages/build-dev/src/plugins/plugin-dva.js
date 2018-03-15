@@ -13,8 +13,8 @@ export default function(api) {
 
   function getModels() {
     const pattern = [
-      winPath(`${paths.absSrcPath}/models/*.{ts,js}`),
-      winPath(`${paths.absSrcPath}/modules/*/models/*.{ts,js}`)
+      `${paths.absSrcPath}/models/*.{ts,js}`,
+      `${paths.absSrcPath}/modules/*/models/*.{ts,js}`
     ];
     const modelPaths = globby.sync(pattern, {
       cwd: paths.absSrcPath,

@@ -14,6 +14,7 @@
     "lint-staged:js": "eslint --ext .js"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0-beta.36",
     "axios": "^0.16.2",
     "classnames": "^2.2.5",
     "extend": "^3.0.1",

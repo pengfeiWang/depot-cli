@@ -6,7 +6,7 @@ import uniqWith from 'lodash/uniqWith';
 
 
 /**
- * 合并并去重, 主要为数组内部为符合对象使用
+ * 合并并去重, 主要为数组内部为复合对象使用
  * @param {*} rawArr
  * @param {*} newArr
  * @param {*} key 去重 依据
@@ -57,7 +57,7 @@ const toUnderScoreCase = (str = '') => {
 // 是否空对象
 const isEmptyObj = (o) => {
   let s;
-  for (s in o) {
+  for (s in o) { // eslint-disable-line
     return false;
   }
   return true;

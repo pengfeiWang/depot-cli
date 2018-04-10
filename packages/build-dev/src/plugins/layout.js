@@ -10,11 +10,37 @@ export default function(api) {
   api.register('modifyRouterFile', ({ memo }) => {
     if (existsSync(layoutPath)) {
       return memo.replace(
-        IMPORT,
+        `export default function() {`,
         `
-import Layout from '${winPath(relative(paths.tmpDirPath, layoutPath))}';
-import menuData from './menu.js';
-${IMPORT}
+function renderRoutes(
+  routes,
+  extraProps = {},
+  switchProps = {},
+) {
+  return routes ? (
+    <Switch {...switchProps}>
+      {routes.map((route, i) => {
+        return (
+          <Route
+            key={route.key || i}
+            path={route.path}
+            exact={route.exact}
+            strict={route.strict}
+            render={props => {
+              return (
+                <route.component {...props} {...extraProps} route={route}>
+                  {renderRoutes(route.routes)}
+                </route.component>
+              );
+            }}
+          />
+        );
+      })}
+    </Switch>
+  ) : null;
+}
+
+export default function() {
         `.trim(),
       );
     } else {
@@ -22,21 +48,21 @@ ${IMPORT}
     }
   });
 
-  api.register('modifyRouterContent', ({ memo }) => {
-    if (existsSync(layoutPath)) {
-      return memo
-        .replace('<Switch>',
-  `<Layout menuData={menuData}>
-    <Switch>`,
-      )
-        .replace('</Switch>',
-  ` </Switch>
-  </Layout>`,
-      );
-    } else {
-      return memo;
-    }
-  });
+//   api.register('modifyRouterContent', ({ memo }) => {
+//     console.log('memo:::', memo);
+    
+//     if (existsSync(layoutPath)) {
+//       return memo
+//         .replace('<% Switch %>',
+// `<Layout menuData={menuData}>`,
+//       )
+//         .replace('<%/ Switch %>',
+// `</Layout>`,
+//       );
+//     } else {
+//       return memo;
+//     }
+//   });
 
   api.register('modifyPageWatchers', ({ memo }) => {
     return [...memo, join(paths.absSrcPath, 'layouts/index.js')];

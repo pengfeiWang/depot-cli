@@ -63,7 +63,8 @@ function _default(opts = {}) {
   } // 内置插件
 
 
-  const builtInPlugins = ['./plugins/global-css', './plugins/layout', './plugins/fastclick', './plugins/hd', './plugins/mock', './plugins/hash-history', './plugins/plugin-dva', './plugins/plugin-generator-menu', './plugins/entryHTMLScript', './plugins/404'];
+  const builtInPlugins = ['./plugins/global-css', './plugins/layout', './plugins/fastclick', './plugins/hd', './plugins/mock', './plugins/hash-history', './plugins/plugin-dva', // './plugins/plugin-generator-menu',
+  './plugins/entryHTMLScript', './plugins/404'];
   const plugins = [// builtIn 的在最前面
   ...builtInPlugins.map(p => {
     const apply = require(p); // eslint-disable-line

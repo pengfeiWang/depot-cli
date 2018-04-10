@@ -1,6 +1,10 @@
 import * as React from 'react';
 import withRouter from 'depot/withRouter';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import { LocaleProvider } from 'antd';
 // import router from 'depot/router';
+
+import Header from './Header';
 import './index.less';
 
 @withRouter
@@ -14,24 +18,17 @@ export default class extends React.PureComponent {
 
   }
   render() {
-    const { menuData } = this.props;
+    const {
+      // route: { routes }
+    } = this.props;
+    // console.log('routes:', routes);
     return (
-      <div>
-        <ul>
-          {
-            menuData.map((it) => {
-              return (
-                <li key={it.path}>
-                  <p>title: {it.title}</p>
-                  <p>icon: {it.icon}</p>
-                  <p>path: {it.path}</p>
-                </li>
-              );
-            })
-          }
-        </ul>
-        {this.props.children}
-      </div>
+      <LocaleProvider locale={zhCN}>
+        <div>
+          <Header />
+          {this.props.children}
+        </div>
+      </LocaleProvider>
     );
   }
 }

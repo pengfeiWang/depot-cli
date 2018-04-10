@@ -50,7 +50,8 @@ function _default(api) {
       // const webPublicPath = repPath(makeSureHaveLastSlash(api.service.webpackConfig.output.publicPath));
       // const relPath = repPath(`${webPublicPath}/${rmDist(relative(process.cwd(), webOutPath))}`);
       if (!isDev) {
-        content = memo.replace(/(src\/assets\/|\.\/src\/assets\/)/g, `${api.service.webpackConfig.output.publicPath}`);
+        content = memo.replace(/(src\/assets\/|\.\/src\/assets\/)/g, 'static/' // `${api.service.webpackConfig.output.publicPath}`
+        );
       }
     } catch (e) {
       console.log(e);

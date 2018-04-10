@@ -73,6 +73,10 @@
     "keyword-spacing": 2,
     "max-params":[1, 7],
     "comma-dangle": [1, "only-multiline"],
-    "object-curly-spacing": [2, "always"]
+    "object-curly-spacing": [2, "always"],
+    "array-callback-return": [0],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-mixed-operators": [0, {"allowSamePrecedence": true}],
+    "no-empty-pattern": [0]
   }
 }

@@ -1,14 +1,11 @@
-import request from '../../utils/request';
+import request from 'utils/request';
+
+
 const { URL } = window.globalJSConfig;
-export async function login(obj = {}) {
+
+export async function queryDemo(obj = {}) {
   const json = Object.assign({
-    url: `${URL}/loginSubmit`
-  }, obj);
-  return request(json);
-}
-export async function demoGoPath(obj = {}) {
-  const json = Object.assign({
-    url: `${URL}/loginSubmit`
+    url: `${URL}/query-demo`
   }, obj);
   return request(json);
 }

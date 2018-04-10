@@ -40,7 +40,8 @@ export default function(api) {
       if (!isDev) {
         content = memo.replace(
           /(src\/assets\/|\.\/src\/assets\/)/g,
-          `${api.service.webpackConfig.output.publicPath}`
+          'static/'
+          // `${api.service.webpackConfig.output.publicPath}`
         );
       }
     } catch(e) {

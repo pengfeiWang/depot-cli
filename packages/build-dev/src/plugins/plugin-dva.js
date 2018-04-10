@@ -108,11 +108,14 @@ ${ROUTER_MODIFIER}
   if (isProduction) {
     api.register('modifyRouteComponent', ({ memo, args }) => {
       const { pageJSFile, webpackChunkName, config } = args;
+      if (!webpackChunkName) {
+        return memo;
+      }
       let ret = `
 _dvaDynamic({
   <%= MODELS %>
-  /* webpackChunkName: '${webpackChunkName}' */
-  component: () => import('${pageJSFile}'),
+
+  component: () => import(/* webpackChunkName: '${webpackChunkName}' */'${pageJSFile}'),
 })
       `.trim();
       const models = getPageModels(pageJSFile);

@@ -9,6 +9,7 @@ import getRouteConfig from './getRouteConfig';
 import { getRequest } from './requestCache';
 import winPath from './winPath';
 import normalizeEntry from './normalizeEntry';
+import { matchRoutes } from 'react-router-config';
 import {
   PLACEHOLDER_HISTORY_MODIFIER,
   PLACEHOLDER_IMPORT,
@@ -16,6 +17,7 @@ import {
   PLACEHOLDER_ROUTER,
   PLACEHOLDER_ROUTER_MODIFIER,
 } from './constants';
+import stripComponentQuote from './stripComponentQuote';
 
 const debug = require('debug')('depot:FilesGenerator');
 
@@ -24,6 +26,7 @@ export default class FilesGenerator {
     this.service = service;
     this.routesContent = null;
     this.hasRebuildError = false;
+    this.layoutDirectoryName = service.config.singular ? 'layout' : 'layouts';
   }
 
   generate(opts = {}) {
@@ -172,29 +175,72 @@ if (process.env.NODE_ENV === 'production') {
     tplContent = this.service.applyPlugins('modifyRouterFile', {
       initialValue: tplContent,
     });
+
+    // 新增
+    let routes = this.getRoutesJSON({
+      env: process.env.NODE_ENV,
+      requested: getRequest(),
+    });
+    routes = stripComponentQuote(routes);
+
+
     const routerContent = this.service.applyPlugins('modifyRouterContent', {
       initialValue: this.getRouterContent(),
     });
     const routeContentString = tplContent
       .replace(PLACEHOLDER_IMPORT, '')
       .replace(PLACEHOLDER_ROUTER_MODIFIER, '')
+      .replace('<%= ROUTES %>', routes)
       .replace(PLACEHOLDER_ROUTER, routerContent)
       .replace(/<%= libraryName %>/g, libraryName);
     return routeContentString;
   }
-
-  getRouterContent() {
-    const { routes, config, paths } = this.service;
-
-    const routesByPath = routes.reduce((memo, { path, component }) => {
-      memo[path] = component;
+  getLayoutFile() {
+    const { paths } = this.service;
+    // for (const ext of EXT_LIST) {
+    const filePath = join(
+      paths.absSrcPath,
+      `${this.layoutDirectoryName}/index.js`,
+    );
+    if (existsSync(filePath)) {
+      return winPath(filePath);
+    }
+    // }
+    return winPath(join(__dirname, './DefaultLayout.js'));
+  }
+  markRouteWithSuffix(routes, webpackChunkName) {
+    return routes.map(route => {
+      const ret = {
+        ...route,
+        component: `${route.component}^^${webpackChunkName}^^${route.path}`,
+      };
+      if (ret.routes) {
+        ret.routes = this.markRouteWithSuffix(route.routes, webpackChunkName);
+      }
+      return ret;
+    });
+  }
+  getRequestedRoutes(requested) {
+    const { routes } = this.service;
+    return Object.keys(requested).reduce((memo, pathname) => {
+      matchRoutes(routes, pathname).forEach(({ route }) => {
+        memo[route.path] = 1;
+      });
       return memo;
     }, {});
+  }
+  getRoutesJSON(opts = {}) {
+    const { env = 'production', requested = {} } = opts;
+    const { paths, config = {} } = this.service;
+    const routes = [...this.service.routes];
 
-    // 导出静态文件时，匹配 /index.html 到 /
-    if (config.exportStatic && routesByPath['/']) {
-      routesByPath['/index.html'] = routesByPath['/'];
-    }
+    // const rootRoute = routes.filter(route => route.path === '/')[0];
+    // if (rootRoute) {
+    //   routes.unshift({
+    //     ...rootRoute,
+    //     path: '/index.html',
+    //   });
+    // }
 
     const { loading } = config;
     let loadingOpts = '';
@@ -203,49 +249,160 @@ if (process.env.NODE_ENV === 'production') {
         join(paths.cwd, loading),
       )}').default,`;
     }
-    let routesContent = Object.keys(routesByPath).map(key => {
-      const pageJSFile = winPath(relative(paths.tmpDirPath, routesByPath[key]));
-      debug(`requested: ${JSON.stringify(getRequest())}`);
-      const isDev = process.env.NODE_ENV === 'development';
+    
+    // 只在一级路由做按需编译
+    routes.forEach(route => {
 
-      let component;
-      let isCompiling = false;
-      let webpackChunkName = null;
-      const compilingPath = winPath(join(__dirname, 'Compiling.js'));
-      if (isDev && process.env.COMPILE_ON_DEMAND !== 'none') {
-        if (getRequest()[key]) {
-          component = `require('${pageJSFile}').default`;
-        } else {
-          component = `() => React.createElement(require('${compilingPath}').default, { route: '${key}' })`;
-          isCompiling = true;
-        }
-      } else {
-        webpackChunkName = normalizeEntry(routesByPath[key]);
-        component = `dynamic(() => import(/* webpackChunkName: '${webpackChunkName}' */'${pageJSFile}'), { ${loadingOpts} })`;
+      const webpackChunkName = normalizeEntry(route.component);
+      route.component = `${route.component}^^${webpackChunkName}^^${
+        route.path
+      }`;
+      if (route.routes) {
+        route.routes = this.markRouteWithSuffix(route.routes, webpackChunkName);
       }
-      component = this.service.applyPlugins('modifyRouteComponent', {
-        initialValue: component,
-        args: {
-          isCompiling,
-          pageJSFile,
-          webpackChunkName,
-          config,
-        },
-      });
-
-      return `    <Route exact path="${key}" component={${component}} />`;
     });
 
-    routesContent = this.service.applyPlugins('modifyRoutesContent', {
-      initialValue: routesContent,
-    });
+    // if (
+    //   process.env.NODE_ENV === 'production' &&
+    //   config.exportStatic &&
+    //   config.exportStatic.htmlSuffix
+    // ) {
+    //   // 为 layout 组件加 (.html)? 兼容
+    //   this.fixHtmlSuffix(routes);
+    // }
 
+    // 添加 layout wrapper
+    const layoutFile = this.getLayoutFile();
+    const wrappedRoutes = [
+      {
+        component: layoutFile,
+        routes,
+      },
+    ];
+    const requestedPaths = this.getRequestedRoutes(requested);
+    // const compilingPath = winPath(join(__dirname, 'Compiling.js'));
+    // console.log('wrappedRoutes::', wrappedRoutes);
+    
+    let ret = JSON.stringify(
+      wrappedRoutes,
+      (key, value) => {
+        if (key === 'component') {
+          const [component, webpackChunkName, path] = value.split('^^');
+          const importPath =
+            value.charAt(0) === '/'
+              ? value
+              : winPath(relative(paths.tmpDirPath, component));
+
+          let ret;
+          let isCompiling = false;
+          if (value === layoutFile) {
+            ret = `require('${importPath}').default`;
+          } else if (env === 'production' && !config.disableDynamicImport) {
+            // 按需加载
+            ret = `dynamic(() => import(/* webpackChunkName: ${webpackChunkName} */'${importPath}'), {${loadingOpts}})`;
+          } else {
+            // 非按需加载
+            if (
+              env === 'production' ||
+              process.env.COMPILE_ON_DEMAND === 'none' ||
+              requestedPaths[path]
+            ) {
+              ret = `require('${importPath}').default`;
+            } else {
+              isCompiling = true;
+              // ret = `() => React.createElement(require('${compilingPath}').default, { route: '${path}' })`;
+              ret = `require('${importPath}').default`;
+            }
+          }
+
+          ret = this.service.applyPlugins('modifyRouteComponent', {
+            initialValue: ret,
+            args: {
+              isCompiling,
+              pageJSFile: importPath,
+              importPath,
+              webpackChunkName,
+              config,
+            },
+          });
+          return ret;
+        } else {
+          return value;
+        }
+      },
+      2,
+    );
+    return ret;
+  }
+
+  getRouterContent() {
     return `
 <Router history={window.g_history}>
-  <Switch>
-${routesContent.join('\n')}
-  </Switch>
+  { renderRoutes(routes) }
 </Router>
-    `.trim();
+        `.trim();
+//     const { routes, config, paths } = this.service;
+
+//     const routesByPath = routes.reduce((memo, { path, component }) => {
+//       memo[path] = component;
+//       return memo;
+//     }, {});
+
+//     // 导出静态文件时，匹配 /index.html 到 /
+//     if (config.exportStatic && routesByPath['/']) {
+//       routesByPath['/index.html'] = routesByPath['/'];
+//     }
+
+//     const { loading } = config;
+//     let loadingOpts = '';
+//     if (loading) {
+//       loadingOpts = `loading: require('${winPath(
+//         join(paths.cwd, loading),
+//       )}').default,`;
+//     }
+//     let routesContent = Object.keys(routesByPath).map(key => {
+//       const pageJSFile = winPath(relative(paths.tmpDirPath, routesByPath[key]));
+//       debug(`requested: ${JSON.stringify(getRequest())}`);
+//       const isDev = process.env.NODE_ENV === 'development';
+
+//       let component;
+//       let isCompiling = false;
+//       let webpackChunkName = null;
+//       const compilingPath = winPath(join(__dirname, 'Compiling.js'));
+//       if (isDev && process.env.COMPILE_ON_DEMAND !== 'none') {
+//         if (getRequest()[key]) {
+//           component = `require('${pageJSFile}').default`;
+//         } else {
+//           component = `() => React.createElement(require('${compilingPath}').default, { route: '${key}' })`;
+//           isCompiling = true;
+//         }
+//       } else {
+//         webpackChunkName = normalizeEntry(routesByPath[key]);
+//         component = `dynamic(() => import(/* webpackChunkName: '${webpackChunkName}' */'${pageJSFile}'), { ${loadingOpts} })`;
+//       }
+//       component = this.service.applyPlugins('modifyRouteComponent', {
+//         initialValue: component,
+//         args: {
+//           isCompiling,
+//           pageJSFile,
+//           webpackChunkName,
+//           config,
+//         },
+//       });
+
+//       return `    <Route exact path="${key}" component={${component}} />`;
+//     });
+
+//     routesContent = this.service.applyPlugins('modifyRoutesContent', {
+//       initialValue: routesContent,
+//     });
+
+//     return `
+// <Router history={window.g_history}>
+//   <Switch>
+// ${routesContent.join('\n')}
+//   </Switch>
+// </Router>
+//     `.trim();
   }
 }

@@ -124,7 +124,7 @@ function _default(service = {}) {
     // 开发环境的 publicPath 写死 /static/
     publicPath: `/`
   } : _extends({
-    publicPath: webpackRCConfig.publicPath || `./${staticDirectory}/`,
+    publicPath: webpackRCConfig.publicPath || `/${staticDirectory}/`,
     commons: webpackRCConfig.commons || [{
       async: 'common',
       children: true,

@@ -15,7 +15,7 @@ export default connect(state => ({
   };
   return (
     <div>
-      <p>列表页</p>
+      <p>列表页 -- 子页</p>
       <p><a onClick={() => { submit(); }}>发起数据请求</a></p>
       <p>
         <a

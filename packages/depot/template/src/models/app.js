@@ -1,27 +1,38 @@
-import { login } from '../services/demo/';
+import { templateModel } from 'utils/modelTemplate';
+import { handleQuery } from 'utils';
+import { queryDemo } from 'services/demo/';
 
-export default {
-  namespace: 'global',
+const currentModel = Object.assign({}, templateModel, {
+  namespace: 'app',
   state: {
-    text: 'hello'
+    text: ''
   },
   effects: {
-    *goPath({ payload }, { put }) { // eslint-disable-line
-      // yield put();
-      console.log('effects::', payload);
+    *fetch({ payload, callback }, { call, put, select }) {  // eslint-disable-line
+      yield handleQuery({ put }, function* () {
+        // 选择已有的数据
+        const text = yield select(({ global }) => global);
+        const response = yield call(queryDemo /* 定义的接口名称 为函数 */, {
+          data: { ...payload, text }
+        });
+        const {
+          data: {
+            // code
+          },
+          code,
+          msg
+        } = response.data;
+        // 保存数据
+        yield put({
+          type: 'saveAs',
+          payload: {}
+        });
+        if (code === 1 && callback) callback(null, msg);
+      }, callback);
     },
-    *loginSubmit({ payload }, { call }) {
-      const response = yield call(login, {
-        data: { ...payload }
-      });
-      console.log('请求返回的数据:', response);
-    }
-  },
-  reducers: {
-    setText() {
-      return {
-        text: 'setted'
-      };
-    }
   }
-};
+});
+
+
+export default currentModel;
+

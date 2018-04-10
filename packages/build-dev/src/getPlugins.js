@@ -53,7 +53,7 @@ export default function(opts = {}) {
     './plugins/mock',
     './plugins/hash-history',
     './plugins/plugin-dva',
-    './plugins/plugin-generator-menu',
+    // './plugins/plugin-generator-menu',
     './plugins/entryHTMLScript',
     './plugins/404', // 404 must after mock
   ];

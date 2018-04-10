@@ -5,7 +5,7 @@
   "editor.fontSize": 14,
   "editor.fontFamily": "monospace",
   "editor.tabSize": 2,
-  "window.zoomLevel": 0,
+  "window.zoomLevel": -1,
   "workbench.colorTheme": "Material Neutral",
   "vsicons.projectDetection.disableDetect": true,
   "window.reopenFolders": "one",

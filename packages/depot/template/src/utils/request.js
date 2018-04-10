@@ -1,5 +1,4 @@
 import axios from 'axios';
-import extend from 'extend';
 import { notification } from 'antd';
 
 const config = {
@@ -94,7 +93,7 @@ axios.interceptors.response.use((response) => {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(options) {
-  const ops = extend({}, config, options);
+  const ops = Object.assign({}, { ...config }, options);
   // ops.data = JSON.stringify(ops.data)
   return axios(ops);
 }

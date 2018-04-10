@@ -42,6 +42,7 @@ const BROWSER_FILES = [
   'packages/depot/src/withRouter.js',
   'packages/depot/src/utils.js',
   'packages/build-dev/src/Compiling.js',
+  'packages/build-dev/src/DefaultLayout.js',
 ];
 const cwd = process.cwd();
 

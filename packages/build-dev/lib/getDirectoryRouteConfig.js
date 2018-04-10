@@ -134,6 +134,15 @@ function getChildRouteByPagesDir(routeJsonInfo) {
   return ret;
 }
 
+function deleteAttribute(props) {
+  delete props.moduleLayout;
+  delete props.routePath;
+  delete props.modulePath;
+  delete props.children;
+  delete props.moduleRoot;
+  return props;
+}
+
 function getRouteJsonToArray(routeItem, cwd) {
   const ret = [];
   const routePath = routeItem.routePath,
@@ -141,18 +150,28 @@ function getRouteJsonToArray(routeItem, cwd) {
         modulePath = routeItem.modulePath,
         title = routeItem.title,
         icon = routeItem.icon,
-        layout = routeItem.layout,
+        moduleLayout = routeItem.moduleLayout,
         moduleRoot = routeItem.moduleRoot;
   let componentPath = modulePath;
   const filePath = (0, _path.relative)(cwd, moduleRoot);
-  componentPath = `${filePath}/${renderPath(modulePath, (0, _path.relative)(cwd, moduleRoot))}`;
+  componentPath = `${filePath}/${renderPath(modulePath)}`;
   const currentRoot = routePath;
 
-  function getChild(childrenItem, patentPath = '') {
+  function getChild(childrenItem, patentPath = '', isReturn) {
     if (!childrenItem.modulePath) return;
     const patentPathLast = patentPath ? `${patentPath}/` : '/';
-    const childModPath = `${filePath}/${renderPath(childrenItem.modulePath, (0, _path.relative)(cwd, moduleRoot))}`;
+    const childModPath = `${filePath}/${renderPath(childrenItem.modulePath)}`;
     if (childModPath === moduleRoot) return;
+    const props = deleteAttribute(_extends({}, childrenItem));
+
+    if (isReturn) {
+      return _extends({}, props, {
+        path: replacePath(`${currentRoot}/${patentPathLast}${childrenItem.routePath}`),
+        exact: true,
+        component: childModPath
+      });
+    }
+
     ret.push({
       path: replacePath(`${currentRoot}/${patentPathLast}${childrenItem.routePath}`),
       exact: true,
@@ -160,29 +179,50 @@ function getRouteJsonToArray(routeItem, cwd) {
     });
   }
 
+  const props = deleteAttribute(_extends({}, routeItem));
+
+  if (routePath === '/' || routePath === '/index' || (0, _path.basename)(moduleRoot) === 'index') {
+    return [_extends({}, props, {
+      path: replacePath(routePath),
+      exact: true,
+      component: componentPath
+    })];
+  }
+
   if (children && children.length) {
-    ret.push({
-      path: replacePath(routePath),
-      exact: true,
-      title,
-      icon,
-      component: componentPath
-    });
-    children.forEach(it => {
-      if (it.children && it.children.length) {
-        getChild(it, it.routePath);
-      } else {
-        getChild(it);
-      }
-    });
+    if (moduleLayout) {
+      ret.push(_extends({}, props, {
+        path: replacePath(routePath),
+        exact: false,
+        component: `${filePath}/${renderPath(moduleLayout.replace(/^.\//, ''))}`,
+        routes: [...children.map(it => {
+          if (it.children && it.children.length) {
+            return getChild(it, it.routePath, !0);
+          } else {
+            return getChild(it, '', !0);
+          }
+        })]
+      }));
+    } else {
+      ret.push(_extends({}, props, {
+        path: replacePath(routePath),
+        exact: true,
+        component: componentPath
+      }));
+      children.forEach(it => {
+        if (it.children && it.children.length) {
+          getChild(it, it.routePath);
+        } else {
+          getChild(it);
+        }
+      });
+    }
   } else {
-    ret.push({
+    ret.push(_extends({}, props, {
       path: replacePath(routePath),
       exact: true,
-      title,
-      icon,
       component: componentPath
-    });
+    }));
   }
 
   return ret;

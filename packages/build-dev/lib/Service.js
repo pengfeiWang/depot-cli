@@ -247,8 +247,7 @@ class Service {
         });
       },
       proxy: this.webpackRCConfig.proxy || {},
-      // 支付宝 IDE 里不自动打开浏览器
-      openBrowser: !process.env.ALIPAY_EDITOR,
+      openBrowser: true,
       historyApiFallback: false
     });
   }

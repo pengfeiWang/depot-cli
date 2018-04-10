@@ -103,11 +103,16 @@ ${ROUTER_MODIFIER}
       const pageJSFile = args.pageJSFile,
             webpackChunkName = args.webpackChunkName,
             config = args.config;
+
+      if (!webpackChunkName) {
+        return memo;
+      }
+
       let ret = `
 _dvaDynamic({
   <%= MODELS %>
-  /* webpackChunkName: '${webpackChunkName}' */
-  component: () => import('${pageJSFile}'),
+
+  component: () => import(/* webpackChunkName: '${webpackChunkName}' */'${pageJSFile}'),
 })
       `.trim();
       const models = getPageModels(pageJSFile);

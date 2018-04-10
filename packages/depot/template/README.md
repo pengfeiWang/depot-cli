@@ -38,6 +38,8 @@
     │   └── app.js
     ├── modules/                              // 模块目录
     │   ├── demo                              // 业务模块
+    │   │   ├── layout/                       // 模块布局
+    │   │   │   └── index.js
     │   │   ├── js/                           // 模块js
     │   │   │   └── index.js
     │   │   ├── css/                          // 模块css, 源文件 less
@@ -45,7 +47,7 @@
     │   │   ├── config.js                     // 模块配置
     │   │   ├── index.js                      // 模块入口
     │   │   └── models                        // 模块数据管理目录
-    │   │       └── index.js // 数据
+    │   │       └── index.js                  // 数据
     │   ├── index
     │   │   ├── config.js
     │   │   ├── index.js

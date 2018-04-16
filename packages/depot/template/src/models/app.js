@@ -1,7 +1,27 @@
 import { templateModel } from 'utils/modelTemplate';
-import { handleQuery } from 'utils';
+// import { handleQuery } from 'utils';
 import { queryDemo } from 'services/demo/';
 
+// model 查询通用函数
+function* handleQuery({ /* payload, callback, call, */ put /* , select */ }, cb, callback) {
+  yield put({
+    type: 'changeLoading',
+    payload: true
+  });
+  try {
+    yield cb();
+    yield put({
+      type: 'changeLoading',
+      payload: false
+    });
+  } catch (err) {
+    yield put({
+      type: 'changeLoading',
+      payload: false
+    });
+    if (callback && err) callback(true, {});
+  }
+}
 const currentModel = Object.assign({}, templateModel, {
   namespace: 'app',
   state: {

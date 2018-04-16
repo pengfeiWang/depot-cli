@@ -1,7 +1,7 @@
 {
-  "name": "项目名称",
+  "name": "",
   "version": "1.0.0",
-  "description": "描述",
+  "description": "",
   "main": "",
   "scripts": {
     "start": "ESLINT=none depot dev",

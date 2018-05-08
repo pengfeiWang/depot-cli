@@ -8,7 +8,21 @@ export default {
   browserslist: [
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
+    "not ie <= 9"
+  ],
+  extraBabelPlugins: [
+    ['import', { libraryName: 'antd', libraryDirectory: 'lib', style: true }, 'antd'],
+    ['import', {
+      libraryName: '@spd',
+      libraryDirectory: 'components',
+      style: (name) => {
+        console.log(name)
+        const splitName = name.split('_');
+        return splitName.join('/');
+      },
+      camel2DashComponentName: true,
+      camel2UnderlineComponentName: true
+    }, '@spd'],
   ],
   alias: {
     utils: path.resolve(__dirname, './src/utils/'),
@@ -25,6 +39,10 @@ export default {
     {
       from: 'src/assets/react/',
       to: 'react/'
+    },
+    {
+      from: 'src/assets/polyfills/',
+      to: 'polyfills/'
     }
   ],
   "theme": {

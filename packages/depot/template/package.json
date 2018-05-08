@@ -21,7 +21,8 @@
     "lodash-decorators": "^4.5.0",
     "moment": "^2.18.1",
     "query-string": "^5.0.1",
-    "rc-tween-one": "^1.7.3"
+    "rc-tween-one": "^1.7.3",
+    "react-document-title": "^2.0.3"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.2",

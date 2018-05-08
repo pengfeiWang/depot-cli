@@ -1,6 +1,6 @@
 {
   "name": "depot-cli",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "framework for React apps.",
   "bin": {
     "depot": "./bin/depot"

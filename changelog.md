@@ -1,16 +1,23 @@
----
-order: 1
-title: depot 更新日志
-timeline: true
----
+
+## 3.0.5
+
+`2018-05-09`
+
+- 调整 `polyfills` `raf` 外部引用(之前内联)
+
+## 3.0.3
+
+`2018-05-08`
+
+- index.ejs 模板增加 `polyfills` 脚本外部引用以及文件
+- index.ejs 模板增加 `requestAnimationFrame` ie9 兼容
+- 调整 `webpackrc` 对应配置
 
 ## 3.0.2
 
 `2018-4-16`
 
-- 更新全局 `model` 调用当前 `model` 有自身前缀的错误
-
-
+- 更新全局 `model` 调用当前 `model` 携带自身前缀的错误
 
 
 ## 3.0.0
@@ -19,7 +26,6 @@ timeline: true
 
 - 优化 `Layout` 调用方式
 - 增加模块布局
-- 优化工程模板
 - 与2x不兼容
 
 ## 2.1.5 2.1.6

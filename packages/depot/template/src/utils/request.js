@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { notification } from 'antd';
-
+import 'antd/es/notification/style';
 const config = {
   method: 'post',
   timeout: 5000,
@@ -9,7 +9,8 @@ const config = {
 };
 
 axios.interceptors.response.use((response) => {
-  if (+(response.data.code) === 1) {
+  console.log(response);
+  if (+(response.status) === 200) {
     return response;
   } else {
     const str = `: ${response.request.url}`;
@@ -21,9 +22,15 @@ axios.interceptors.response.use((response) => {
   }
 }, (error) => {
   if ('stack' in error && 'message' in error) {
+    const str = `: ${error.request.url}`;
     notification.error({
-      message: `请求错误 ${error.status}: ${process.env === 'development' ? error.request.url : ''}`,
+      message: `请求错误 ${error.status || (error.response && error.response.status)} ${process.env === 'development' ? str : ''}`,
       description: error.message
+    });
+  } else if (error.response) {
+    notification.error({
+      message: error.response.status,
+      description: error.response.statusText
     });
   } else if (error.code) {
     notification.error({
@@ -94,6 +101,5 @@ axios.interceptors.response.use((response) => {
  */
 export default function request(options) {
   const ops = Object.assign({}, { ...config }, options);
-  // ops.data = JSON.stringify(ops.data)
   return axios(ops);
 }

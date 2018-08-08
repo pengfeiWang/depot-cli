@@ -13,7 +13,9 @@ var _winPath = _interopRequireDefault(require("./winPath"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _default(paths, config = {}) {
   // let routes = [];
@@ -100,7 +102,7 @@ function getRoutesByPagesDir(paths, dirPath = '', config) {
                 return [];
               }
 
-              routeJsonInfo.routeJSON[config.routePath] = _extends({}, config, {
+              routeJsonInfo.routeJSON[config.routePath] = _objectSpread({}, config, {
                 moduleRoot
               }); // const tmpObj = {
               //   config,
@@ -162,10 +164,10 @@ function getRouteJsonToArray(routeItem, cwd) {
     const patentPathLast = patentPath ? `${patentPath}/` : '/';
     const childModPath = `${filePath}/${renderPath(childrenItem.modulePath)}`;
     if (childModPath === moduleRoot) return;
-    const props = deleteAttribute(_extends({}, childrenItem));
+    const props = deleteAttribute(_objectSpread({}, childrenItem));
 
     if (isReturn) {
-      return _extends({}, props, {
+      return _objectSpread({}, props, {
         path: replacePath(`${currentRoot}/${patentPathLast}${childrenItem.routePath}`),
         exact: true,
         component: childModPath
@@ -179,10 +181,10 @@ function getRouteJsonToArray(routeItem, cwd) {
     });
   }
 
-  const props = deleteAttribute(_extends({}, routeItem));
+  const props = deleteAttribute(_objectSpread({}, routeItem));
 
   if (routePath === '/' || routePath === '/index' || (0, _path.basename)(moduleRoot) === 'index') {
-    return [_extends({}, props, {
+    return [_objectSpread({}, props, {
       path: replacePath(routePath),
       exact: true,
       component: componentPath
@@ -191,7 +193,7 @@ function getRouteJsonToArray(routeItem, cwd) {
 
   if (children && children.length) {
     if (moduleLayout) {
-      ret.push(_extends({}, props, {
+      ret.push(_objectSpread({}, props, {
         path: replacePath(routePath),
         exact: false,
         component: `${filePath}/${renderPath(moduleLayout.replace(/^.\//, ''))}`,
@@ -204,7 +206,7 @@ function getRouteJsonToArray(routeItem, cwd) {
         })]
       }));
     } else {
-      ret.push(_extends({}, props, {
+      ret.push(_objectSpread({}, props, {
         path: replacePath(routePath),
         exact: true,
         component: componentPath
@@ -218,7 +220,7 @@ function getRouteJsonToArray(routeItem, cwd) {
       });
     }
   } else {
-    ret.push(_extends({}, props, {
+    ret.push(_objectSpread({}, props, {
       path: replacePath(routePath),
       exact: true,
       component: componentPath

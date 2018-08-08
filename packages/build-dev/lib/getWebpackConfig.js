@@ -17,7 +17,9 @@ var _browsers = _interopRequireDefault(require("./defaultConfigs/browsers"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 const debug = require('debug')('build-dev:getWebpackConfig');
 
@@ -95,7 +97,7 @@ function _default(service = {}) {
 
   const browserslist = webpackRCConfig.browserslist || _browsers.default;
 
-  let afWebpackOpts = _extends({
+  let afWebpackOpts = _objectSpread({
     cwd
   }, webpackRCConfig, {
     // 不允许配置
@@ -111,19 +113,19 @@ function _default(service = {}) {
     browserslist,
     extraResolveModules: [...(webpackRCConfig.extraResolveModules || []), ...(extraResolveModules || [])],
     cssModulesExcludes: [...(webpackRCConfig.cssModulesExcludes || []), paths.absGlobalStyle],
-    define: _extends({
+    define: _objectSpread({
       // 禁用 antd-mobile 升级提醒
       'process.env.DISABLE_ANTD_MOBILE_UPGRADE': true,
       // For registerServiceWorker.js
       'process.env.BASE_URL': process.env.BASE_URL,
       __UMI_HTML_SUFFIX: !!(config.exportStatic && typeof config.exportStatic === 'object' && config.exportStatic.htmlSuffix)
     }, webpackRCConfig.define || {}),
-    alias: _extends({}, preactOrReactAlias, libAlias, webpackRCConfig.alias || {})
+    alias: _objectSpread({}, preactOrReactAlias, libAlias, webpackRCConfig.alias || {})
   }, isDev ? {
     // 生产环境的 publicPath 是服务端把 assets 发布到 cdn 后配到 HTML 里的
     // 开发环境的 publicPath 写死 /static/
     publicPath: `/`
-  } : _extends({
+  } : _objectSpread({
     publicPath: webpackRCConfig.publicPath || `/${staticDirectory}/`,
     commons: webpackRCConfig.commons || [{
       async: 'common',
@@ -139,7 +141,7 @@ function _default(service = {}) {
 
     }]
   }, config.disableServiceWorker ? {} : {
-    serviceworker: _extends({}, webpackRCConfig.serviceworker || {})
+    serviceworker: _objectSpread({}, webpackRCConfig.serviceworker || {})
   }));
 
   afWebpackOpts = service.applyPlugins('modifyAFWebpackOpts', {

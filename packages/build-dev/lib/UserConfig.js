@@ -25,7 +25,9 @@ var _createRouteMiddleware = require("./createRouteMiddleware");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function normalizeConfig(config) {
   config = config.default || config;
@@ -33,7 +35,7 @@ function normalizeConfig(config) {
   if (config.context && config.pages) {
     Object.keys(config.pages).forEach(key => {
       const page = config.pages[key];
-      page.context = _extends({}, config.context, page.context);
+      page.context = _objectSpread({}, config.context, page.context);
     });
   } // pages 配置补丁
   // /index -> /index.html
@@ -195,7 +197,7 @@ class UserConfig {
     if (typeof config.directoryConfigRoute === 'string') {
       const srcPath = /src/.test(config.directoryConfigRoute) ? config.directoryConfigRoute : `./src/${config.directoryConfigRoute}`;
       const absPagesPath = (0, _path.join)(cwd, srcPath);
-      this.service.paths = _extends({}, this.service.paths, {
+      this.service.paths = _objectSpread({}, this.service.paths, {
         absPagesPath,
         pagesPath: srcPath,
         absPageDocumentPath: (0, _path.join)(absPagesPath, 'document.ejs')

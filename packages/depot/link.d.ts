@@ -1,9 +1,2 @@
-import * as React from 'react';
-
-declare class Link extends React.Component<{
-  to: string,
-  replace?: boolean,
-}, any> {
-  render(): JSX.Element;
-}
+import { Link } from 'react-router-dom';
 export default Link;

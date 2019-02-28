@@ -1,8 +1,11 @@
 {
-  "lerna": "2.0.0",
   "packages": [
     "packages/*"
   ],
-  "npmClient": "npm",
+  "command": {
+    "version": {
+      "exact": true
+    }
+  },
   "version": "independent"
 }

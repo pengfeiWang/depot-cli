@@ -1,8 +1,8 @@
-import test from '../test';
-const args = process.argv.slice(2);
-const watch = args.indexOf('-w') > -1 || args.indexOf('--watch') > -1;
-const coverage = args.indexOf('--coverage') > -1;
-test({
-  watch,
-  coverage,
-});
+import yParser from 'yargs-parser';
+import buildDevOpts from '../buildDevOpts';
+
+process.env.NODE_ENV = 'development';
+
+const args = yParser(process.argv.slice(2));
+const Service = require('build-dev/lib/Service').default;
+new Service(buildDevOpts(args)).run('test', args);

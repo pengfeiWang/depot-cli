@@ -1,9 +1,0 @@
-node_modules/
-lib/
-dist/
-template/
-!./packages/depot/template
-fixtures/
-website/
-examples/
-bin/

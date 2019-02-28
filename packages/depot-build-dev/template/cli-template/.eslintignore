@@ -1,0 +1,11 @@
+.vscode
+.vscode/*
+.gitignore
+.depotrc.js
+.depotrc-mock.js
+.eslintrc
+package.json
+dist
+node_modules
+mock
+.DS_Store

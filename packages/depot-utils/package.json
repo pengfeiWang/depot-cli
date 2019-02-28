@@ -1,0 +1,14 @@
+{
+  "name": "depot-utils",
+  "version": "0.0.1",
+  "main": "./lib/index.js",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "is-url": "1.2.4",
+    "slash2": "2.0.0"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "depot-babel-preset",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-babel-preset"

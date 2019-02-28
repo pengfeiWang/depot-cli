@@ -5,6 +5,14 @@
   "bin": {
     "depot-tools": "./tool"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-tools"
+  },
+  "bugs": {
+    "url": "https://github.com/pengfeiWang/depot-cli/issues"
+  },
+  "homepage": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-tools",
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",

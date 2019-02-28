@@ -3,6 +3,15 @@
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
+  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-build-dev"
+  },
+  "bugs": {
+    "url": "https://github.com/pengfeiWang/depot-cli/issues"
+  },
+  "homepage": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-build-dev",
   "dependencies": {
     "@babel/code-frame": "7.0.0",
     "@babel/generator": "7.2.2",

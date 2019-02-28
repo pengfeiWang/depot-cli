@@ -28,7 +28,7 @@
     "clipboardy": "1.2.3",
     "crequire": "^1.8.1",
     "debug": "4.1.0",
-    "depot-babel-preset": "0.0.1",
+    "depot-babel-preset": "0.0.0",
     "depot-history": "0.0.1",
     "depot-utils": "0.0.1",
     "didyoumean": "1.2.1",

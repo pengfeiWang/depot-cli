@@ -21,7 +21,7 @@
 		"@types/react": "16.x",
 		"@types/react-router-dom": "4.x",
 		"debug": "4.1.0",
-		"depot-babel-preset": "0.0.1",
+		"depot-babel-preset": "0.0.0",
 		"depot-build-dev": "0.0.1",
 		"depot-utils": "0.0.1",
 		"dotenv": "6.2.0",

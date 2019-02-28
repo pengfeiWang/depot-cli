@@ -1,19 +1,19 @@
 {
 	"name": "depot-cli",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"description": "framework for React apps",
 	"bin": {
 		"depot": "./bin/depot.js"
 	},
 	"repository": {
-    "type": "git",
-    "url": "https://github.com/pengfeiWang/depot-cli.git"
-  },
-  "bugs": {
-    "url": "https://github.com/pengfeiWang/depot-cli/issues"
-  },
-  "homepage": "https://github.com/pengfeiWang/depot-cli.git",
-  "authors": "pengfeiwang",
+		"type": "git",
+		"url": "https://github.com/pengfeiWang/depot-cli.git"
+	},
+	"bugs": {
+		"url": "https://github.com/pengfeiWang/depot-cli/issues"
+	},
+	"homepage": "https://github.com/pengfeiWang/depot-cli.git",
+	"authors": "pengfeiwang",
 	"license": "MIT",
 	"dependencies": {
 		"@babel/core": "7.2.2",
@@ -21,9 +21,9 @@
 		"@types/react": "16.x",
 		"@types/react-router-dom": "4.x",
 		"debug": "4.1.0",
-		"depot-babel-preset": "0.0.1",
-		"depot-build-dev": "0.0.1",
-		"depot-utils": "0.0.1",
+		"depot-babel-preset": "0.0.2",
+		"depot-build-dev": "0.0.2",
+		"depot-utils": "0.0.2",
 		"dotenv": "6.2.0",
 		"is-windows": "1.0.2",
 		"lodash": "4.17.11",

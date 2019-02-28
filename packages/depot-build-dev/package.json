@@ -1,9 +1,8 @@
 {
   "name": "depot-build-dev",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "license": "MIT",
-  
   "repository": {
     "type": "git",
     "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-build-dev"
@@ -29,6 +28,9 @@
     "clipboardy": "1.2.3",
     "crequire": "^1.8.1",
     "debug": "4.1.0",
+    "depot-babel-preset": "0.0.2",
+    "depot-history": "0.0.2",
+    "depot-utils": "0.0.2",
     "didyoumean": "1.2.1",
     "dotenv": "6.2.0",
     "ejs": "2.6.1",
@@ -73,10 +75,7 @@
     "url-polyfill": "1.1.3",
     "user-home": "2.0.0",
     "whatwg-fetch": "3.0.0",
-    "yeoman-generator": "3.1.1",
-    "depot-babel-preset": "0.0.1",
-    "depot-history": "0.0.1",
-    "depot-utils": "0.0.1"
+    "yeoman-generator": "3.1.1"
   },
   "depotTools": {
     "browserFiles": [

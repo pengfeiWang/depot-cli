@@ -1,6 +1,6 @@
 {
   "name": "depot-history",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "Manage session history with JavaScript",
   "repository": "ReactTraining/history",
   "license": "MIT",

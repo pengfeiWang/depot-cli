@@ -1,8 +1,16 @@
 {
   "name": "depot-babel-preset",
-  "version": "0.0.2",
-  "main": "./lib/index",
-  "license": "MIT",
+  "version": "0.0.1",
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-babel-preset"
+  },
+  "bugs": {
+    "url": "https://github.com/pengfeiWang/depot-cli/issues"
+  },
+  "homepage": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-babel-preset",
+  "authors": "pengfeiwang",
+	"license": "MIT",
   "dependencies": {
     "@babel/core": "7.2.2",
     "@babel/plugin-proposal-async-generator-functions": "7.2.0",

@@ -1,6 +1,6 @@
 {
 	"name": "depot-cli",
-	"version": "3.1.9",
+	"version": "3.2.0",
 	"description": "framework for React apps",
 	"bin": {
 		"depot": "./bin/depot.js"
@@ -21,8 +21,8 @@
 		"@types/react": "16.x",
 		"@types/react-router-dom": "4.x",
 		"debug": "4.1.0",
-		"depot-babel-preset": "0.0.3",
-		"depot-build-dev": "0.0.3",
+		"depot-babel-preset": "0.0.4",
+		"depot-build-dev": "0.0.4",
 		"depot-utils": "0.0.1",
 		"dotenv": "6.2.0",
 		"is-windows": "1.0.2",

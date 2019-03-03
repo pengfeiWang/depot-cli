@@ -33,5 +33,6 @@
     "browserFiles": [
       "src/runtime.js"
     ]
-  }
+  },
+  "gitHead": "b88d675300838c4dbe0764b611a3201c5b5b3e31"
 }

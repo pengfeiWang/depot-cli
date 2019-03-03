@@ -90,5 +90,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1"
-  }
+  },
+  "gitHead": "b88d675300838c4dbe0764b611a3201c5b5b3e31"
 }

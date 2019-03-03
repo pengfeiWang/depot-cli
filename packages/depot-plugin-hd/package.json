@@ -20,5 +20,6 @@
   "dependencies": {
     "depot-hd": "0.0.1",
     "postcss-plugin-px2rem": "0.8.1"
-  }
+  },
+  "gitHead": "b88d675300838c4dbe0764b611a3201c5b5b3e31"
 }

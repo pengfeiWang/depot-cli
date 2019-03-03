@@ -1,0 +1,6 @@
+**/fixtures/**/*.js
+**/template/**/*.js
+**/templates/**/*.js
+**/bin/*.js
+packages/depot-build-dev/src/plugins/commands/block/index.js
+

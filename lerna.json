@@ -7,5 +7,16 @@
       "exact": true
     }
   },
+  "changelog": {
+    "labels": {
+      "pr: enhancement": ":rocket: Enhancement",
+      "pr: bug": ":bug: Bug Fix",
+      "pr: documentation": ":book: Documentation",
+      "pr: dependency": ":deciduous_tree: Dependency"
+    },
+    "repo": "pengfeiWang/depot-cli",
+    "cacheDir": ".changelog"
+  },
+  "npmClient": "npm",
   "version": "independent"
 }

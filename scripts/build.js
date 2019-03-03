@@ -4,9 +4,9 @@ const { fork } = require('child_process');
 const { join } = require('path');
 
 function runTools(...args) {
-  console.log(['>> depot-tools', ...args].join(' '),'cwd >> ' , process.cwd());
+  console.log(['>> depot-tools', ...args].join(' '), 'cwd >> ', process.cwd());
   return fork(
-    join(process.cwd(), './packages/depot-tools/src/build.js'),
+    join(process.cwd(), './packages/depot-cli-tools/src/build.js'),
     [...args].concat(process.argv.slice(2), ['-e=depot-history']),
     {
       stdio: 'inherit',
@@ -22,6 +22,6 @@ cp.on('error', err => {
 cp.on('message', message => {
   console.log(message, '子进程事件通知');
   // if (message === 'BUILD_COMPLETE') {
-    // runTools('rollup', '-g', 'dva:dva,antd:antd');
+  // runTools('rollup', '-g', 'dva:dva,antd:antd');
   // }
 });

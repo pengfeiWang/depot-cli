@@ -3,12 +3,15 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "node scripts/build.js",
-    "changelog": "lerna-changelog",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint --ext .js packages",
-    "doc:dev": "./website/node_modules/.bin/vuepress dev ./docs",
-    "doc:deploy": "cd ./website && npm run deploy && cd -",
-    "publish": "./scripts/publish.js"
+    "publish": "./scripts/publish.js",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --trailing-comma all --single-quote --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "babel-eslint": "10.0.1",
@@ -32,7 +35,7 @@
     "react-test-renderer": "16.6.3",
     "shelljs": "0.8.3",
     "test-build-result": "^1.0.1",
-    "depot-tools": "^0.0.0"
+    "depot-cli-tools": "^0.0.1"
   },
   "license": "MIT"
 }

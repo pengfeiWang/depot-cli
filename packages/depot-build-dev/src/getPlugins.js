@@ -41,8 +41,6 @@ export default function(opts = {}) {
     // Disable this since it make umi build exit very slowly (4s+)
     // './plugins/atoolMonitor',
     './plugins/targets',
-
-   
   ];
 
   const pluginsObj = [
@@ -61,7 +59,6 @@ export default function(opts = {}) {
         opts,
       };
     }),
-    // ...getUserPlugins(['depot-plugin-react'], { cwd }),
     ...getUserPlugins(
       process.env.DEPOT_PLUGINS ? process.env.DEPOT_PLUGINS.split(',') : [],
       { cwd },
@@ -84,28 +81,31 @@ function pluginToPath(plugins, { cwd }) {
     }
     let [path, opts] = p;
     let oldPath = path;
+    // console.log('plugins::', plugins)
+    // console.log(
 
-    if (path === 'depot-plugin-react') {
-      path = 'umi-plugin-react';
-    }
+    //     resolve.sync(path, {
+    //       basedir: cwd,
+    //     })
+
+    // )
     try {
-      if (path === 'umi-plugin-react') {
-        opts = Object.assign({
-          dva: true,
-          antd: true,
-          fastClick: true,
-        }, opts);
+      if (path === 'depot-plugin-react') {
+        opts = Object.assign(
+          {
+            dva: true,
+            antd: true,
+            fastClick: true,
+          },
+          opts,
+        );
 
         return [
-          resolve.sync(
-            'umi-plugin-react',
-            {
-              basedir: join(__dirname, '../')
-            }
-          ),
-            // winPath(join(__dirname, `../node_modules/${path}`))),
-          opts
-          
+          resolve.sync('depot-plugin-react', {
+            basedir: join(__dirname, '../'),
+          }),
+          // winPath(join(__dirname, `../node_modules/${path}`))),
+          opts,
         ];
       }
       return [
@@ -148,9 +148,7 @@ function getUserPlugins(plugins, { cwd }) {
     let [path, opts] = p;
     let apply;
     let oldPath = path;
-    if (path === 'depot-plugin-react') {
-      path = 'umi-plugin-react';
-    }
+
     try {
       apply = require(path); // eslint-disable-line
     } catch (e) {

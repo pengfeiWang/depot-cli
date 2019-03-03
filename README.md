@@ -17,8 +17,6 @@ npm install depot-cli -g
 depot cli myApp
 ```
 
-`depot cli myApp`
-
 `myApp` 为所要创建的目录名称
 
 执行完毕后, 程序会创建  `myApp` 目录, 并生成开发所依赖的环境, 与文件结构

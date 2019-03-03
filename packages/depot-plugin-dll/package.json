@@ -1,0 +1,23 @@
+{
+  "name": "depot-plugin-dll",
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengfeiWang/depot-cli/tree/master/packages/depot-plugin-dll"
+  },
+  "bugs": {
+    "url": "https://github.com/pengfeiWang/depot-cli/issues"
+  },
+  "homepage": "https://github.com/pengfeiWang/depot-cli.git",
+  "authors": "pengfeiwang",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "rimraf": "2.6.2",
+    "serve-static": "1.13.2"
+  }
+}

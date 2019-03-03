@@ -1,0 +1,42 @@
+{
+  "name": "depot-plugin-locale",
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "browser": {
+    "./lib/index.js": "./lib/locale.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengfeiWang/tree/master/packages/depot-plugin-locale"
+  },
+  "bugs": {
+    "url": "https://github.com/pengfeiWang/depot-cli/issues"
+  },
+  "homepage": "https://github.com/pengfeiWang/depot-cli.git",
+  "authors": "pengfeiwang",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "src",
+    "template",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "depot"
+  ],
+  "dependencies": {
+    "globby": "7.1.1",
+    "intl": "1.2.5",
+    "lodash.groupby": "4.6.0",
+    "moment": "2.x",
+    "mustache": "3.0.1",
+    "prop-types": "15.6.2",
+    "react-intl": "2.7.2",
+    "depot-utils": "0.0.1"
+  },
+  "depotTools": {
+    "browserFiles": [
+      "src/locale.js"
+    ]
+  }
+}

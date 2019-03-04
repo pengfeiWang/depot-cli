@@ -19,7 +19,7 @@ function* handleQuery({ /* payload, callback, call, */ put /* , select */ }, cb,
       type: 'changeLoading',
       payload: false
     });
-    if (callback && err) callback(true, {});
+    if (callback && err) callback(true,err);
   }
 }
 const currentModel = Object.assign({}, templateModel, {

@@ -116,7 +116,7 @@ function* handleQuery({ /* payload, callback, call, */ put /* , select */ }, cb,
       type: 'app/changeLoading',
       payload: false
     });
-    if (callback && err) callback(true, {});
+    if (callback && err) callback(true, err);
   }
 }
 export {

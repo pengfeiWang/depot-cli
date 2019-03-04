@@ -4,6 +4,7 @@
 
 - 集中包管理(Lerna)
 - 重写编译配置
+- 调整 `src/assets` -> `/public/accets`
 
 ## 3.0.5
 

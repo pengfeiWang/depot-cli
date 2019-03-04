@@ -6,8 +6,9 @@ export default {
   closeModules: [
     // 关闭的模块
   ],
-  
+  // 指定 history 类型，可选 browser、hash
   history: 'browser', // hash || browser
+  // 不打到包内的文件
   'externals': {
     'react': 'window.React',
     'react-dom': 'window.ReactDOM',
@@ -17,10 +18,11 @@ export default {
   },
   // 打包优化, 减小体积
   treeShaking: true,
+  // 忽略 moment locale
   ignoreMomentLocale: true,
   // 路由路径
   // base: 'ass',
-  ignoreMomentLocale: true,
+  // 额外插件 webpack
   extraBabelPlugins: [],
   chainWebpack(config, { webpack }) {
     const isDev = process.env.NODE_ENV === 'development';

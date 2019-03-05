@@ -19,5 +19,6 @@
   "dependencies": {
     "is-url": "1.2.4",
     "slash2": "2.0.0"
-  }
+  },
+  "gitHead": "8ecd3b774bd149c86982d153b80e71cecbef612d"
 }

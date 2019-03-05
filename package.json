@@ -4,7 +4,6 @@
     "bootstrap": "lerna bootstrap",
     "build": "node scripts/build.js",
     "lint": "eslint --ext .js packages",
-    "publish": "./scripts/publish.js",
     "precommit": "lint-staged"
   },
   "lint-staged": {

@@ -1,6 +1,6 @@
 {
   "name": "depot-plugin-dva",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./lib/index.js",
   "dependencies": {
     "babel-plugin-dva-hmr": "0.4.1",

@@ -10,14 +10,14 @@ const FormItem = Form.Item;
 /**
  * 连接 model (store)
  */
-@connect(state => {
+export default @connect(state => {
   return {
     app: state.app,
     list: state.listModel
   };
 }) // 这里不能有 `;` 分号, @connect 是高阶函数, 还未结束
 @Form.create() // 这里不能有 `;` 分号, @Form.create() 是高阶函数, 还未结束
-export default class List extends PureComponent {
+class List extends PureComponent {
   constructor(props) {
     super(props);
     this.enterAnim = [

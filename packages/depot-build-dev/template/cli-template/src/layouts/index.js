@@ -8,8 +8,7 @@ import { LocaleProvider } from 'antd';
 import Header from './Header';
 import './index.less';
 
-@withRouter
-export default class extends React.PureComponent {
+class Layout extends React.PureComponent {
   state = {
   };
 
@@ -25,10 +24,10 @@ export default class extends React.PureComponent {
     const {
       // route: { routes }
     } = this.props;
-    // console.log('routes:', routes);
     return (
       <LocaleProvider locale={zhCN}>
         <div>
+          <img src={require('../assets/images/KpnpchXsobRgLElEozzI.svg')} alt="" />
           <Header />
           {this.props.children}
         </div>
@@ -36,3 +35,4 @@ export default class extends React.PureComponent {
     );
   }
 }
+export default withRouter(Layout);

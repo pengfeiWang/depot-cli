@@ -176,12 +176,7 @@ function pluginToPath(plugins, { cwd }) {
       path = _p2[0],
       opts = _p2[1];
 
-    let oldPath = path; // console.log('plugins::', plugins)
-    // console.log(
-    //     resolve.sync(path, {
-    //       basedir: cwd,
-    //     })
-    // )
+    let oldPath = path;
 
     try {
       if (path === 'depot-plugin-react') {

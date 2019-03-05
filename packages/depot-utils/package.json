@@ -5,12 +5,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-utils"
+    "url": "https://github.com/pengfeiWang/depot-cli/tree/master/packages/depot-utils"
   },
   "bugs": {
     "url": "https://github.com/pengfeiWang/depot-cli/issues"
   },
-  "homepage": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-utils",
+  "homepage": "https://github.com/pengfeiWang/depot-cli/tree/master/packages/depot-utils",
   "authors": "pengfeiwang",
   "files": [
     "lib",

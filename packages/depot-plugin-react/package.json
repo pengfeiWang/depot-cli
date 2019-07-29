@@ -1,6 +1,6 @@
 {
   "name": "depot-plugin-react",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "depot-plugin-dva": "0.0.4",
     "depot-plugin-hd": "0.0.4",
     "depot-plugin-locale": "0.0.4",
-    "depot-plugin-polyfills": "0.0.4",
+    "depot-plugin-polyfills": "0.0.5",
     "fastclick": "1.0.6",
     "lodash": "4.17.11",
     "mustache": "3.0.1",

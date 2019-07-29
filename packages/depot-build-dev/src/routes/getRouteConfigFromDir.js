@@ -13,32 +13,33 @@ export default function getRouteConfigFromDir(paths, config) {
   const absPath = join(absPagesPath, dirPath);
   const files = readdirSync(absPath);
 
-  const routes = files.filter(file => {
-    if (
-      file.charAt(0) === '.' ||
-      file.charAt(0) === '_' ||
-      /\.(test|spec)\.(j|t)sx?$/.test(file)
-    )
-      return false;
-    return true;
-  })
-  .filter(file => {
-    if (
-      file.charAt(0) === '.' ||
-      file.charAt(0) === '_' ||
-      /\.(test|spec)\.(j|t)sx?$/.test(file)
-    ) return false;
-    const absFile = join(absPath, file);
-    const stats = statSync(absFile);
-    if (stats.isDirectory()) {
-  
-      if (closeModules.includes(file)) return false;
-
+  const routes = files
+    .filter(file => {
+      if (
+        file.charAt(0) === '.' ||
+        file.charAt(0) === '_' ||
+        /\.(test|spec)\.(j|t)sx?$/.test(file)
+      )
+        return false;
       return true;
-    }
-    return false;
-  })
-  .reduce(transformConfigToRoutes.bind(null, paths, absPath), []);
+    })
+    .filter(file => {
+      if (
+        file.charAt(0) === '.' ||
+        file.charAt(0) === '_' ||
+        /\.(test|spec)\.(j|t)sx?$/.test(file)
+      )
+        return false;
+      const absFile = join(absPath, file);
+      const stats = statSync(absFile);
+      if (stats.isDirectory()) {
+        if (closeModules.includes(file)) return false;
+
+        return true;
+      }
+      return false;
+    })
+    .reduce(transformConfigToRoutes.bind(null, paths, absPath), []);
 
   if (dirPath === '' && absSrcPath) {
     const globalLayoutFile =
@@ -64,34 +65,42 @@ export default function getRouteConfigFromDir(paths, config) {
 
   return routes;
 }
-function transformConfigToRoutes(paths, absPath, memo, file){
+function transformConfigToRoutes(paths, absPath, memo, file) {
   const { cwd, absPagesPath, absSrcPath, dirPath = '' } = paths;
   const absConfig = readConfig(absPath, file);
 
   if (absConfig) {
-    addRoute(memo, toRoutes({
-      ...paths,
-      absPath,
-      absConfig,
-      dirPath: file
-    }));
+    addRoute(
+      memo,
+      toRoutes({
+        ...paths,
+        absPath,
+        absConfig,
+        dirPath: file,
+      }),
+    );
   }
   return memo;
 }
-function transform (cfg) {
-  const {cwd, absPath, absConfig, absTmpDirPath, dirPath} = cfg;
-  const { routePath = 'index.js', moduleLayout, modulePath, children = []} = absConfig;
+function transform(cfg) {
+  const { cwd, absPath, absConfig, absTmpDirPath, dirPath } = cfg;
+  const {
+    routePath = 'index.js',
+    moduleLayout,
+    modulePath,
+    children = [],
+  } = absConfig;
 
   delete absConfig.routePath;
   delete absConfig.moduleLayout;
   delete absConfig.modulePath;
   delete absConfig.children;
- 
+
   const route = {
     ...absConfig,
     path: normalizePath(routePath),
     component: modulePath,
-    exact: true
+    exact: true,
   };
   if (moduleLayout) {
     route.component = `./${winPath(relative(cwd, moduleLayout))}`;
@@ -101,36 +110,42 @@ function transform (cfg) {
         ...absConfig,
         path: normalizePath(routePath),
         component: modulePath,
-        exact: true
-      }
+        exact: true,
+      },
     ];
   }
-  if (children.length){
-    route.routes = (route.routes || []).concat(...children.map((it) => {
-      it.routePath = normalizePath(`${normalizePath(routePath)}/${it.routePath}`);
-      return toRoutes({
-        ...cfg,
-        absConfig: it,
-        dirPath: `${dirPath}`
-      });
-    }));
+  if (children.length) {
+    route.routes = (route.routes || []).concat(
+      ...children.map(it => {
+        it.routePath = normalizePath(
+          `${normalizePath(routePath)}/${it.routePath}`,
+        );
+        return toRoutes({
+          ...cfg,
+          absConfig: it,
+          dirPath: `${dirPath}`,
+        });
+      }),
+    );
   }
   return route;
 }
-function toRoutes (cfg) {
-  const {cwd, absTmpDirPath, absPath, absConfig, dirPath} = cfg;
+function toRoutes(cfg) {
+  const { cwd, absTmpDirPath, absPath, absConfig, dirPath } = cfg;
 
-  const {
-    moduleLayout, modulePath
-  } = absConfig;
-  if (moduleLayout) absConfig.moduleLayout = join(absPath, dirPath, moduleLayout);
+  const { moduleLayout, modulePath } = absConfig;
 
-  absConfig.modulePath = `./${winPath(relative(cwd, join(absPath, dirPath, modulePath)))}`;
+  if (moduleLayout)
+    absConfig.moduleLayout = join(absPath, dirPath, moduleLayout || '');
+  /* modulePath 为 undefined 时可能会出错 */
+  absConfig.modulePath = `./${winPath(
+    relative(cwd, join(absPath, dirPath, modulePath || '')),
+  )}`;
 
   return transform(cfg);
 }
 
-function readConfig (absPath, dir, fileName = 'config.js') {
+function readConfig(absPath, dir, fileName = 'config.js') {
   const absFilePath = join(absPath, dir, fileName);
   if (existsSync(absFilePath) && statSync(absFilePath).isFile()) {
     delete require.cache[absFilePath];
@@ -163,7 +178,7 @@ function normalizePath(path) {
   return newPath;
 }
 
-function addRoute(memo, route/* , { componentFile } */) {
+function addRoute(memo, route /* , { componentFile } */) {
   // const code = readFileSync(componentFile, 'utf-8');
   // debug(`parse yaml from ${componentFile}`);
   // const config = getYamlConfig(code);

@@ -19,7 +19,7 @@ function* handleQuery({ /* payload, callback, call, */ put /* , select */ }, cb,
       type: 'changeLoading',
       payload: false
     });
-    if (callback && err) callback(true,err);
+    if (callback && err) callback(true, err);
   }
 }
 const currentModel = Object.assign({}, templateModel, {
@@ -47,7 +47,7 @@ const currentModel = Object.assign({}, templateModel, {
           type: 'saveAs',
           payload: {}
         });
-        if (code === 1 && callback) callback(null, msg);
+        if (callback) callback(code, msg);
       }, callback);
     },
   }

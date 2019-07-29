@@ -30,7 +30,7 @@ const currentModel = Object.assign({}, templateModel, {
             dataList: list
           }
         });
-        if (code === 1 && callback) callback(null, msg);
+        if (callback) callback(code, msg);
       }, callback);
     },
     *addRow({ /* payload, */ callback }, { call, put, select }) {
@@ -54,7 +54,7 @@ const currentModel = Object.assign({}, templateModel, {
             dataList: list
           }
         });
-        if (code === 1 && callback) callback(null, msg);
+        if (callback) callback(code, msg);
       }, callback);
     },
     *delRow({ payload, callback }, { call, put, select }) {
@@ -78,7 +78,7 @@ const currentModel = Object.assign({}, templateModel, {
             dataList: list
           }
         });
-        if (code === 1 && callback) callback(null, msg);
+        if (callback) callback(code, msg);
       }, callback);
     },
     *editRow({ payload, callback }, { call, put, select }) {
@@ -102,7 +102,7 @@ const currentModel = Object.assign({}, templateModel, {
             dataList: list
           }
         });
-        if (code === 1 && callback) callback(null, msg);
+        if (callback) callback(code, msg);
       }, callback);
     }
   }

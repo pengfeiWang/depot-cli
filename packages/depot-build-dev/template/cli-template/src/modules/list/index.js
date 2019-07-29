@@ -10,13 +10,13 @@ const FormItem = Form.Item;
 /**
  * 连接 model (store)
  */
-export default @connect(state => {
-  return {
-    app: state.app,
-    list: state.listModel
-  };
-}) // 这里不能有 `;` 分号, @connect 是高阶函数, 还未结束
-@Form.create() // 这里不能有 `;` 分号, @Form.create() 是高阶函数, 还未结束
+// export default @connect(state => {
+//   return {
+//     app: state.app,
+//     list: state.listModel
+//   };
+// }) // 这里不能有 `;` 分号, @connect 是高阶函数, 还未结束
+// @Form.create() // 这里不能有 `;` 分号, @Form.create() 是高阶函数, 还未结束
 class List extends PureComponent {
   constructor(props) {
     super(props);
@@ -185,3 +185,10 @@ class List extends PureComponent {
     );
   }
 }
+
+export default connect(state => {
+  return {
+    app: state.app,
+    list: state.listModel
+  };
+})(Form.create()(List));

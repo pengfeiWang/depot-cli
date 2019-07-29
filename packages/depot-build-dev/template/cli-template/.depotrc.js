@@ -71,8 +71,8 @@ export default {
       // 放在 <head> 里，在 depot.js 之前，可使用 <%= PUBLIC_PATH %> 指向 publicPath
       headScripts: [
         {src: '<%= PUBLIC_PATH %>assets/config/index.js'},
-        {src: '<%= PUBLIC_PATH %>assets/react/16.8.2/react.js'},
-        {src: '<%= PUBLIC_PATH %>assets/react/16.8.2/react-dom.production.min.js'},
+        {src: '<%= PUBLIC_PATH %>assets/react/16.8.6/react-16.8.6.production.min.js'},
+        {src: '<%= PUBLIC_PATH %>assets/react/16.8.6/react-dom-16.8.6.production.min.js'},
         {src: '<%= PUBLIC_PATH %>assets/react/react-router4/react-router-dom.min.js'},
         {src: '<%= PUBLIC_PATH %>assets/dva/2.4.1/dva.js'},
         {src: '<%= PUBLIC_PATH %>assets/moment/2.22.2/moment.js'},

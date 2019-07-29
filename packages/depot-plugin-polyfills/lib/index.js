@@ -7,11 +7,11 @@ exports.default = _default;
 
 var _path = require('path');
 
-var _umiUtils = require('umi-utils');
+var _depotUtils = require('depot-utils');
 
 function _default(api, options = []) {
-  (0, _umiUtils.deprecate)(
-    `umi-plugin-polyfills`,
+  (0, _depotUtils.deprecate)(
+    `depot-plugin-polyfills`,
     `use config.targets instead.`,
   );
   const paths = api.paths;

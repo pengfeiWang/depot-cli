@@ -1,19 +1,47 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = getRouteConfigFromDir;
 
-var _fs = require("fs");
+var _fs = require('fs');
 
-var _path = require("path");
+var _path = require('path');
 
-var _depotUtils = require("depot-utils");
+var _depotUtils = require('depot-utils');
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(
+        Object.getOwnPropertySymbols(source).filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }),
+      );
+    }
+    ownKeys.forEach(function(key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+  return target;
+}
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
 
 // import assert from 'assert';
 // import getYamlConfig from './getYamlConfig';
@@ -23,42 +51,61 @@ const JS_EXTNAMES = ['.js', '.jsx', '.ts', '.tsx'];
 
 function getRouteConfigFromDir(paths, config) {
   const cwd = paths.cwd,
-        absPagesPath = paths.absPagesPath,
-        absSrcPath = paths.absSrcPath,
-        _paths$dirPath = paths.dirPath,
-        dirPath = _paths$dirPath === void 0 ? '' : _paths$dirPath;
+    absPagesPath = paths.absPagesPath,
+    absSrcPath = paths.absSrcPath,
+    _paths$dirPath = paths.dirPath,
+    dirPath = _paths$dirPath === void 0 ? '' : _paths$dirPath;
   const closeModules = config.closeModules;
   const absPath = (0, _path.join)(absPagesPath, dirPath);
   const files = (0, _fs.readdirSync)(absPath);
-  const routes = files.filter(file => {
-    if (file.charAt(0) === '.' || file.charAt(0) === '_' || /\.(test|spec)\.(j|t)sx?$/.test(file)) return false;
-    return true;
-  }).filter(file => {
-    if (file.charAt(0) === '.' || file.charAt(0) === '_' || /\.(test|spec)\.(j|t)sx?$/.test(file)) return false;
-    const absFile = (0, _path.join)(absPath, file);
-    const stats = (0, _fs.statSync)(absFile);
-
-    if (stats.isDirectory()) {
-      if (closeModules.includes(file)) return false;
+  const routes = files
+    .filter(file => {
+      if (
+        file.charAt(0) === '.' ||
+        file.charAt(0) === '_' ||
+        /\.(test|spec)\.(j|t)sx?$/.test(file)
+      )
+        return false;
       return true;
-    }
+    })
+    .filter(file => {
+      if (
+        file.charAt(0) === '.' ||
+        file.charAt(0) === '_' ||
+        /\.(test|spec)\.(j|t)sx?$/.test(file)
+      )
+        return false;
+      const absFile = (0, _path.join)(absPath, file);
+      const stats = (0, _fs.statSync)(absFile);
 
-    return false;
-  }).reduce(transformConfigToRoutes.bind(null, paths, absPath), []);
+      if (stats.isDirectory()) {
+        if (closeModules.includes(file)) return false;
+        return true;
+      }
+
+      return false;
+    })
+    .reduce(transformConfigToRoutes.bind(null, paths, absPath), []);
 
   if (dirPath === '' && absSrcPath) {
-    const globalLayoutFile = (0, _depotUtils.findJS)(absSrcPath, 'layouts/index') || (0, _depotUtils.findJS)(absSrcPath, 'layout/index');
+    const globalLayoutFile =
+      (0, _depotUtils.findJS)(absSrcPath, 'layouts/index') ||
+      (0, _depotUtils.findJS)(absSrcPath, 'layout/index');
 
     if (globalLayoutFile) {
       const wrappedRoutes = [];
-      addRoute(wrappedRoutes, {
-        path: '/',
-        component: `./${(0, _path.relative)(cwd, globalLayoutFile)}`,
-        exact: false,
-        routes
-      }, {
-        componentFile: globalLayoutFile
-      });
+      addRoute(
+        wrappedRoutes,
+        {
+          path: '/',
+          component: `./${(0, _path.relative)(cwd, globalLayoutFile)}`,
+          exact: false,
+          routes,
+        },
+        {
+          componentFile: globalLayoutFile,
+        },
+      );
       return wrappedRoutes;
     }
   }
@@ -68,18 +115,23 @@ function getRouteConfigFromDir(paths, config) {
 
 function transformConfigToRoutes(paths, absPath, memo, file) {
   const cwd = paths.cwd,
-        absPagesPath = paths.absPagesPath,
-        absSrcPath = paths.absSrcPath,
-        _paths$dirPath2 = paths.dirPath,
-        dirPath = _paths$dirPath2 === void 0 ? '' : _paths$dirPath2;
+    absPagesPath = paths.absPagesPath,
+    absSrcPath = paths.absSrcPath,
+    _paths$dirPath2 = paths.dirPath,
+    dirPath = _paths$dirPath2 === void 0 ? '' : _paths$dirPath2;
   const absConfig = readConfig(absPath, file);
 
   if (absConfig) {
-    addRoute(memo, toRoutes(_objectSpread({}, paths, {
-      absPath,
-      absConfig,
-      dirPath: file
-    })));
+    addRoute(
+      memo,
+      toRoutes(
+        _objectSpread({}, paths, {
+          absPath,
+          absConfig,
+          dirPath: file,
+        }),
+      ),
+    );
   }
 
   return memo;
@@ -87,16 +139,17 @@ function transformConfigToRoutes(paths, absPath, memo, file) {
 
 function transform(cfg) {
   const cwd = cfg.cwd,
-        absPath = cfg.absPath,
-        absConfig = cfg.absConfig,
-        absTmpDirPath = cfg.absTmpDirPath,
-        dirPath = cfg.dirPath;
+    absPath = cfg.absPath,
+    absConfig = cfg.absConfig,
+    absTmpDirPath = cfg.absTmpDirPath,
+    dirPath = cfg.dirPath;
   const _absConfig$routePath = absConfig.routePath,
-        routePath = _absConfig$routePath === void 0 ? 'index.js' : _absConfig$routePath,
-        moduleLayout = absConfig.moduleLayout,
-        modulePath = absConfig.modulePath,
-        _absConfig$children = absConfig.children,
-        children = _absConfig$children === void 0 ? [] : _absConfig$children;
+    routePath =
+      _absConfig$routePath === void 0 ? 'index.js' : _absConfig$routePath,
+    moduleLayout = absConfig.moduleLayout,
+    modulePath = absConfig.modulePath,
+    _absConfig$children = absConfig.children,
+    children = _absConfig$children === void 0 ? [] : _absConfig$children;
   delete absConfig.routePath;
   delete absConfig.moduleLayout;
   delete absConfig.modulePath;
@@ -105,27 +158,37 @@ function transform(cfg) {
   const route = _objectSpread({}, absConfig, {
     path: normalizePath(routePath),
     component: modulePath,
-    exact: true
+    exact: true,
   });
 
   if (moduleLayout) {
-    route.component = `./${(0, _depotUtils.winPath)((0, _path.relative)(cwd, moduleLayout))}`;
+    route.component = `./${(0, _depotUtils.winPath)(
+      (0, _path.relative)(cwd, moduleLayout),
+    )}`;
     route.exact = false;
-    route.routes = [_objectSpread({}, absConfig, {
-      path: normalizePath(routePath),
-      component: modulePath,
-      exact: true
-    })];
+    route.routes = [
+      _objectSpread({}, absConfig, {
+        path: normalizePath(routePath),
+        component: modulePath,
+        exact: true,
+      }),
+    ];
   }
 
   if (children.length) {
-    route.routes = (route.routes || []).concat(...children.map(it => {
-      it.routePath = normalizePath(`${normalizePath(routePath)}/${it.routePath}`);
-      return toRoutes(_objectSpread({}, cfg, {
-        absConfig: it,
-        dirPath: `${dirPath}`
-      }));
-    }));
+    route.routes = (route.routes || []).concat(
+      ...children.map(it => {
+        it.routePath = normalizePath(
+          `${normalizePath(routePath)}/${it.routePath}`,
+        );
+        return toRoutes(
+          _objectSpread({}, cfg, {
+            absConfig: it,
+            dirPath: `${dirPath}`,
+          }),
+        );
+      }),
+    );
   }
 
   return route;
@@ -133,21 +196,36 @@ function transform(cfg) {
 
 function toRoutes(cfg) {
   const cwd = cfg.cwd,
-        absTmpDirPath = cfg.absTmpDirPath,
-        absPath = cfg.absPath,
-        absConfig = cfg.absConfig,
-        dirPath = cfg.dirPath;
+    absTmpDirPath = cfg.absTmpDirPath,
+    absPath = cfg.absPath,
+    absConfig = cfg.absConfig,
+    dirPath = cfg.dirPath;
   const moduleLayout = absConfig.moduleLayout,
-        modulePath = absConfig.modulePath;
-  if (moduleLayout) absConfig.moduleLayout = (0, _path.join)(absPath, dirPath, moduleLayout);
-  absConfig.modulePath = `./${(0, _depotUtils.winPath)((0, _path.relative)(cwd, (0, _path.join)(absPath, dirPath, modulePath)))}`;
+    modulePath = absConfig.modulePath;
+  if (moduleLayout)
+    absConfig.moduleLayout = (0, _path.join)(
+      absPath,
+      dirPath,
+      moduleLayout || '',
+    );
+  /* modulePath 为 undefined 时可能会出错 */
+
+  absConfig.modulePath = `./${(0, _depotUtils.winPath)(
+    (0, _path.relative)(
+      cwd,
+      (0, _path.join)(absPath, dirPath, modulePath || ''),
+    ),
+  )}`;
   return transform(cfg);
 }
 
 function readConfig(absPath, dir, fileName = 'config.js') {
   const absFilePath = (0, _path.join)(absPath, dir, fileName);
 
-  if ((0, _fs.existsSync)(absFilePath) && (0, _fs.statSync)(absFilePath).isFile()) {
+  if (
+    (0, _fs.existsSync)(absFilePath) &&
+    (0, _fs.statSync)(absFilePath).isFile()
+  ) {
     delete require.cache[absFilePath];
     return require(absFilePath); // eslint-disable-line
   }
@@ -156,12 +234,14 @@ function readConfig(absPath, dir, fileName = 'config.js') {
 }
 
 function normalizePath(path) {
-  let newPath = `/${(0, _depotUtils.winPath)(path).split('/').map(path => path.replace(/^\$/, ':').replace(/\$$/, '?')).join('/')}`; // /index/index -> /
+  let newPath = `/${(0, _depotUtils.winPath)(path)
+    .split('/')
+    .map(path => path.replace(/^\$/, ':').replace(/\$$/, '?'))
+    .join('/')}`; // /index/index -> /
 
   if (newPath === '/index/index') {
     newPath = '/';
   } // /xxxx/index -> /xxxx/
-
 
   newPath = newPath.replace(/\/index$/, '/'); // remove the last slash
   // e.g. /abc/ -> /abc
@@ -177,8 +257,10 @@ function normalizePath(path) {
   return newPath;
 }
 
-function addRoute(memo, route
-/* , { componentFile } */
+function addRoute(
+  memo,
+  route,
+  /* , { componentFile } */
 ) {
   // const code = readFileSync(componentFile, 'utf-8');
   // debug(`parse yaml from ${componentFile}`);

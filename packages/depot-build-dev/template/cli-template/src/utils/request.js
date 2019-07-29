@@ -4,12 +4,11 @@ import 'antd/es/notification/style';
 const config = {
   method: 'post',
   timeout: 5000,
-  'Content-Type': 'application/json; charset=utf-8',
+  headers: { 'content-type': 'application/json; charset=utf-8' },
   withCredentials: true
 };
 
 axios.interceptors.response.use((response) => {
-  console.log(response);
   if (+(response.status) === 200) {
     return response;
   } else {

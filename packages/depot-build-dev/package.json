@@ -1,6 +1,6 @@
 {
   "name": "depot-build-dev",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "main": "index.js",
   "license": "MIT",
   "repository": {
@@ -20,7 +20,7 @@
     "@babel/template": "7.2.2",
     "@babel/traverse": "7.2.3",
     "@babel/types": "7.2.2",
-    "af-webpack": "1.4.2",
+    "af-webpack": "1.9.5",
     "body-parser": "1.18.3",
     "chalk": "2.4.1",
     "cheerio": "1.0.0-rc.2",

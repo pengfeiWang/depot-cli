@@ -7,7 +7,7 @@ const { fork } = require('child_process');
 if (
   shell
     .exec('npm config get registry')
-    .stdout.indexOf('https://registry.npmjs.org/') === -1
+    .stdout.indexOf('http://registry.npmjs.org/') === -1
 ) {
   console.error(
     'Failed: set npm registry to https://registry.npmjs.org/ first',

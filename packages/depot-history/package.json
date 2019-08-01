@@ -30,6 +30,7 @@
     "test": "karma start --single-run"
   },
   "dependencies": {
+    "depot-test": "^0.0.0",
     "invariant": "^2.2.1",
     "loose-envify": "^1.2.0",
     "query-string": "^5.0.1",

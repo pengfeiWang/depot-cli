@@ -57,7 +57,7 @@ Object.defineProperty(window, 'localStorage', {
 // eslint-disable-next-line
 Object.defineProperty(location, 'reload', {
   value: () => {
-    window.g_lang = window.localStorage.getItem('umi_locale');
+    window.g_lang = window.localStorage.getItem('depot_locale');
   },
 });
 
@@ -110,11 +110,11 @@ describe('test umi/locale', () => {
     }).toThrow();
 
     setLocale('zh-CN');
-    expect(window.localStorage.getItem('umi_locale')).toBe('zh-CN');
+    expect(window.localStorage.getItem('depot_locale')).toBe('zh-CN');
     expect(getLocale()).toBe('zh-CN');
     setLocale('en-US');
     expect(getLocale()).toBe('en-US');
     setLocale();
-    expect(window.localStorage.getItem('umi_locale')).toBe('');
+    expect(window.localStorage.getItem('depot_locale')).toBe('');
   });
 });

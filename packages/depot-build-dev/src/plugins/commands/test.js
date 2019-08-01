@@ -33,7 +33,7 @@ export default function(api) {
 
       args._ = args._.slice(1);
       if (args.w) args.watch = args.w;
-      require('umi-test')
+      require('depot-test')
         .default({
           cwd: api.cwd,
           moduleNameMapper,

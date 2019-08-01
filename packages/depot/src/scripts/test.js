@@ -4,5 +4,5 @@ import buildDevOpts from '../buildDevOpts';
 process.env.NODE_ENV = 'development';
 
 const args = yParser(process.argv.slice(2));
-const Service = require('build-dev/lib/Service').default;
+const Service = require('depot-build-dev/lib/Service').default;
 new Service(buildDevOpts(args)).run('test', args);

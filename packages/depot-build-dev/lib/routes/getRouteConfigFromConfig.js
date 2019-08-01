@@ -1,23 +1,70 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = void 0;
 
-var _assert = _interopRequireDefault(require("assert"));
+var _assert = _interopRequireDefault(require('assert'));
 
-var _path = require("path");
+var _path = require('path');
 
-var _lodash = require("lodash");
+var _lodash = require('lodash');
 
-var _depotUtils = require("depot-utils");
+var _depotUtils = require('depot-utils');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly)
+      symbols = symbols.filter(function(sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    if (i % 2) {
+      ownKeys(source, true).forEach(function(key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function(key) {
+        Object.defineProperty(
+          target,
+          key,
+          Object.getOwnPropertyDescriptor(source, key),
+        );
+      });
+    }
+  }
+  return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
 
 var _default = (routes, pagesPath = 'src/pages', parentRoutePath = '/') => {
   // cloneDeep 是为了避免 patch 多次
@@ -29,7 +76,10 @@ var _default = (routes, pagesPath = 'src/pages', parentRoutePath = '/') => {
 exports.default = _default;
 
 function patchRoutes(routes, pagesPath, parentRoutePath) {
-  (0, _assert.default)(Array.isArray(routes), `routes should be Array, but got ${routes}`);
+  (0, _assert.default)(
+    Array.isArray(routes),
+    `routes should be Array, but got ${routes}`,
+  );
   routes.forEach(route => {
     patchRoute(route, pagesPath, parentRoutePath);
   });
@@ -41,15 +91,15 @@ function patchRoute(route, pagesPath, parentRoutePath) {
     route.component = resolveComponent(pagesPath, route.component);
   } // path patch must be before bigfish patch
 
-
   if (route.path && route.path.charAt(0) !== '/') {
     if ((0, _depotUtils.isUrl)(route.path)) {
       route.path = (0, _depotUtils.winPath)(route.path);
     } else {
-      route.path = (0, _depotUtils.winPath)((0, _path.join)(parentRoutePath, route.path));
+      route.path = (0, _depotUtils.winPath)(
+        (0, _path.join)(parentRoutePath, route.path),
+      );
     }
   } // Compatible with bigfish
-
 
   if (process.env.BIGFISH_COMPAT) {
     if (route.childRoutes) {
@@ -62,7 +112,9 @@ function patchRoute(route, pagesPath, parentRoutePath) {
         let redirect = route.indexRoute.redirect;
 
         if (redirect.charAt(0) !== '/') {
-          redirect = (0, _depotUtils.winPath)((0, _path.join)(route.path, redirect));
+          redirect = (0, _depotUtils.winPath)(
+            (0, _path.join)(route.path, redirect),
+          );
         }
 
         if (route.indexRoute.component || route.routes) {
@@ -72,7 +124,7 @@ function patchRoute(route, pagesPath, parentRoutePath) {
 
           route.routes.unshift({
             path: route.path,
-            redirect
+            redirect,
           });
         } else {
           route.redirect = redirect;
@@ -87,7 +139,7 @@ function patchRoute(route, pagesPath, parentRoutePath) {
         const parsedRoute = _objectSpread({}, route.indexRoute, {
           path: route.path,
           exact: true,
-          component: route.indexRoute.component
+          component: route.indexRoute.component,
         });
 
         delete parsedRoute.redirect;
@@ -99,7 +151,9 @@ function patchRoute(route, pagesPath, parentRoutePath) {
   }
 
   if (route.redirect && route.redirect.charAt(0) !== '/') {
-    route.redirect = (0, _depotUtils.winPath)((0, _path.join)(parentRoutePath, route.redirect));
+    route.redirect = (0, _depotUtils.winPath)(
+      (0, _path.join)(parentRoutePath, route.redirect),
+    );
   }
 
   if (route.routes) {

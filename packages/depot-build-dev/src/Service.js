@@ -86,8 +86,6 @@ plugin must export a function, e.g.
         `.trim(),
       );
       const api = new Proxy(new PluginAPI(id, this), {
-        
-        
         get: (target, prop) => {
           if (this.pluginMethods[prop]) {
             return this.pluginMethods[prop];
@@ -138,7 +136,6 @@ plugin must export a function, e.g.
       if (process.env.DEPOT_TEST) {
         throw new Error(e);
       } else {
-
         signale.error(
           `
 Plugin ${chalk.cyan.underline(id)} initialize failed
@@ -296,6 +293,7 @@ ${getCodeFrame(e, { cwd: this.cwd })}
   }
 
   run(name = 'help', args) {
+    /* 在 getPlugins.js 中注册内置插件 */
     this.init();
     return this.runCommand(name, args);
   }
@@ -309,6 +307,7 @@ ${getCodeFrame(e, { cwd: this.cwd })}
       },
     });
     debug(`run ${name} with args ${JSON.stringify(args)}`);
+
     const command = this.commands[name];
     if (!command) {
       signale.error(`Command ${chalk.underline.cyan(name)} does not exists`);

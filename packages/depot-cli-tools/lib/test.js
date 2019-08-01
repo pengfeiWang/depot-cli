@@ -1,3 +1,3 @@
 'use strict';
 
-require('umi-test/bin/umi-test');
+require('depot-test/bin/depot-test');

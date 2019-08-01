@@ -31,6 +31,7 @@
     "depot-babel-preset": "0.0.7",
     "depot-history": "0.0.1",
     "depot-plugin-react": "0.0.5",
+    "depot-test": "^0.0.0",
     "depot-utils": "0.0.3",
     "didyoumean": "1.2.1",
     "dotenv": "6.2.0",
@@ -80,12 +81,7 @@
   "depotTools": {
     "browserFiles": [
       "src/plugins/404/NotFound.js",
-      "src/plugins/404/guessJSFileFromPath.js",
-      "src/plugins/commands/ui/src/pages/index/index.js",
-      "src/plugins/commands/ui/src/layouts/index.js",
-      "src/plugins/commands/ui/plugins/config/client.js",
-      "src/plugins/commands/ui/plugins/routes/client.js",
-      "src/plugins/commands/ui/plugins/blocks/client.js"
+      "src/plugins/404/guessJSFileFromPath.js"
     ]
   },
   "devDependencies": {

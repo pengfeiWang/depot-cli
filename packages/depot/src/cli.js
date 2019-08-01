@@ -33,8 +33,9 @@ switch (script) {
   case 'build':
   case 'dev':
   case 'cli':
-  // case 'test':
-  // case 'inspect':
+  case 'test':
+    // case 'test':
+    // case 'inspect':
     require(`./scripts/${script}`); // eslint-disable-line
     break;
   default: {

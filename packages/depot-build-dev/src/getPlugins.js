@@ -18,13 +18,8 @@ export default function(opts = {}) {
     './plugins/commands/build',
     './plugins/commands/cli',
     // './plugins/commands/inspect',
-    // './plugins/commands/test',
+    './plugins/commands/test',
     './plugins/commands/help',
-    // './plugins/commands/generate',
-    // './plugins/commands/rm',
-    // './plugins/commands/config',
-    // './plugins/commands/block',
-    // './plugins/commands/ui',
     './plugins/commands/version',
     './plugins/global-js',
     './plugins/global-css',
@@ -38,7 +33,6 @@ export default function(opts = {}) {
     './plugins/afwebpack-config',
     './plugins/mountElementId',
     './plugins/404', // 404 must after mock
-    // Disable this since it make umi build exit very slowly (4s+)
     // './plugins/atoolMonitor',
     './plugins/targets',
   ];

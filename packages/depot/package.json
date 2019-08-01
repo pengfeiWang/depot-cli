@@ -23,6 +23,7 @@
     "debug": "4.1.0",
     "depot-babel-preset": "0.0.7",
     "depot-build-dev": "0.0.10",
+    "depot-test": "^0.0.0",
     "depot-utils": "0.0.3",
     "dotenv": "6.2.0",
     "is-windows": "1.0.2",

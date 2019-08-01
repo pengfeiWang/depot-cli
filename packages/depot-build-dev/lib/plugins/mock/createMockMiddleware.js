@@ -1,42 +1,89 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
 exports.default = getMockMiddleware;
 
-var _fs = require("fs");
+var _fs = require('fs');
 
-var _path = require("path");
+var _path = require('path');
 
-var _bodyParser = _interopRequireDefault(require("body-parser"));
+var _bodyParser = _interopRequireDefault(require('body-parser'));
 
-var _glob = _interopRequireDefault(require("glob"));
+var _glob = _interopRequireDefault(require('glob'));
 
-var _assert = _interopRequireDefault(require("assert"));
+var _assert = _interopRequireDefault(require('assert'));
 
-var _chokidar = _interopRequireDefault(require("chokidar"));
+var _chokidar = _interopRequireDefault(require('chokidar'));
 
-var _pathToRegexp = _interopRequireDefault(require("path-to-regexp"));
+var _pathToRegexp = _interopRequireDefault(require('path-to-regexp'));
 
-var _signale = _interopRequireDefault(require("signale"));
+var _signale = _interopRequireDefault(require('signale'));
 
-var _multer = _interopRequireDefault(require("multer"));
+var _multer = _interopRequireDefault(require('multer'));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly)
+      symbols = symbols.filter(function(sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    if (i % 2) {
+      ownKeys(source, true).forEach(function(key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function(key) {
+        Object.defineProperty(
+          target,
+          key,
+          Object.getOwnPropertyDescriptor(source, key),
+        );
+      });
+    }
+  }
+  return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
 
 const VALID_METHODS = ['get', 'post', 'put', 'patch', 'delete'];
 const BODY_PARSED_METHODS = ['post', 'put', 'patch', 'delete'];
 
 function getMockMiddleware(api, errors) {
   const debug = api.debug,
-        paths = api.paths;
+    paths = api.paths;
   const cwd = paths.cwd,
-        absPagesPath = paths.absPagesPath;
+    absPagesPath = paths.absPagesPath;
   const absMockPath = (0, _path.join)(cwd, 'mock');
   const absConfigPath = (0, _path.join)(cwd, '.depotrc.mock.js');
   api.addBabelRegister([absMockPath, absConfigPath, absPagesPath]);
@@ -46,9 +93,16 @@ function getMockMiddleware(api, errors) {
   function watch() {
     if (process.env.WATCH_FILES === 'none') return;
 
-    const watcher = _chokidar.default.watch([absConfigPath, absMockPath, (0, _path.join)(absPagesPath, '**/_mock.js')], {
-      ignoreInitial: true
-    });
+    const watcher = _chokidar.default.watch(
+      [
+        absConfigPath,
+        absMockPath,
+        (0, _path.join)(absPagesPath, '**/_mock.js'),
+      ],
+      {
+        ignoreInitial: true,
+      },
+    );
 
     watcher.on('all', (event, file) => {
       debug(`[${event}] ${file}, reload mock data`);
@@ -70,20 +124,30 @@ function getMockMiddleware(api, errors) {
       debug(`load mock data from ${absConfigPath}`);
       ret = require(absConfigPath); // eslint-disable-line
     } else {
-      const mockFiles = _glob.default.sync('**/*.js', {
-        cwd: absMockPath
-      }).map(p => (0, _path.join)(absMockPath, p)).concat(_glob.default.sync('**/_mock.js', {
-        cwd: absPagesPath
-      }).map(p => (0, _path.join)(absPagesPath, p)));
+      const mockFiles = _glob.default
+        .sync('**/*.js', {
+          cwd: absMockPath,
+        })
+        .map(p => (0, _path.join)(absMockPath, p))
+        .concat(
+          _glob.default
+            .sync('**/_mock.js', {
+              cwd: absPagesPath,
+            })
+            .map(p => (0, _path.join)(absPagesPath, p)),
+        );
 
-      debug(`load mock data from ${absMockPath}, including files ${JSON.stringify(mockFiles)}`);
+      debug(
+        `load mock data from ${absMockPath}, including files ${JSON.stringify(
+          mockFiles,
+        )}`,
+      );
 
       try {
         ret = mockFiles.reduce((memo, mockFile) => {
           const m = require(mockFile); // eslint-disable-line
 
-
-          memo = _objectSpread({}, memo, m.default || m);
+          memo = _objectSpread({}, memo, {}, m.default || m);
           return memo;
         }, {});
       } catch (e) {
@@ -108,23 +172,26 @@ function getMockMiddleware(api, errors) {
       path = splited[1]; // eslint-disable-line
     }
 
-    (0, _assert.default)(VALID_METHODS.includes(method), `Invalid method ${method} for path ${path}, please check your mock files.`);
+    (0, _assert.default)(
+      VALID_METHODS.includes(method),
+      `Invalid method ${method} for path ${path}, please check your mock files.`,
+    );
     return {
       method,
-      path
+      path,
     };
   }
 
   function createHandler(method, path, handler) {
-    return function (req, res, next) {
+    return function(req, res, next) {
       if (BODY_PARSED_METHODS.includes(method)) {
         _bodyParser.default.json({
           limit: '5mb',
-          strict: false
+          strict: false,
         })(req, res, () => {
           _bodyParser.default.urlencoded({
             limit: '5mb',
-            extended: true
+            extended: true,
           })(req, res, () => {
             sendData();
           });
@@ -149,11 +216,14 @@ function getMockMiddleware(api, errors) {
     return Object.keys(config).reduce((memo, key) => {
       const handler = config[key];
       const type = typeof handler;
-      (0, _assert.default)(type === 'function' || type === 'object', `mock value of ${key} should be function or object, but got ${type}`);
+      (0, _assert.default)(
+        type === 'function' || type === 'object',
+        `mock value of ${key} should be function or object, but got ${type}`,
+      );
 
       const _parseKey = parseKey(key),
-            method = _parseKey.method,
-            path = _parseKey.path;
+        method = _parseKey.method,
+        path = _parseKey.path;
 
       const keys = [];
       const re = (0, _pathToRegexp.default)(path, keys);
@@ -162,7 +232,7 @@ function getMockMiddleware(api, errors) {
         path,
         re,
         keys,
-        handler: createHandler(method, path, handler)
+        handler: createHandler(method, path, handler),
       });
       return memo;
     }, []);
@@ -170,7 +240,11 @@ function getMockMiddleware(api, errors) {
 
   function cleanRequireCache() {
     Object.keys(require.cache).forEach(file => {
-      if (file === absConfigPath || file.indexOf(absMockPath) > -1 || (0, _path.basename)(file) === '_mock.js') {
+      if (
+        file === absConfigPath ||
+        file.indexOf(absMockPath) > -1 ||
+        (0, _path.basename)(file) === '_mock.js'
+      ) {
         delete require.cache[file];
       }
     });
@@ -184,11 +258,15 @@ function getMockMiddleware(api, errors) {
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = mockData[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (
+        var _iterator = mockData[Symbol.iterator](), _step;
+        !(_iteratorNormalCompletion = (_step = _iterator.next()).done);
+        _iteratorNormalCompletion = true
+      ) {
         const mock = _step.value;
         const method = mock.method,
-              re = mock.re,
-              keys = mock.keys;
+          re = mock.re,
+          keys = mock.keys;
 
         if (method === exceptMethod) {
           const match = re.exec(req.path);
@@ -243,10 +321,7 @@ function getMockMiddleware(api, errors) {
       }
     }
 
-    return mockData.filter(({
-      method,
-      re
-    }) => {
+    return mockData.filter(({ method, re }) => {
       return method === exceptMethod && re.test(exceptPath);
     })[0];
   }

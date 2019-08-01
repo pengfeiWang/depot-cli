@@ -22,7 +22,7 @@
     "@babel/preset-react": "^7.0.0",
     "chalk": "^2.4.1",
     "chokidar": "^2.0.4",
-    "depot-test": "^0.0.0",
+    "depot-test": "0.0.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",

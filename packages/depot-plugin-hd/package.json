@@ -19,7 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "depot-hd": "0.0.1",
-    "depot-test": "^0.0.0",
+    "depot-test": "0.0.1",
     "postcss-plugin-px2rem": "0.8.1"
   },
   "gitHead": "8ecd3b774bd149c86982d153b80e71cecbef612d"

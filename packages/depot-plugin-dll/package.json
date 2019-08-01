@@ -1,6 +1,6 @@
 {
   "name": "depot-plugin-dll",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "src"
   ],
   "dependencies": {
-    "depot-test": "^0.0.0",
+    "depot-test": "0.0.1",
     "rimraf": "2.6.2",
     "serve-static": "1.13.2"
   },

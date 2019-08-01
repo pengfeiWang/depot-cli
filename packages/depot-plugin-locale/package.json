@@ -25,7 +25,7 @@
     "depot"
   ],
   "dependencies": {
-    "depot-test": "^0.0.0",
+    "depot-test": "0.0.1",
     "depot-utils": "0.0.3",
     "globby": "7.1.1",
     "intl": "1.2.5",

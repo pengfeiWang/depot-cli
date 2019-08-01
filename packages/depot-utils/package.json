@@ -17,7 +17,7 @@
     "src"
   ],
   "dependencies": {
-    "depot-test": "^0.0.0",
+    "depot-test": "0.0.1",
     "is-url": "1.2.4",
     "slash2": "2.0.0"
   },

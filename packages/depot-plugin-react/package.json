@@ -22,7 +22,7 @@
     "antd": "3.x",
     "antd-mobile": "2.x",
     "babel-plugin-import": "1.x",
-    "depot-plugin-dll": "0.0.1",
+    "depot-plugin-dll": "0.0.4",
     "depot-plugin-dva": "0.0.4",
     "depot-plugin-hd": "0.0.4",
     "depot-plugin-locale": "0.0.4",

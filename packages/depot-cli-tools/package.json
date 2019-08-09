@@ -1,6 +1,6 @@
 {
   "name": "depot-cli-tools",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "bin": {
     "depot-tools": "./tool"
@@ -37,7 +37,8 @@
   },
   "files": [
     "bin",
-    "src"
+    "src",
+    "tool"
   ],
   "devDependencies": {
     "np": "^3.0.4"

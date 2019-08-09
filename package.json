@@ -33,7 +33,7 @@
     "react-test-renderer": "16.6.3",
     "shelljs": "0.8.3",
     "test-build-result": "^1.0.1",
-    "depot-cli-tools": "^0.0.1"
+    "depot-cli-tools": "^0.0.6"
   },
   "license": "MIT",
   "devDependencies": {

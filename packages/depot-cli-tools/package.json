@@ -7,12 +7,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-cli-tools"
+    "url": "https://github.com/pengfeiWang/depot-cli/tree/master/packages/depot-cli-tools"
   },
   "bugs": {
     "url": "https://github.com/pengfeiWang/depot-cli/issues"
   },
-  "homepage": "https://github.com/pengfeiWang/depot-cli-3/tree/master/packages/depot-cli-tools",
+  "homepage": "https://github.com/pengfeiWang/depot-cli/tree/master/packages/depot-cli-tools",
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",

@@ -159,7 +159,8 @@ function getMockMiddleware(api, errors) {
       }
     }
 
-    return normalizeConfig(ret);
+    const rs = normalizeConfig(ret);
+    return rs;
   }
 
   function parseKey(key) {

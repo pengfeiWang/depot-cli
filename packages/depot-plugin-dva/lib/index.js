@@ -81,7 +81,31 @@ function getModel(cwd, api) {
     return [winPath(modelJSPath)];
   }
 
-  return _globby.default
+  const stat = (0, _fs.lstatSync)(cwd);
+  let configModels = [];
+
+  if (stat.isDirectory()) {
+    const moduleConfigAbsPath = (0, _path.join)(cwd, 'config.js');
+    const moduleConfig = (0, _fs.existsSync)(moduleConfigAbsPath);
+
+    if (moduleConfig) {
+      const moduleConfigJson = require(moduleConfigAbsPath);
+
+      if (moduleConfigJson && moduleConfigJson.depModel) {
+        if (Array.isArray(moduleConfigJson.depModel)) {
+          configModels = moduleConfigJson.depModel
+            .map(pth => api.winPath((0, _path.join)(cwd, pth)))
+            .filter(T => T);
+        } else {
+          configModels.push(
+            api.winPath((0, _path.join)(cwd, moduleConfigJson.depModel)),
+          );
+        }
+      }
+    }
+  }
+
+  const pageModels = _globby.default
     .sync(`./${config.singular ? 'model' : 'models'}/**/*.{ts,tsx,js,jsx}`, {
       cwd,
     })
@@ -94,6 +118,8 @@ function getModel(cwd, api) {
         !p.endsWith('.test.tsx'),
     )
     .map(p => api.winPath((0, _path.join)(cwd, p)));
+
+  return pageModels.concat(configModels);
 }
 
 function getModelsWithRoutes(routes, api) {

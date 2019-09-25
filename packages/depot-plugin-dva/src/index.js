@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, lstatSync } from 'fs';
 import { join, dirname, basename, extname } from 'path';
 import globby from 'globby';
 import uniq from 'lodash.uniq';
@@ -7,13 +7,32 @@ import { chunkName, findJS, optsToArray, endWithSlash } from 'depot-utils';
 
 export function getModel(cwd, api) {
   const { config, winPath } = api;
-
   const modelJSPath = findJS(cwd, 'model');
   if (modelJSPath) {
     return [winPath(modelJSPath)];
   }
 
-  return globby
+  const stat = lstatSync(cwd);
+
+  let configModels = [];
+  if (stat.isDirectory()) {
+    const moduleConfigAbsPath = join(cwd, 'config.js');
+    const moduleConfig = existsSync(moduleConfigAbsPath);
+    if (moduleConfig) {
+      const moduleConfigJson = require(moduleConfigAbsPath);
+      if (moduleConfigJson && moduleConfigJson.depModel) {
+        if (Array.isArray(moduleConfigJson.depModel)) {
+          configModels = moduleConfigJson.depModel
+            .map(pth => api.winPath(join(cwd, pth)))
+            .filter(T => T);
+        } else {
+          configModels.push(api.winPath(join(cwd, moduleConfigJson.depModel)));
+        }
+      }
+    }
+  }
+
+  const pageModels = globby
     .sync(`./${config.singular ? 'model' : 'models'}/**/*.{ts,tsx,js,jsx}`, {
       cwd,
     })
@@ -26,6 +45,8 @@ export function getModel(cwd, api) {
         !p.endsWith('.test.tsx'),
     )
     .map(p => api.winPath(join(cwd, p)));
+
+  return pageModels.concat(configModels);
 }
 
 function getModelsWithRoutes(routes, api) {

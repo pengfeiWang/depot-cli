@@ -12,9 +12,9 @@ export default function(api) {
       const afterMiddlewares = api.applyPlugins('addMiddlewareAfterMock', {
         initialValue: [],
       });
-
       beforeMiddlewares.forEach(m => app.use(m));
-      app.use(createMockMiddleware(api, errors));
+      const middleware = createMockMiddleware(api, errors);
+      app.use(middleware);
       afterMiddlewares.forEach(m => app.use(m));
     }
   });

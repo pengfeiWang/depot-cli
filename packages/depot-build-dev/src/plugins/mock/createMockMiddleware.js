@@ -80,7 +80,8 @@ export default function getMockMiddleware(api, errors) {
         console.error(e.message);
       }
     }
-    return normalizeConfig(ret);
+    const rs = normalizeConfig(ret);
+    return rs;
   }
 
   function parseKey(key) {
@@ -213,7 +214,6 @@ export default function getMockMiddleware(api, errors) {
 
   return function DEPOT_MOCK(req, res, next) {
     const match = matchMock(req);
-
     if (match) {
       debug(`mock matched: [${match.method}] ${match.path}`);
       return match.handler(req, res, next);

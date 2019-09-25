@@ -62,7 +62,6 @@ export default function getRouteConfigFromDir(paths, config) {
       return wrappedRoutes;
     }
   }
-
   return routes;
 }
 function transformConfigToRoutes(paths, absPath, memo, file) {
@@ -95,7 +94,7 @@ function transform(cfg) {
   delete absConfig.moduleLayout;
   delete absConfig.modulePath;
   delete absConfig.children;
-
+  delete absConfig.depModel;
   const route = {
     ...absConfig,
     path: normalizePath(routePath),
@@ -185,6 +184,7 @@ function addRoute(memo, route /* , { componentFile } */) {
   // ['path', 'exact', 'component', 'routes'].forEach(key => {
   //   assert(!(key in config), `Unexpected key ${key} in file ${componentFile}`);
   // });
+
   memo.push({
     ...route,
     // ...config,

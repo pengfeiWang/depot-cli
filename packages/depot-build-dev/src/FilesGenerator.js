@@ -241,11 +241,12 @@ require('depot/_createHistory').default({
   getRouterJSContent() {
     const { paths } = this.service;
     const routerTpl = readFileSync(paths.defaultRouterTplPath, 'utf-8');
-    const routes = stripJSONQuote(
-      this.getRoutesJSON({
-        env: process.env.NODE_ENV,
-      }),
-    );
+
+    const json = this.getRoutesJSON({
+      env: process.env.NODE_ENV,
+    });
+
+    const routes = stripJSONQuote(json);
     const rendererWrappers = this.service
       .applyPlugins('addRendererWrapperWithComponent', {
         initialValue: [],
@@ -291,6 +292,7 @@ require('depot/_createHistory').default({
 
   getRoutesJSON(opts = {}) {
     const { env } = opts;
+
     return routesToJSON(this.RoutesManager.routes, this.service, env);
   }
 

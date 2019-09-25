@@ -171,6 +171,7 @@ function transform(cfg) {
   delete absConfig.moduleLayout;
   delete absConfig.modulePath;
   delete absConfig.children;
+  delete absConfig.depModel;
 
   const route = _objectSpread({}, absConfig, {
     path: normalizePath(routePath),

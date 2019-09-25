@@ -167,13 +167,16 @@ function transform(cfg) {
     modulePath = absConfig.modulePath,
     _absConfig$children = absConfig.children,
     children = _absConfig$children === void 0 ? [] : _absConfig$children;
-  delete absConfig.routePath;
-  delete absConfig.moduleLayout;
-  delete absConfig.modulePath;
-  delete absConfig.children;
-  delete absConfig.depModel;
 
-  const route = _objectSpread({}, absConfig, {
+  const cloneCfg = _objectSpread({}, absConfig);
+
+  delete cloneCfg.routePath;
+  delete cloneCfg.moduleLayout;
+  delete cloneCfg.modulePath;
+  delete cloneCfg.children;
+  delete cloneCfg.depModel;
+
+  const route = _objectSpread({}, cloneCfg, {
     path: normalizePath(routePath),
     component: modulePath,
     exact: true,
@@ -185,7 +188,7 @@ function transform(cfg) {
     )}`;
     route.exact = false;
     route.routes = [
-      _objectSpread({}, absConfig, {
+      _objectSpread({}, cloneCfg, {
         path: normalizePath(routePath),
         component: modulePath,
         exact: true,

@@ -90,13 +90,15 @@ function transform(cfg) {
     children = [],
   } = absConfig;
 
-  delete absConfig.routePath;
-  delete absConfig.moduleLayout;
-  delete absConfig.modulePath;
-  delete absConfig.children;
-  delete absConfig.depModel;
+  const cloneCfg = { ...absConfig };
+  delete cloneCfg.routePath;
+  delete cloneCfg.moduleLayout;
+  delete cloneCfg.modulePath;
+  delete cloneCfg.children;
+  delete cloneCfg.depModel;
+
   const route = {
-    ...absConfig,
+    ...cloneCfg,
     path: normalizePath(routePath),
     component: modulePath,
     exact: true,
@@ -106,7 +108,7 @@ function transform(cfg) {
     route.exact = false;
     route.routes = [
       {
-        ...absConfig,
+        ...cloneCfg,
         path: normalizePath(routePath),
         component: modulePath,
         exact: true,

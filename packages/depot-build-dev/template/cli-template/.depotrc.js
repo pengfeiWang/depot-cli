@@ -63,6 +63,9 @@ export default {
   },
   plugins: [
     ['depot-plugin-react', {
+      // dynamicImport: {
+      //   webpackChunkName: true,
+      // },
       // title: '测试',
       // 类型：Array(Object)
       // 放在 <head> 里，在 depot.js 之后，可使用 <%= PUBLIC_PATH %> 指向 publicPath

@@ -1,6 +1,6 @@
 {
   "name": "depot-plugin-dva",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "./lib/index.js",
   "dependencies": {
     "babel-plugin-dva-hmr": "0.4.1",
@@ -10,6 +10,7 @@
     "dva-immer": "0.2.4",
     "dva-loading": "2.1.0-beta.2",
     "globby": "7.1.1",
+    "is-windows": "^1.0.2",
     "lodash.uniq": "4.5.0",
     "object-assign": "4.1.1",
     "path-is-root": "0.1.0",

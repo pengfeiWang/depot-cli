@@ -19,6 +19,8 @@ var _pathIsRoot = _interopRequireDefault(require('path-is-root'));
 
 var _depotUtils = require('depot-utils');
 
+var _isWindows = _interopRequireDefault(require('is-windows'));
+
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -342,7 +344,7 @@ app.use(require('${winPath(require.resolve('dva-immer'))}').default());
       let ret = `
 _dvaDynamic({
   <%= MODELS %>
-  component: () => import(${extendStr}'${importPath}'),
+  component: () => require(${extendStr}'${importPath}'),
   ${loadingOpts}
 })
       `.trim();
@@ -358,20 +360,22 @@ _dvaDynamic({
 app: window.g_app,
 models: () => [
   ${models
-    .map(
-      model =>
-        `import(${
-          opts.dynamicImport.webpackChunkName
-            ? `/* webpackChunkName: '${(0, _depotUtils.chunkName)(
-                paths.cwd,
-                model,
-              )}' */`
-            : ''
-        }'${model}').then(m => { return { namespace: '${(0, _path.basename)(
-          model,
-          (0, _path.extname)(model),
-        )}',...m.default}})`,
-    )
+    .map(model => {
+      _isWindows.default;
+      return `import(${
+        opts.dynamicImport.webpackChunkName
+          ? `/* webpackChunkName: '${(0, _depotUtils.chunkName)(
+              paths.cwd,
+              model,
+            )}' */`
+          : ''
+      }'${
+        _isWindows.default ? winPath(model) : model
+      }').then(m => { return { namespace: '${(0, _path.basename)(
+        model,
+        (0, _path.extname)(model),
+      )}',...m.default}})`;
+    })
     .join(',\r\n  ')}
 ],
       `.trim(),

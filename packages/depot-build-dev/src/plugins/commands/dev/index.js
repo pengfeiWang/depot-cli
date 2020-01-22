@@ -6,6 +6,7 @@ import getFilesGenerator from '../getFilesGenerator';
 
 export default function(api) {
   const { service, config, log, debug } = api;
+
   const { cwd } = service;
   api.registerCommand(
     'dev',
@@ -14,14 +15,19 @@ export default function(api) {
       description: 'start a dev server for development',
     },
     (args = {}) => {
-      
       const RoutesManager = getRouteManager(service);
       RoutesManager.fetchRoutes();
-     
-      const { port } = args;
-      process.env.NODE_ENV = 'development';
+      let { port } = args;
+
+      if (!port) {
+        port = 8000;
+      }
+      if (process.env.PORT) {
+        port = parseInt(process.env.PORT, 10);
+      }
+
       service.applyPlugins('onStart');
-     
+
       const filesGenerator = getFilesGenerator(service, {
         RoutesManager,
         mountElementId: config.mountElementId,
@@ -29,7 +35,7 @@ export default function(api) {
       debug('generate files');
 
       filesGenerator.generate();
-     
+
       let server = null;
 
       // Add more service methods.
@@ -129,7 +135,6 @@ export default function(api) {
                 },
               });
               if (isFirstCompile) {
-               
               }
             },
           });

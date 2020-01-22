@@ -5,9 +5,6 @@ import uniq from 'lodash.uniq';
 import isRoot from 'path-is-root';
 import { chunkName, findJS, optsToArray, endWithSlash } from 'depot-utils';
 
-import isWindows from 'is-windows';
-import { winPath } from 'depot-utils';
-
 export function getModel(cwd, api) {
   const { config, winPath } = api;
   const modelJSPath = findJS(cwd, 'model');
@@ -235,15 +232,11 @@ app: window.g_app,
 models: () => [
   ${models
     .map(model => {
-      isWindows;
-
       return `import(${
         opts.dynamicImport.webpackChunkName
           ? `/* webpackChunkName: '${chunkName(paths.cwd, model)}' */`
           : ''
-      }'${
-        isWindows ? winPath(model) : model
-      }').then(m => { return { namespace: '${basename(
+      }'${model}').then(m => { return { namespace: '${basename(
         model,
         extname(model),
       )}',...m.default}})`;

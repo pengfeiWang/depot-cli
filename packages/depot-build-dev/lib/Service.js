@@ -425,6 +425,7 @@ ${(0, _getCodeFrame.default)(e, {
       process.exit(1);
     }
 
+    console.log('args:', args);
     const fn = command.fn,
       opts = command.opts;
 

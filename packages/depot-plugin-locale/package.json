@@ -1,6 +1,6 @@
 {
   "name": "depot-plugin-locale",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./lib/index.js",
   "browser": {
     "./lib/index.js": "./lib/locale.js"
@@ -25,8 +25,8 @@
     "depot"
   ],
   "dependencies": {
-    "depot-test": "0.0.1",
-    "depot-utils": "0.0.3",
+    "depot-test": "0.0.2",
+    "depot-utils": "0.0.4",
     "globby": "7.1.1",
     "intl": "1.2.5",
     "lodash.groupby": "4.6.0",

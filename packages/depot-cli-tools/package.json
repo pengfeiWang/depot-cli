@@ -1,6 +1,6 @@
 {
   "name": "depot-cli-tools",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "bin": {
     "depot-tools": "./tool"
@@ -22,7 +22,7 @@
     "@babel/preset-react": "^7.0.0",
     "chalk": "^2.4.1",
     "chokidar": "^2.0.4",
-    "depot-test": "0.0.1",
+    "depot-test": "0.0.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",

@@ -1,6 +1,6 @@
 {
   "name": "depot-utils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "./lib/index.js",
   "license": "MIT",
   "repository": {
@@ -17,7 +17,7 @@
     "src"
   ],
   "dependencies": {
-    "depot-test": "0.0.1",
+    "depot-test": "0.0.2",
     "is-url": "1.2.4",
     "slash2": "2.0.0"
   }

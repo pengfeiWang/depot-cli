@@ -75,7 +75,6 @@ function pluginToPath(plugins, { cwd }) {
     }
     let [path, opts] = p;
     let oldPath = path;
-
     try {
       if (path === 'depot-plugin-react') {
         opts = Object.assign(

@@ -1,1 +1,1 @@
-export default from 'depot-plugin-polyfills';
+// export default from 'depot-plugin-polyfills';

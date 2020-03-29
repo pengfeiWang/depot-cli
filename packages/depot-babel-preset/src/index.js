@@ -65,7 +65,6 @@ export default function(context, opts = {}) {
       require.resolve('babel-plugin-transform-react-remove-prop-types'),
     );
   }
-
   return {
     presets: [
       [

@@ -6,7 +6,6 @@ import assert from 'assert';
 
 export default function(api) {
   const { paths, winPath, log } = api;
-
   api._registerConfig(() => {
     return () => {
       return {

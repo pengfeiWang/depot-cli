@@ -116,7 +116,7 @@ function _default(api, option) {
     // misc
     dva: () => require('./plugins/dva').default,
     locale: () => require('./plugins/locale').default,
-    polyfills: () => require('./plugins/polyfills').default,
+    // polyfills: () => require('./plugins/polyfills').default,
     // routes: () => require('./plugins/routes').default,
     antd: () => require('./plugins/antd').default,
     title: () => require('./plugins/title').default,

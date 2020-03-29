@@ -313,7 +313,6 @@ ${getCodeFrame(e, { cwd: this.cwd })}
       signale.error(`Command ${chalk.underline.cyan(name)} does not exists`);
       process.exit(1);
     }
-    console.log('args:', args);
     const { fn, opts } = command;
 
     if (opts.webpack) {

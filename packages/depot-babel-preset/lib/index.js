@@ -149,7 +149,9 @@ function _default(context, opts = {}) {
         require.resolve('@babel/preset-env'),
         _objectSpread(
           {
-            targets,
+            targets: {
+              browsers: ['last 2 versions', 'ie >= 9'],
+            },
             loose,
             modules: 'commonjs',
             exclude,

@@ -70,7 +70,9 @@ export default function(context, opts = {}) {
       [
         require.resolve('@babel/preset-env'),
         {
-          targets,
+          targets: {
+            browsers: ['last 2 versions', 'ie >= 9'],
+          },
           loose,
           modules: 'commonjs',
           exclude,

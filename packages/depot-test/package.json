@@ -1,6 +1,6 @@
 {
   "name": "depot-test",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "bin": {
     "depot-test": "./bin/depot-test.js"
   },
@@ -25,7 +25,7 @@
     "babel-plugin-module-resolver": "3.2.0",
     "core-js": "3.1.4",
     "debug": "4.1.1",
-    "depot-babel-preset": "0.0.8",
+    "depot-babel-preset": "0.0.9",
     "depot-utils": "0.0.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",

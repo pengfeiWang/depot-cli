@@ -1,6 +1,6 @@
 {
 	"name": "depot-build-dev",
-	"version": "0.1.9",
+	"version": "0.1.10",
 	"main": "index.js",
 	"license": "MIT",
 	"repository": {
@@ -28,7 +28,7 @@
 		"clipboardy": "1.2.3",
 		"crequire": "^1.8.1",
 		"debug": "4.1.0",
-		"depot-babel-preset": "0.0.8",
+		"depot-babel-preset": "0.0.9",
 		"depot-history": "0.0.2",
 		"depot-plugin-react": "0.0.9",
 		"depot-utils": "0.0.4",

@@ -1,13 +1,9 @@
-'use strict';
+// UMI depends on promise
+import 'core-js/es6/promise'; // React depends on set/map/requestAnimationFrame
+// https://reactjs.org/docs/javascript-environment-requirements.html
 
-require('core-js/es6/promise');
-
-require('core-js/es6/set');
-
-require('core-js/es6/object');
-
-require('core-js/es6/number');
-
-require('core-js/es6/array');
-
-require('url-polyfill');
+import 'core-js/es6/set';
+import 'core-js/es6/object';
+import 'core-js/es6/number';
+import 'core-js/es6/array';
+import 'url-polyfill';

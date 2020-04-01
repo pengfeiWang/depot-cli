@@ -1,6 +1,4 @@
-'use strict';
-
-const _require = require('signale'),
+var _require = require('signale'),
   Signale = _require.Signale;
 
 module.exports = new Signale({

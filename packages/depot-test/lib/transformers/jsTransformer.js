@@ -1,17 +1,8 @@
-'use strict';
-
-var _babelJest = _interopRequireDefault(require('babel-jest'));
-
-var _path = require('path');
-
-var _depotUtils = require('depot-utils');
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-const cwd = process.cwd();
-module.exports = _babelJest.default.createTransformer({
+import babelJest from 'babel-jest';
+import { dirname } from 'path';
+import { compatDirname } from 'depot-utils';
+var cwd = process.cwd();
+module.exports = babelJest.createTransformer({
   presets: [
     require.resolve('@babel/preset-typescript'),
     [
@@ -27,27 +18,25 @@ module.exports = _babelJest.default.createTransformer({
       {
         alias: {
           // Projects don't need to install react, react-dom and enzyme
-          react: (0, _depotUtils.compatDirname)(
+          react: compatDirname(
             'react/package',
             cwd,
-            (0, _path.dirname)(require.resolve('react/package.json')),
+            dirname(require.resolve('react/package.json')),
           ),
-          'react-dom': (0, _depotUtils.compatDirname)(
+          'react-dom': compatDirname(
             'react-dom/package',
             cwd,
-            (0, _path.dirname)(require.resolve('react-dom/package.json')),
+            dirname(require.resolve('react-dom/package.json')),
           ),
-          enzyme: (0, _depotUtils.compatDirname)(
+          enzyme: compatDirname(
             'enzyme/package.json',
             cwd,
-            (0, _path.dirname)(require.resolve('enzyme/package.json')),
+            dirname(require.resolve('enzyme/package.json')),
           ),
-          'enzyme-adapter-react-16': (0, _depotUtils.compatDirname)(
+          'enzyme-adapter-react-16': compatDirname(
             'enzyme-adapter-react-16/package.json',
             cwd,
-            (0, _path.dirname)(
-              require.resolve('enzyme-adapter-react-16/package.json'),
-            ),
+            dirname(require.resolve('enzyme-adapter-react-16/package.json')),
           ),
         },
       },

@@ -1,18 +1,28 @@
-'use strict';
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread()
+  );
+}
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.default = _default;
+function _nonIterableSpread() {
+  throw new TypeError('Invalid attempt to spread non-iterable instance');
+}
 
-var _postcssPluginPx2rem = _interopRequireDefault(
-  require('postcss-plugin-px2rem'),
-);
+function _iterableToArray(iter) {
+  if (
+    Symbol.iterator in Object(iter) ||
+    Object.prototype.toString.call(iter) === '[object Arguments]'
+  )
+    return Array.from(iter);
+}
 
-var _path = require('path');
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
 }
 
 function ownKeys(object, enumerableOnly) {
@@ -64,10 +74,14 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _default(api, options = {}) {
-  const paths = api.paths,
+import px2rem from 'postcss-plugin-px2rem';
+import { join, relative } from 'path';
+export default function(api) {
+  var options =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var paths = api.paths,
     findJS = api.findJS;
-  api.modifyAFWebpackOpts(opts => {
+  api.modifyAFWebpackOpts(function(opts) {
     opts.theme = _objectSpread(
       {},
       opts.theme || {},
@@ -76,33 +90,35 @@ function _default(api, options = {}) {
       },
       options.theme || {},
     );
-    opts.extraPostCSSPlugins = [
-      ...(opts.extraPostCSSPlugins || []),
-      (0, _postcssPluginPx2rem.default)(
-        _objectSpread(
-          {
-            rootValue: 100,
-            minPixelValue: 2,
-          },
-          options.px2rem || {},
+    opts.extraPostCSSPlugins = [].concat(
+      _toConsumableArray(opts.extraPostCSSPlugins || []),
+      [
+        px2rem(
+          _objectSpread(
+            {
+              rootValue: 100,
+              minPixelValue: 2,
+            },
+            options.px2rem || {},
+          ),
         ),
-      ),
-    ];
+      ],
+    );
     return opts;
   });
-  api.addEntryImport(() => {
+  api.addEntryImport(function() {
     return {
-      source: (0, _path.relative)(
+      source: relative(
         paths.absTmpDirPath,
         findJS(paths.absSrcPath, 'hd') ||
-          (0, _path.join)(__dirname, '../template/index.js'),
+          join(__dirname, '../template/index.js'),
       ),
     };
   });
   api.addPageWatcher([
-    (0, _path.join)(paths.absSrcPath, 'hd.tsx'),
-    (0, _path.join)(paths.absSrcPath, 'hd.ts'),
-    (0, _path.join)(paths.absSrcPath, 'hd.jsx'),
-    (0, _path.join)(paths.absSrcPath, 'hd.js'),
+    join(paths.absSrcPath, 'hd.tsx'),
+    join(paths.absSrcPath, 'hd.ts'),
+    join(paths.absSrcPath, 'hd.jsx'),
+    join(paths.absSrcPath, 'hd.js'),
   ]);
 }

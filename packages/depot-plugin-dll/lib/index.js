@@ -1,20 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.default = _default;
-
-var _path = require('path');
-
-var _serveStatic = _interopRequireDefault(require('serve-static'));
-
-var _buildDll = _interopRequireDefault(require('./buildDll'));
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
@@ -64,38 +47,43 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _default(api, opts = {}) {
+import { join } from 'path';
+import serveStatic from 'serve-static';
+import buildDll from './buildDll';
+export default function(api) {
+  var opts =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   if (process.env.NODE_ENV !== 'development') return;
-  const debug = api.debug,
+  var debug = api.debug,
     paths = api.paths;
-  const dllDir = (0, _path.join)(paths.absNodeModulesPath, 'depot-dlls');
-  const dllManifest = (0, _path.join)(dllDir, 'depot.json');
-  api.register('_beforeDevServerAsync', () => {
-    return new Promise((resolve, reject) => {
-      (0, _buildDll.default)(
+  var dllDir = join(paths.absNodeModulesPath, 'depot-dlls');
+  var dllManifest = join(dllDir, 'depot.json');
+  api.register('_beforeDevServerAsync', function() {
+    return new Promise(function(resolve, reject) {
+      buildDll(
         _objectSpread(
           {
-            api,
-            dllDir,
+            api: api,
+            dllDir: dllDir,
           },
           opts,
         ),
       )
-        .then(() => {
+        .then(function() {
           debug('depot-plugin-dll done');
           resolve();
         })
-        .catch(e => {
+        .catch(function(e) {
           console.log('[depot-plugin-dll] error', e);
           reject(e);
         });
     });
   });
-  api.addMiddlewareAhead(() => {
-    return (0, _serveStatic.default)(dllDir);
+  api.addMiddlewareAhead(function() {
+    return serveStatic(dllDir);
   });
-  api.chainWebpackConfig(webpackConfig => {
-    const webpack = require(api._resolveDeps('af-webpack/webpack')); // eslint-disable-line
+  api.chainWebpackConfig(function(webpackConfig) {
+    var webpack = require(api._resolveDeps('af-webpack/webpack')); // eslint-disable-line
 
     webpackConfig.plugin('dll-reference').use(webpack.DllReferencePlugin, [
       {

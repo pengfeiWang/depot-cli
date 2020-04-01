@@ -1,20 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.default = _default;
-
-var _path = require('path');
-
-var _rimraf = _interopRequireDefault(require('rimraf'));
-
-var _fs = require('fs');
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
@@ -64,61 +47,96 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _default(opts = {}) {
-  const dllDir = opts.dllDir,
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread()
+  );
+}
+
+function _nonIterableSpread() {
+  throw new TypeError('Invalid attempt to spread non-iterable instance');
+}
+
+function _iterableToArray(iter) {
+  if (
+    Symbol.iterator in Object(iter) ||
+    Object.prototype.toString.call(iter) === '[object Arguments]'
+  )
+    return Array.from(iter);
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+}
+
+import { join } from 'path';
+import rimraf from 'rimraf';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+export default function() {
+  var opts =
+    arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var dllDir = opts.dllDir,
     api = opts.api,
     include = opts.include,
     exclude = opts.exclude;
   console.log('dllDir::', dllDir);
-  const paths = api.paths,
+  var paths = api.paths,
     _resolveDeps = api._resolveDeps,
     _api$_ = api._,
     pullAll = _api$_.pullAll,
     uniq = _api$_.uniq;
   console.log('paths.cwd:::', paths.cwd);
-  const pkgFile = (0, _path.join)(paths.cwd, 'package.json');
-  const pkg = (0, _fs.existsSync)(pkgFile) ? require(pkgFile) : {}; // eslint-disable-line
+  var pkgFile = join(paths.cwd, 'package.json');
+  var pkg = existsSync(pkgFile) ? require(pkgFile) : {}; // eslint-disable-line
 
-  const depNames = pullAll(
+  var depNames = pullAll(
     uniq(Object.keys(pkg.dependencies || {}).concat(include || [])),
     exclude,
-  ).filter(dep => {
+  ).filter(function(dep) {
     return dep !== 'depot' && !dep.startsWith('depot-plugin-');
   });
   console.log('depNames::', depNames);
 
-  const webpack = require(_resolveDeps('af-webpack/webpack'));
+  var webpack = require(_resolveDeps('af-webpack/webpack'));
 
-  const files = uniq([
-    ...depNames,
-    'depot/link',
-    'depot/dynamic',
-    'depot/navlink',
-    'depot/redirect',
-    'depot/router',
-    'depot/withRouter',
-    'depot/_renderRoutes',
-    'depot/_createHistory',
-    'react',
-    'react-dom',
-    'react-router-dom',
-  ]).sort((a, b) => (a > b ? 1 : -1));
+  var files = uniq(
+    [].concat(_toConsumableArray(depNames), [
+      'depot/link',
+      'depot/dynamic',
+      'depot/navlink',
+      'depot/redirect',
+      'depot/router',
+      'depot/withRouter',
+      'depot/_renderRoutes',
+      'depot/_createHistory',
+      'react',
+      'react-dom',
+      'react-router-dom',
+    ]),
+  ).sort(function(a, b) {
+    return a > b ? 1 : -1;
+  });
   console.log('files:::', files);
-  const filesInfoFile = (0, _path.join)(dllDir, 'filesInfo.json');
+  var filesInfoFile = join(dllDir, 'filesInfo.json');
 
-  if ((0, _fs.existsSync)(filesInfoFile)) {
+  if (existsSync(filesInfoFile)) {
     if (
-      JSON.parse((0, _fs.readFileSync)(filesInfoFile, 'utf-8')).join(', ') ===
+      JSON.parse(readFileSync(filesInfoFile, 'utf-8')).join(', ') ===
       files.join(', ')
     ) {
       console.log(
-        `[depot-plugin-dll] File list is equal, don't generate the dll file.`,
+        "[depot-plugin-dll] File list is equal, don't generate the dll file.",
       );
       return Promise.resolve();
     }
   }
 
-  const afWebpackOpts = api.applyPlugins('modifyAFWebpackOpts', {
+  var afWebpackOpts = api.applyPlugins('modifyAFWebpackOpts', {
     initialValue: {
       cwd: paths.cwd,
       disableBabelTransform: true,
@@ -127,11 +145,11 @@ function _default(opts = {}) {
     },
   });
 
-  const afWebpackConfig = require(_resolveDeps('af-webpack/getConfig')).default(
+  var afWebpackConfig = require(_resolveDeps('af-webpack/getConfig')).default(
     afWebpackOpts,
   );
 
-  const webpackConfig = _objectSpread({}, afWebpackConfig, {
+  var webpackConfig = _objectSpread({}, afWebpackConfig, {
     entry: {
       depot: files,
     },
@@ -141,17 +159,21 @@ function _default(opts = {}) {
       library: '[name]',
       publicPath: api.webpackConfig.output.publicPath,
     },
-    plugins: [
-      ...afWebpackConfig.plugins,
-      ...api.webpackConfig.plugins.filter(plugin => {
-        return plugin instanceof webpack.DefinePlugin;
-      }),
-      new webpack.DllPlugin({
-        path: (0, _path.join)(dllDir, '[name].json'),
-        name: '[name]',
-        context: paths.absSrcPath,
-      }),
-    ],
+    plugins: [].concat(
+      _toConsumableArray(afWebpackConfig.plugins),
+      _toConsumableArray(
+        api.webpackConfig.plugins.filter(function(plugin) {
+          return plugin instanceof webpack.DefinePlugin;
+        }),
+      ),
+      [
+        new webpack.DllPlugin({
+          path: join(dllDir, '[name].json'),
+          name: '[name]',
+          context: paths.absSrcPath,
+        }),
+      ],
+    ),
     resolve: _objectSpread({}, afWebpackConfig.resolve, {
       alias: _objectSpread(
         {},
@@ -162,19 +184,17 @@ function _default(opts = {}) {
     }),
   });
 
-  return new Promise((resolve, reject) => {
+  return new Promise(function(resolve, reject) {
     require(_resolveDeps('af-webpack/build')).default({
-      webpackConfig,
-
-      onSuccess() {
+      webpackConfig: webpackConfig,
+      onSuccess: function onSuccess() {
         console.log('[depot-plugin-dll] Build dll done');
-        (0, _fs.writeFileSync)(filesInfoFile, JSON.stringify(files), 'utf-8');
+        writeFileSync(filesInfoFile, JSON.stringify(files), 'utf-8');
         resolve();
       },
-
-      onFail({ err }) {
-        _rimraf.default.sync(dllDir);
-
+      onFail: function onFail(_ref) {
+        var err = _ref.err;
+        rimraf.sync(dllDir);
         reject(err);
       },
     });

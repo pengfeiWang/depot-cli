@@ -1,5 +1,3 @@
-'use strict';
-
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
@@ -49,45 +47,74 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-const babel = require('@babel/core');
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread()
+  );
+}
 
-const yParser = require('yargs-parser');
+function _nonIterableSpread() {
+  throw new TypeError('Invalid attempt to spread non-iterable instance');
+}
 
-const _require = require('path'),
+function _iterableToArray(iter) {
+  if (
+    Symbol.iterator in Object(iter) ||
+    Object.prototype.toString.call(iter) === '[object Arguments]'
+  )
+    return Array.from(iter);
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
+}
+
+var babel = require('@babel/core');
+
+var yParser = require('yargs-parser');
+
+var _require = require('path'),
   join = _require.join,
   extname = _require.extname,
   sep = _require.sep;
 
-const _require2 = require('fs'),
+var _require2 = require('fs'),
   existsSync = _require2.existsSync,
   statSync = _require2.statSync,
   readdirSync = _require2.readdirSync;
 
-const assert = require('assert');
+var assert = require('assert');
 
-const log = require('./utils/log');
+var log = require('./utils/log');
 
-const slash = require('slash2');
+var slash = require('slash2');
 
-const chalk = require('chalk');
+var chalk = require('chalk');
 
-const rimraf = require('rimraf');
+var rimraf = require('rimraf');
 
-const vfs = require('vinyl-fs');
+var vfs = require('vinyl-fs');
 
-const through = require('through2');
+var through = require('through2');
 
-const chokidar = require('chokidar');
+var chokidar = require('chokidar');
 
-const cwd = process.cwd();
-let pkgCount = null; // Init
+var cwd = process.cwd();
+var pkgCount = null; // Init
 
-const args = yParser(process.argv.slice(3));
-const watch = args.w || args.watch;
-let excludes = args.e;
+var args = yParser(process.argv.slice(3));
+var watch = args.w || args.watch;
+var excludes = args.e;
 
-function getBabelConfig(isBrowser) {
-  const targets = isBrowser
+function getBabelConfig() {
+  var isBrowser =
+    arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  var targets = isBrowser
     ? {
         browsers: ['last 2 versions', 'IE >= 9'],
       }
@@ -100,7 +127,7 @@ function getBabelConfig(isBrowser) {
         require.resolve('@babel/preset-env'),
         _objectSpread(
           {
-            targets,
+            targets: targets,
           },
           isBrowser
             ? {
@@ -109,8 +136,11 @@ function getBabelConfig(isBrowser) {
             : {},
         ),
       ],
-      ...(isBrowser ? [require.resolve('@babel/preset-react')] : []),
-    ],
+    ].concat(
+      _toConsumableArray(
+        isBrowser ? [require.resolve('@babel/preset-react')] : [],
+      ),
+    ),
     plugins: [
       require.resolve('@babel/plugin-proposal-export-default-from'),
       require.resolve('@babel/plugin-proposal-do-expressions'),
@@ -120,47 +150,51 @@ function getBabelConfig(isBrowser) {
 }
 
 function addLastSlash(path) {
-  return path.slice(-1) === '/' ? path : `${path}/`;
+  return path.slice(-1) === '/' ? path : ''.concat(path, '/');
 }
 
-function transform(opts = {}) {
-  const content = opts.content,
+function transform() {
+  var opts =
+    arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var content = opts.content,
     path = opts.path,
     pkg = opts.pkg,
     root = opts.root;
-  assert(content, `opts.content should be supplied for transform()`);
-  assert(path, `opts.path should be supplied for transform()`);
-  assert(pkg, `opts.pkg should be supplied for transform()`);
-  assert(root, `opts.root should be supplied for transform()`);
-  assert(extname(path) === '.js', `extname of opts.path should be .js`);
+  assert(content, 'opts.content should be supplied for transform()');
+  assert(path, 'opts.path should be supplied for transform()');
+  assert(pkg, 'opts.pkg should be supplied for transform()');
+  assert(root, 'opts.root should be supplied for transform()');
+  assert(extname(path) === '.js', 'extname of opts.path should be .js');
 
-  const _ref = pkg.depotTools || {},
+  var _ref = pkg.depotTools || {},
     browserFiles = _ref.browserFiles;
 
-  const isBrowser =
+  var isBrowser =
     browserFiles &&
     browserFiles.includes(
-      slash(path).replace(`${addLastSlash(slash(root))}`, ''),
+      slash(path).replace(''.concat(addLastSlash(slash(root))), ''),
     );
-  const babelConfig = getBabelConfig(isBrowser);
+  var babelConfig = getBabelConfig(isBrowser);
   log.transform(
     chalk[isBrowser ? 'yellow' : 'blue'](
-      `${slash(path).replace(`${cwd}/`, '')}`,
+      ''.concat(slash(path).replace(''.concat(cwd, '/'), '')),
     ),
   );
   return babel.transform(content, babelConfig).code;
 }
 
-function build(dir, opts = {}) {
-  const cwd = opts.cwd,
+function build(dir) {
+  var opts =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var cwd = opts.cwd,
     watch = opts.watch,
     pkgWebpack = opts.pkgWebpack;
-  assert(dir.charAt(0) !== '/', `dir should be relative`);
-  assert(cwd, `opts.cwd should be supplied`);
-  const pkgPath = join(cwd, dir, 'package.json');
+  assert(dir.charAt(0) !== '/', 'dir should be relative');
+  assert(cwd, 'opts.cwd should be supplied');
+  var pkgPath = join(cwd, dir, 'package.json');
   assert(existsSync(pkgPath), 'package.json should exists');
 
-  const pkg = require(pkgPath); // eslint-disable-line
+  var pkg = require(pkgPath); // eslint-disable-line
 
   if (excludes) {
     if (!Array.isArray(excludes)) {
@@ -170,21 +204,21 @@ function build(dir, opts = {}) {
     if (excludes.includes(pkg.name)) return;
   }
 
-  const libDir = join(dir, 'lib');
-  const srcDir = join(dir, 'src'); // clean
+  var libDir = join(dir, 'lib');
+  var srcDir = join(dir, 'src'); // clean
 
   rimraf.sync(join(cwd, libDir));
 
   function createStream(src) {
-    assert(typeof src === 'string', `src for createStream should be string`);
+    assert(typeof src === 'string', 'src for createStream should be string');
     return vfs
       .src(
         [
           src,
-          `!${join(srcDir, '**/fixtures/**/*')}`,
-          `!${join(srcDir, '**/.*-production/**/*')}`,
-          `!${join(srcDir, '**/*.test.js')}`,
-          `!${join(srcDir, '**/*.e2e.js')}`,
+          '!'.concat(join(srcDir, '**/fixtures/**/*')),
+          '!'.concat(join(srcDir, '**/.*-production/**/*')),
+          '!'.concat(join(srcDir, '**/*.test.js')),
+          '!'.concat(join(srcDir, '**/*.e2e.js')),
         ],
         {
           allowEmpty: true,
@@ -192,16 +226,16 @@ function build(dir, opts = {}) {
         },
       )
       .pipe(
-        through.obj((f, env, cb) => {
+        through.obj(function(f, env, cb) {
           if (
             extname(f.path) === '.js' &&
-            !f.path.includes(`${sep}templates${sep}`)
+            !f.path.includes(''.concat(sep, 'templates').concat(sep))
           ) {
             f.contents = Buffer.from(
               transform({
                 content: f.contents,
                 path: f.path,
-                pkg,
+                pkg: pkg,
                 root: join(cwd, dir),
               }),
             );
@@ -214,14 +248,14 @@ function build(dir, opts = {}) {
   }
 
   function createWebpack() {
-    const pkgWebpackPath = join(cwd, dir, 'webpackConfig.js');
+    var pkgWebpackPath = join(cwd, dir, 'webpackConfig.js');
     assert(existsSync(pkgWebpackPath), 'webpackConfig.js should exists');
 
-    const webpackCfg = require(pkgWebpackPath); // eslint-disable-line
+    var webpackCfg = require(pkgWebpackPath); // eslint-disable-line
 
-    const compiler = webpack(webpackCfg);
+    var compiler = webpack(webpackCfg);
 
-    const cb = (err, st) => {
+    var cb = function cb(err, st) {
       if (!err) {
         console.log(
           chalk.green('[webpack build done] '),
@@ -244,8 +278,8 @@ function build(dir, opts = {}) {
     }
   } // build
 
-  const stream = createStream(join(srcDir, '**/*'));
-  stream.on('end', () => {
+  var stream = createStream(join(srcDir, '**/*'));
+  stream.on('end', function() {
     pkgCount -= 1;
 
     if (pkgCount === 0 && process.send) {
@@ -258,12 +292,12 @@ function build(dir, opts = {}) {
 
     if (watch) {
       log.pending('start watch', srcDir);
-      const watcher = chokidar.watch(join(cwd, srcDir), {
+      var watcher = chokidar.watch(join(cwd, srcDir), {
         ignoreInitial: true,
       });
-      watcher.on('all', (event, fullPath) => {
-        const relPath = fullPath.replace(join(cwd, srcDir), '');
-        log.watch(`[${event}] ${join(srcDir, relPath)}`);
+      watcher.on('all', function(event, fullPath) {
+        var relPath = fullPath.replace(join(cwd, srcDir), '');
+        log.watch('['.concat(event, '] ').concat(join(srcDir, relPath)));
         if (!existsSync(fullPath)) return;
 
         if (statSync(fullPath).isFile()) {
@@ -279,20 +313,20 @@ function isLerna(cwd) {
 } // export default build;
 
 if (isLerna(cwd)) {
-  const dirs = readdirSync(join(cwd, 'packages')).filter(
-    dir => dir.charAt(0) !== '.',
-  );
+  var dirs = readdirSync(join(cwd, 'packages')).filter(function(dir) {
+    return dir.charAt(0) !== '.';
+  });
   pkgCount = dirs.length;
-  dirs.forEach(pkg => {
-    build(`./packages/${pkg}`, {
-      cwd,
-      watch,
+  dirs.forEach(function(pkg) {
+    build('./packages/'.concat(pkg), {
+      cwd: cwd,
+      watch: watch,
     });
   });
 } else {
   pkgCount = 1;
   build('./', {
-    cwd,
-    watch,
+    cwd: cwd,
+    watch: watch,
   });
 }

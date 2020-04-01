@@ -1,30 +1,22 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.default = _default;
-
-var _path = require('path');
-
-var _depotUtils = require('depot-utils');
-
-function _default(api, options = []) {
-  (0, _depotUtils.deprecate)(
-    `depot-plugin-polyfills`,
-    `use config.targets instead.`,
-  );
-  const paths = api.paths;
-  api.addEntryPolyfillImports(() => {
+import { join, relative } from 'path';
+import { deprecate } from 'depot-utils';
+export default function(api) {
+  var options =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  deprecate('depot-plugin-polyfills', 'use config.targets instead.');
+  var paths = api.paths;
+  api.addEntryPolyfillImports(function() {
     return ['ie9', 'ie10', 'ie11']
-      .filter(key => {
+      .filter(function(key) {
         return options.includes(key);
       })
-      .map(key => ({
-        source: (0, _path.relative)(
-          paths.absTmpDirPath,
-          (0, _path.join)(__dirname, `${key}.js`),
-        ),
-      }));
+      .map(function(key) {
+        return {
+          source: relative(
+            paths.absTmpDirPath,
+            join(__dirname, ''.concat(key, '.js')),
+          ),
+        };
+      });
   });
 }

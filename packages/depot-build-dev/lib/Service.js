@@ -431,6 +431,11 @@ ${(0, _getCodeFrame.default)(e, {
     if (opts.webpack) {
       // webpack config
       this.webpackConfig = require('./getWebpackConfig').default(this); // eslint-disable-line
+
+      console.log(
+        'this.webpackConfig:::',
+        JSON.stringify(this.webpackConfig.optimization),
+      );
     }
 
     return fn(args);

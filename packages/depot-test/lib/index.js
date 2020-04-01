@@ -1,20 +1,28 @@
-'use strict';
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread()
+  );
+}
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.default = _default;
+function _nonIterableSpread() {
+  throw new TypeError('Invalid attempt to spread non-iterable instance');
+}
 
-var _jest = _interopRequireDefault(require('jest'));
+function _iterableToArray(iter) {
+  if (
+    Symbol.iterator in Object(iter) ||
+    Object.prototype.toString.call(iter) === '[object Arguments]'
+  )
+    return Array.from(iter);
+}
 
-var _args = require('jest-cli/build/cli/args');
-
-var _path = require('path');
-
-var _fs = require('fs');
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  }
 }
 
 function _objectWithoutProperties(source, excluded) {
@@ -95,30 +103,37 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-const debug = require('debug')('depot-test');
+import jest from 'jest';
+import { options as CliOptions } from 'jest-cli/build/cli/args';
+import { join } from 'path';
+import { existsSync } from 'fs';
+
+var debug = require('debug')('depot-test');
 
 process.env.NODE_ENV = 'test';
+export default function() {
+  var originOpts =
+    arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-function _default(originOpts = {}) {
-  const opts = _objectSpread({}, originOpts);
+  var opts = _objectSpread({}, originOpts);
 
-  const _opts$cwd = opts.cwd,
+  var _opts$cwd = opts.cwd,
     cwd = _opts$cwd === void 0 ? process.cwd() : _opts$cwd,
     moduleNameMapper = opts.moduleNameMapper;
-  let transformInclude = opts.transformInclude || [];
+  var transformInclude = opts.transformInclude || [];
 
   if (typeof transformInclude === 'string') {
     transformInclude = [transformInclude];
   }
 
-  const jestConfigFile = (0, _path.join)(cwd, 'jest.config.js');
-  let userJestConfig = {};
+  var jestConfigFile = join(cwd, 'jest.config.js');
+  var userJestConfig = {};
 
-  if ((0, _fs.existsSync)(jestConfigFile)) {
+  if (existsSync(jestConfigFile)) {
     userJestConfig = require(jestConfigFile); // eslint-disable-line
   }
 
-  const _userJestConfig = userJestConfig,
+  var _userJestConfig = userJestConfig,
     userModuleNameMapper = _userJestConfig.moduleNameMapper,
     extraSetupFiles = _userJestConfig.extraSetupFiles,
     restUserJestConfig = _objectWithoutProperties(_userJestConfig, [
@@ -126,23 +141,23 @@ function _default(originOpts = {}) {
       'extraSetupFiles',
     ]);
 
-  const config = _objectSpread(
+  var config = _objectSpread(
     {
       rootDir: process.cwd(),
       setupFiles: [
         require.resolve('./shim.js'),
         require.resolve('./setupTests.js'),
-        ...(extraSetupFiles || []),
-      ],
+      ].concat(_toConsumableArray(extraSetupFiles || [])),
       resolver: require.resolve('jest-pnp-resolver'),
       transform: {
         '\\.(t|j)sx?$': require.resolve('./transformers/jsTransformer'),
         '\\.svg$': require.resolve('./transformers/fileTransformer'),
       },
       transformIgnorePatterns: [
-        `node_modules/(?!([^/]*?enzyme-adapter-react-16|${transformInclude.join(
-          '|',
-        )})/)`,
+        'node_modules/(?!([^/]*?enzyme-adapter-react-16|'.concat(
+          transformInclude.join('|'),
+          ')/)',
+        ),
       ],
       testMatch: ['**/?*.(spec|test|e2e).(j|t)s?(x)'],
       moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
@@ -165,8 +180,8 @@ function _default(originOpts = {}) {
 
   delete opts.transformInclude; // Convert alias option into real one
 
-  Object.keys(_args.options).forEach(name => {
-    const _ref = _args.options[name] || {},
+  Object.keys(CliOptions).forEach(function(name) {
+    var _ref = CliOptions[name] || {},
       alias = _ref.alias;
 
     if (alias && opts[alias]) {
@@ -174,8 +189,8 @@ function _default(originOpts = {}) {
       delete opts[alias];
     }
   });
-  return new Promise((resolve, reject) => {
-    _jest.default
+  return new Promise(function(resolve, reject) {
+    jest
       .runCLI(
         _objectSpread(
           {
@@ -185,9 +200,9 @@ function _default(originOpts = {}) {
         ),
         [cwd],
       )
-      .then(result => {
+      .then(function(result) {
         debug(result);
-        const results = result.results;
+        var results = result.results;
 
         if (results.success) {
           resolve();
@@ -195,7 +210,7 @@ function _default(originOpts = {}) {
           reject(new Error('Jest failed'));
         }
       })
-      .catch(e => {
+      .catch(function(e) {
         console.log(e);
       });
   });

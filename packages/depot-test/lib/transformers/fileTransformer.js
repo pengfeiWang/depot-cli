@@ -1,13 +1,28 @@
-var path = require('path');
+"use strict";
+
+const path = require('path');
 
 module.exports = {
-  process: function process(src, filename) {
-    var assetFilename = JSON.stringify(path.basename(filename));
+  process(src, filename) {
+    const assetFilename = JSON.stringify(path.basename(filename));
 
     if (filename.match(/\.svg$/)) {
-      return "module.exports = {\n        __esModule: true,\n        default: ".concat(assetFilename, ",\n        ReactComponent: ({ svgRef, ...props }) => ({\n          $$typeof: Symbol.for('react.element'),\n          type: 'svg',\n          ref: svgRef || null,\n          key: null,\n          props: Object.assign({}, props, {\n            children: ").concat(assetFilename, "\n          })\n        }),\n      };");
+      return `module.exports = {
+        __esModule: true,
+        default: ${assetFilename},
+        ReactComponent: ({ svgRef, ...props }) => ({
+          $$typeof: Symbol.for('react.element'),
+          type: 'svg',
+          ref: svgRef || null,
+          key: null,
+          props: Object.assign({}, props, {
+            children: ${assetFilename}
+          })
+        }),
+      };`;
     }
 
-    return "module.exports = ".concat(assetFilename, ";");
+    return `module.exports = ${assetFilename};`;
   }
+
 };

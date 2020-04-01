@@ -1,3 +1,5 @@
+"use strict";
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -16,57 +18,48 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+const yParser = require('yargs-parser');
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+const rollup = require('rollup');
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+const assert = require('assert');
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+const _require = require('fs'),
+      existsSync = _require.existsSync,
+      readdirSync = _require.readdirSync;
 
-var yParser = require('yargs-parser');
+const _require2 = require('path'),
+      join = _require2.join;
 
-var rollup = require('rollup');
+const nodeResolve = require('rollup-plugin-node-resolve');
 
-var assert = require('assert');
+const commonjs = require('rollup-plugin-commonjs');
 
-var _require = require('fs'),
-    existsSync = _require.existsSync,
-    readdirSync = _require.readdirSync;
+const replace = require('rollup-plugin-replace');
 
-var _require2 = require('path'),
-    join = _require2.join;
+const postcss = require('rollup-plugin-postcss');
 
-var nodeResolve = require('rollup-plugin-node-resolve');
+const log = require('./utils/log');
 
-var commonjs = require('rollup-plugin-commonjs');
+const parseGlobals = require('./utils/parseGlobals');
 
-var replace = require('rollup-plugin-replace');
-
-var postcss = require('rollup-plugin-postcss');
-
-var log = require('./utils/log');
-
-var parseGlobals = require('./utils/parseGlobals');
-
-var env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV;
 
 function isLerna(cwd) {
   return existsSync(join(cwd, 'lerna.json'));
 }
 
-function build(dir) {
-  var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var cwd = opts.cwd,
-      watch = opts.watch,
-      _opts$globals = opts.globals,
-      globals = _opts$globals === void 0 ? {} : _opts$globals;
-  assert(dir.charAt(0) !== '/', "dir should be relative");
-  assert(cwd, "opts.cwd should be supplied");
-  var pkgPath = join(cwd, dir, 'package.json');
+function build(dir, opts = {}) {
+  const cwd = opts.cwd,
+        watch = opts.watch,
+        _opts$globals = opts.globals,
+        globals = _opts$globals === void 0 ? {} : _opts$globals;
+  assert(dir.charAt(0) !== '/', `dir should be relative`);
+  assert(cwd, `opts.cwd should be supplied`);
+  const pkgPath = join(cwd, dir, 'package.json');
   assert(existsSync(pkgPath), 'package.json should exists');
-  var inputOptions = {
-    external: ['react', 'react-dom'].concat(_toConsumableArray(Object.keys(globals))),
+  const inputOptions = {
+    external: ['react', 'react-dom', ...Object.keys(globals)],
     plugins: [nodeResolve({
       jsnext: true
     }), replace({
@@ -75,7 +68,7 @@ function build(dir) {
       extract: true
     })]
   };
-  var outputOptions = {
+  const outputOptions = {
     format: 'umd',
     extend: true,
     globals: _objectSpread({
@@ -84,135 +77,86 @@ function build(dir) {
     }, globals)
   };
 
-  var pkg = require(pkgPath);
+  const pkg = require(pkgPath);
 
-  var _ref = pkg.depotTools || {},
-      _ref$rollupFiles = _ref.rollupFiles,
-      rollupFiles = _ref$rollupFiles === void 0 ? [] : _ref$rollupFiles;
+  const _ref = pkg.depotTools || {},
+        _ref$rollupFiles = _ref.rollupFiles,
+        rollupFiles = _ref$rollupFiles === void 0 ? [] : _ref$rollupFiles;
 
-  _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, rollupFile, _rollupFile, file, _rollupFile$, _opts, input, output, watcher, bundle;
+  _asyncToGenerator(function* () {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
 
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _iteratorNormalCompletion = true;
-            _didIteratorError = false;
-            _iteratorError = undefined;
-            _context.prev = 3;
-            _iterator = rollupFiles[Symbol.iterator]();
+    try {
+      for (var _iterator = rollupFiles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        let rollupFile = _step.value;
 
-          case 5:
-            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 24;
-              break;
-            }
+        const _rollupFile = _slicedToArray(rollupFile, 2),
+              file = _rollupFile[0],
+              _rollupFile$ = _rollupFile[1],
+              opts = _rollupFile$ === void 0 ? {} : _rollupFile$;
 
-            rollupFile = _step.value;
-            _rollupFile = _slicedToArray(rollupFile, 2), file = _rollupFile[0], _rollupFile$ = _rollupFile[1], _opts = _rollupFile$ === void 0 ? {} : _rollupFile$;
-            log.info("build ".concat(file));
-            input = _objectSpread({}, inputOptions, {
-              input: join(dir, file)
-            });
-            output = _objectSpread({}, outputOptions, {
-              file: join(dir, file.replace(/\.js$/, '.umd.js')),
-              name: _opts.name
-            });
+        log.info(`build ${file}`);
 
-            if (!watch) {
-              _context.next = 16;
-              break;
-            }
+        const input = _objectSpread({}, inputOptions, {
+          input: join(dir, file)
+        });
 
-            watcher = rollup.watch(_objectSpread({}, input, {
-              output: output
-            }));
-            watcher.on('event', function (event) {
-              log.info("watch ".concat(event.code));
-            });
-            _context.next = 21;
-            break;
+        const output = _objectSpread({}, outputOptions, {
+          file: join(dir, file.replace(/\.js$/, '.umd.js')),
+          name: opts.name
+        });
 
-          case 16:
-            _context.next = 18;
-            return rollup.rollup(input);
-
-          case 18:
-            bundle = _context.sent;
-            _context.next = 21;
-            return bundle.write(output);
-
-          case 21:
-            _iteratorNormalCompletion = true;
-            _context.next = 5;
-            break;
-
-          case 24:
-            _context.next = 30;
-            break;
-
-          case 26:
-            _context.prev = 26;
-            _context.t0 = _context["catch"](3);
-            _didIteratorError = true;
-            _iteratorError = _context.t0;
-
-          case 30:
-            _context.prev = 30;
-            _context.prev = 31;
-
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-              _iterator.return();
-            }
-
-          case 33:
-            _context.prev = 33;
-
-            if (!_didIteratorError) {
-              _context.next = 36;
-              break;
-            }
-
-            throw _iteratorError;
-
-          case 36:
-            return _context.finish(33);
-
-          case 37:
-            return _context.finish(30);
-
-          case 38:
-          case "end":
-            return _context.stop();
+        if (watch) {
+          const watcher = rollup.watch(_objectSpread({}, input, {
+            output
+          }));
+          watcher.on('event', event => {
+            log.info(`watch ${event.code}`);
+          });
+        } else {
+          const bundle = yield rollup.rollup(input);
+          yield bundle.write(output);
         }
       }
-    }, _callee, null, [[3, 26, 30, 38], [31,, 33, 37]]);
-  }))();
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  })();
 } // Init
 
 
-var cwd = process.cwd();
-var args = yParser(process.argv.slice(3));
-var watch = args.w || args.watch;
-var globals = parseGlobals(args.g || args.globals || '');
+const cwd = process.cwd();
+const args = yParser(process.argv.slice(3));
+const watch = args.w || args.watch;
+const globals = parseGlobals(args.g || args.globals || '');
 
 if (isLerna(cwd)) {
-  var dirs = readdirSync(join(cwd, 'packages'));
-  dirs.forEach(function (pkg) {
+  const dirs = readdirSync(join(cwd, 'packages'));
+  dirs.forEach(pkg => {
     if (pkg.charAt(0) === '.') return;
-    build("./packages/".concat(pkg), {
-      cwd: cwd,
-      watch: watch,
-      globals: globals
+    build(`./packages/${pkg}`, {
+      cwd,
+      watch,
+      globals
     });
   });
 } else {
   build('./', {
-    cwd: cwd,
-    watch: watch,
-    globals: globals
+    cwd,
+    watch,
+    globals
   });
 }

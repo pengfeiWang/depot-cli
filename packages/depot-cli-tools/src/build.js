@@ -19,7 +19,7 @@ const args = yParser(process.argv.slice(3));
 const watch = args.w || args.watch;
 let excludes = args.e;
 
-function getBabelConfig(isBrowser = true) {
+function getBabelConfig(isBrowser) {
   const targets = isBrowser
     ? {
         browsers: ['last 2 versions', 'IE >= 9'],

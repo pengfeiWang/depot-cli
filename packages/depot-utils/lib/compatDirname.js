@@ -1,33 +1,41 @@
-import { dirname, join } from 'path';
-import { existsSync } from 'fs';
-export default function (path, cwd, fallback) {
-  var pkg = findPkg(path, cwd);
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _path = require("path");
+
+var _fs = require("fs");
+
+function _default(path, cwd, fallback) {
+  const pkg = findPkg(path, cwd);
   if (pkg) return pkg;
 
   if (cwd !== process.cwd()) {
-    var _pkg = findPkg(path, process.cwd());
-
-    if (_pkg) return _pkg;
+    const pkg = findPkg(path, process.cwd());
+    if (pkg) return pkg;
   }
 
   return fallback;
 }
 
 function findPkg(path, cwd) {
-  var pkgPath = join(cwd, 'package.json');
-  var library = path.split('/')[0];
+  const pkgPath = (0, _path.join)(cwd, 'package.json');
+  const library = path.split('/')[0];
 
-  if (existsSync(pkgPath)) {
-    var _require = require(pkgPath),
-        _require$dependencies = _require.dependencies,
-        dependencies = _require$dependencies === void 0 ? {} : _require$dependencies; // eslint-disable-line
+  if ((0, _fs.existsSync)(pkgPath)) {
+    const _require = require(pkgPath),
+          _require$dependencies = _require.dependencies,
+          dependencies = _require$dependencies === void 0 ? {} : _require$dependencies; // eslint-disable-line
 
 
     if (dependencies[library]) {
-      var _pkgPath = dirname(join(cwd, 'node_modules', path));
+      const pkgPath = (0, _path.dirname)((0, _path.join)(cwd, 'node_modules', path));
 
-      if (existsSync(_pkgPath)) {
-        return _pkgPath;
+      if ((0, _fs.existsSync)(pkgPath)) {
+        return pkgPath;
       }
     }
   }

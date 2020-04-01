@@ -1,10 +1,15 @@
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+"use strict";
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+var _postcssPluginPx2rem = _interopRequireDefault(require("postcss-plugin-px2rem"));
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+var _path = require("path");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -12,26 +17,23 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-import px2rem from 'postcss-plugin-px2rem';
-import { join, relative } from 'path';
-export default function (api) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var paths = api.paths,
-      findJS = api.findJS;
-  api.modifyAFWebpackOpts(function (opts) {
+function _default(api, options = {}) {
+  const paths = api.paths,
+        findJS = api.findJS;
+  api.modifyAFWebpackOpts(opts => {
     opts.theme = _objectSpread({}, opts.theme || {}, {
       '@hd': '2px'
     }, options.theme || {});
-    opts.extraPostCSSPlugins = [].concat(_toConsumableArray(opts.extraPostCSSPlugins || []), [px2rem(_objectSpread({
+    opts.extraPostCSSPlugins = [...(opts.extraPostCSSPlugins || []), (0, _postcssPluginPx2rem.default)(_objectSpread({
       rootValue: 100,
       minPixelValue: 2
-    }, options.px2rem || {}))]);
+    }, options.px2rem || {}))];
     return opts;
   });
-  api.addEntryImport(function () {
+  api.addEntryImport(() => {
     return {
-      source: relative(paths.absTmpDirPath, findJS(paths.absSrcPath, 'hd') || join(__dirname, '../template/index.js'))
+      source: (0, _path.relative)(paths.absTmpDirPath, findJS(paths.absSrcPath, 'hd') || (0, _path.join)(__dirname, '../template/index.js'))
     };
   });
-  api.addPageWatcher([join(paths.absSrcPath, 'hd.tsx'), join(paths.absSrcPath, 'hd.ts'), join(paths.absSrcPath, 'hd.jsx'), join(paths.absSrcPath, 'hd.js')]);
+  api.addPageWatcher([(0, _path.join)(paths.absSrcPath, 'hd.tsx'), (0, _path.join)(paths.absSrcPath, 'hd.ts'), (0, _path.join)(paths.absSrcPath, 'hd.jsx'), (0, _path.join)(paths.absSrcPath, 'hd.js')]);
 }

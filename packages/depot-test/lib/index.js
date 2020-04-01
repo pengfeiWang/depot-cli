@@ -1,10 +1,19 @@
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+"use strict";
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+var _jest = _interopRequireDefault(require("jest"));
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+var _args = require("jest-cli/build/cli/args");
+
+var _path = require("path");
+
+var _fs = require("fs");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -16,49 +25,43 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-import jest from 'jest';
-import { options as CliOptions } from 'jest-cli/build/cli/args';
-import { join } from 'path';
-import { existsSync } from 'fs';
-
-var debug = require('debug')('depot-test');
+const debug = require('debug')('depot-test');
 
 process.env.NODE_ENV = 'test';
-export default function () {
-  var originOpts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var opts = _objectSpread({}, originOpts);
+function _default(originOpts = {}) {
+  const opts = _objectSpread({}, originOpts);
 
-  var _opts$cwd = opts.cwd,
-      cwd = _opts$cwd === void 0 ? process.cwd() : _opts$cwd,
-      moduleNameMapper = opts.moduleNameMapper;
-  var transformInclude = opts.transformInclude || [];
+  const _opts$cwd = opts.cwd,
+        cwd = _opts$cwd === void 0 ? process.cwd() : _opts$cwd,
+        moduleNameMapper = opts.moduleNameMapper;
+  let transformInclude = opts.transformInclude || [];
 
   if (typeof transformInclude === 'string') {
     transformInclude = [transformInclude];
   }
 
-  var jestConfigFile = join(cwd, 'jest.config.js');
-  var userJestConfig = {};
+  const jestConfigFile = (0, _path.join)(cwd, 'jest.config.js');
+  let userJestConfig = {};
 
-  if (existsSync(jestConfigFile)) {
+  if ((0, _fs.existsSync)(jestConfigFile)) {
     userJestConfig = require(jestConfigFile); // eslint-disable-line
   }
 
-  var _userJestConfig = userJestConfig,
-      userModuleNameMapper = _userJestConfig.moduleNameMapper,
-      extraSetupFiles = _userJestConfig.extraSetupFiles,
-      restUserJestConfig = _objectWithoutProperties(_userJestConfig, ["moduleNameMapper", "extraSetupFiles"]);
+  const _userJestConfig = userJestConfig,
+        userModuleNameMapper = _userJestConfig.moduleNameMapper,
+        extraSetupFiles = _userJestConfig.extraSetupFiles,
+        restUserJestConfig = _objectWithoutProperties(_userJestConfig, ["moduleNameMapper", "extraSetupFiles"]);
 
-  var config = _objectSpread({
+  const config = _objectSpread({
     rootDir: process.cwd(),
-    setupFiles: [require.resolve('./shim.js'), require.resolve('./setupTests.js')].concat(_toConsumableArray(extraSetupFiles || [])),
+    setupFiles: [require.resolve('./shim.js'), require.resolve('./setupTests.js'), ...(extraSetupFiles || [])],
     resolver: require.resolve('jest-pnp-resolver'),
     transform: {
       '\\.(t|j)sx?$': require.resolve('./transformers/jsTransformer'),
       '\\.svg$': require.resolve('./transformers/fileTransformer')
     },
-    transformIgnorePatterns: ["node_modules/(?!([^/]*?enzyme-adapter-react-16|".concat(transformInclude.join('|'), ")/)")],
+    transformIgnorePatterns: [`node_modules/(?!([^/]*?enzyme-adapter-react-16|${transformInclude.join('|')})/)`],
     testMatch: ['**/?*.(spec|test|e2e).(j|t)s?(x)'],
     moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
     setupFilesAfterEnv: [require.resolve('./jasmine')],
@@ -71,28 +74,28 @@ export default function () {
 
   delete opts.transformInclude; // Convert alias option into real one
 
-  Object.keys(CliOptions).forEach(function (name) {
-    var _ref = CliOptions[name] || {},
-        alias = _ref.alias;
+  Object.keys(_args.options).forEach(name => {
+    const _ref = _args.options[name] || {},
+          alias = _ref.alias;
 
     if (alias && opts[alias]) {
       opts[name] = opts[alias];
       delete opts[alias];
     }
   });
-  return new Promise(function (resolve, reject) {
-    jest.runCLI(_objectSpread({
+  return new Promise((resolve, reject) => {
+    _jest.default.runCLI(_objectSpread({
       config: JSON.stringify(config)
-    }, opts), [cwd]).then(function (result) {
+    }, opts), [cwd]).then(result => {
       debug(result);
-      var results = result.results;
+      const results = result.results;
 
       if (results.success) {
         resolve();
       } else {
         reject(new Error('Jest failed'));
       }
-    }).catch(function (e) {
+    }).catch(e => {
       console.log(e);
     });
   });

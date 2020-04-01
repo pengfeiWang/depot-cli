@@ -4,7 +4,7 @@
  */
 import crypto from 'crypto';
 var macroCheck = new RegExp('[./]macro');
-export default function() {
+export default function () {
   return {
     // This function transforms the Babel configuration on a per-file basis
     config: function config(_config, _ref) {
@@ -19,12 +19,12 @@ export default function() {
       if (macroCheck.test(source)) {
         return Object.assign({}, _config.options, {
           caller: Object.assign({}, _config.options.caller, {
-            craInvalidationToken: crypto.randomBytes(32).toString('hex'),
-          }),
+            craInvalidationToken: crypto.randomBytes(32).toString('hex')
+          })
         });
       }
 
       return _config.options;
-    },
+    }
   };
 }

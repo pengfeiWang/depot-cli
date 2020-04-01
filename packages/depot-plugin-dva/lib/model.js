@@ -1,21 +1,19 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = void 0;
 
-var _path = require('path');
+var _path = require("path");
 
-var _assert = _interopRequireDefault(require('assert'));
+var _assert = _interopRequireDefault(require("assert"));
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = api => {
   const paths = api.paths,
-    config = api.config;
+        config = api.config;
   const absTemplatePath = (0, _path.join)(__dirname, '../template/generators');
   return class Generator extends api.Generator {
     writing() {
@@ -25,18 +23,12 @@ var _default = api => {
 
       const models = config.singular ? 'model' : 'models';
       const name = this.args[0].toString();
-      (0, _assert.default)(
-        !name.includes('/'),
-        `model name should not contains /, bug got ${name}`,
-      );
-      this.fs.copyTpl(
-        (0, _path.join)(absTemplatePath, 'model.js'),
-        (0, _path.join)(paths.absSrcPath, models, `${name}.js`),
-        {
-          name,
-        },
-      );
+      (0, _assert.default)(!name.includes('/'), `model name should not contains /, bug got ${name}`);
+      this.fs.copyTpl((0, _path.join)(absTemplatePath, 'model.js'), (0, _path.join)(paths.absSrcPath, models, `${name}.js`), {
+        name
+      });
     }
+
   };
 };
 

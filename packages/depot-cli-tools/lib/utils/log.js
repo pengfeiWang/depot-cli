@@ -1,22 +1,22 @@
 var _require = require('signale'),
-  Signale = _require.Signale;
+    Signale = _require.Signale;
 
 module.exports = new Signale({
   types: {
     transform: {
       badge: '🎅',
       color: 'blue',
-      label: 'transform',
+      label: 'transform'
     },
     pending: {
       badge: '++',
       color: 'magenta',
-      label: 'pending',
+      label: 'pending'
     },
     watch: {
       badge: '**',
       color: 'yellow',
-      label: 'watch',
-    },
-  },
+      label: 'watch'
+    }
+  }
 });

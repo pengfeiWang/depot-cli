@@ -1,41 +1,37 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = exports.watcherIgnoreRegExp = void 0;
 
-var _path = require('path');
+var _path = require("path");
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _mkdirp = _interopRequireDefault(require('mkdirp'));
+var _mkdirp = _interopRequireDefault(require("mkdirp"));
 
-var _chokidar = _interopRequireDefault(require('chokidar'));
+var _chokidar = _interopRequireDefault(require("chokidar"));
 
-var _assert = _interopRequireDefault(require('assert'));
+var _assert = _interopRequireDefault(require("assert"));
 
-var _chalk = _interopRequireDefault(require('chalk'));
+var _chalk = _interopRequireDefault(require("chalk"));
 
-var _lodash = require('lodash');
+var _lodash = require("lodash");
 
-var _mustache = _interopRequireDefault(require('mustache'));
+var _mustache = _interopRequireDefault(require("mustache"));
 
-var _depotUtils = require('depot-utils');
+var _depotUtils = require("depot-utils");
 
-var _stripJSONQuote = _interopRequireDefault(
-  require('./routes/stripJSONQuote'),
-);
+var _stripJSONQuote = _interopRequireDefault(require("./routes/stripJSONQuote"));
 
-var _routesToJSON = _interopRequireDefault(require('./routes/routesToJSON'));
+var _routesToJSON = _interopRequireDefault(require("./routes/routesToJSON"));
 
-var _importsToStr = _interopRequireDefault(require('./importsToStr'));
+var _importsToStr = _interopRequireDefault(require("./importsToStr"));
 
-var _constants = require('./constants');
+var _constants = require("./constants");
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const debug = require('debug')('depot:FilesGenerator');
 
@@ -55,7 +51,7 @@ class FilesGenerator {
     debug('generate');
     const paths = this.service.paths;
     const absTmpDirPath = paths.absTmpDirPath,
-      tmpDirPath = paths.tmpDirPath;
+          tmpDirPath = paths.tmpDirPath;
     debug(`mkdir tmp dir: ${tmpDirPath}`);
 
     _mkdirp.default.sync(absTmpDirPath);
@@ -67,34 +63,23 @@ class FilesGenerator {
     const watcher = _chokidar.default.watch(path, {
       ignored: watcherIgnoreRegExp,
       // ignore .dotfiles and _mock.js
-      ignoreInitial: true,
+      ignoreInitial: true
     });
 
-    watcher.on(
-      'all',
-      (0, _lodash.debounce)((event, path) => {
-        debug(`${event} ${path}`);
-        this.rebuild();
-      }, 100),
-    );
+    watcher.on('all', (0, _lodash.debounce)((event, path) => {
+      debug(`${event} ${path}`);
+      this.rebuild();
+    }, 100));
     return watcher;
   }
 
   watch() {
     if (process.env.WATCH_FILES === 'none') return;
     const _this$service = this.service,
-      paths = _this$service.paths,
-      singular = _this$service.config.singular;
+          paths = _this$service.paths,
+          singular = _this$service.config.singular;
     const layout = singular ? 'layout' : 'layouts';
-    let pageWatchers = [
-      paths.absPagesPath,
-      ..._constants.EXT_LIST.map(ext =>
-        (0, _path.join)(paths.absSrcPath, `${layout}/index${ext}`),
-      ),
-      ..._constants.EXT_LIST.map(ext =>
-        (0, _path.join)(paths.absSrcPath, `app${ext}`),
-      ),
-    ];
+    let pageWatchers = [paths.absPagesPath, ..._constants.EXT_LIST.map(ext => (0, _path.join)(paths.absSrcPath, `${layout}/index${ext}`)), ..._constants.EXT_LIST.map(ext => (0, _path.join)(paths.absSrcPath, `app${ext}`))];
 
     if (this.modifyPageWatcher) {
       pageWatchers = this.modifyPageWatcher(pageWatchers);
@@ -118,14 +103,14 @@ class FilesGenerator {
 
   rebuild() {
     const _this$service2 = this.service,
-      refreshBrowser = _this$service2.refreshBrowser,
-      printError = _this$service2.printError;
+          refreshBrowser = _this$service2.refreshBrowser,
+          printError = _this$service2.printError;
 
     try {
       this.service.applyPlugins('onGenerateFiles', {
         args: {
-          isRebuild: true,
-        },
+          isRebuild: true
+        }
       });
       this.generateRouterJS();
       this.generateEntry();
@@ -167,83 +152,54 @@ class FilesGenerator {
     rootContainer,
     document.getElementById('${this.mountElementId}'),
   );
-      `.trim(),
+      `.trim()
     });
-    const moduleBeforeRenderer = this.service
-      .applyPlugins('addRendererWrapperWithModule', {
-        initialValue: [],
-      })
-      .map((source, index) => {
-        return {
-          source,
-          specifier: `moduleBeforeRenderer${index}`,
-        };
-      });
-    const plugins = this.service
-      .applyPlugins('addRuntimePlugin', {
-        initialValue: [],
-      })
-      .map(plugin => {
-        return (0, _depotUtils.winPath)(
-          (0, _path.relative)(paths.absTmpDirPath, plugin),
-        );
-      });
+    const moduleBeforeRenderer = this.service.applyPlugins('addRendererWrapperWithModule', {
+      initialValue: []
+    }).map((source, index) => {
+      return {
+        source,
+        specifier: `moduleBeforeRenderer${index}`
+      };
+    });
+    const plugins = this.service.applyPlugins('addRuntimePlugin', {
+      initialValue: []
+    }).map(plugin => {
+      return (0, _depotUtils.winPath)((0, _path.relative)(paths.absTmpDirPath, plugin));
+    });
 
     if ((0, _depotUtils.findJS)(paths.absSrcPath, 'app')) {
       plugins.push('@/app');
     }
 
     const validKeys = this.service.applyPlugins('addRuntimePluginKey', {
-      initialValue: [
-        'patchRoutes',
-        'render',
-        'rootContainer',
-        'modifyRouteProps',
-        'onRouteChange',
-      ],
+      initialValue: ['patchRoutes', 'render', 'rootContainer', 'modifyRouteProps', 'onRouteChange']
     });
-    (0, _assert.default)(
-      (0, _lodash.uniq)(validKeys).length === validKeys.length,
-      `Conflict keys found in [${validKeys.join(', ')}]`,
-    );
+    (0, _assert.default)((0, _lodash.uniq)(validKeys).length === validKeys.length, `Conflict keys found in [${validKeys.join(', ')}]`);
 
     const entryContent = _mustache.default.render(entryTpl, {
-      code: this.service
-        .applyPlugins('addEntryCode', {
-          initialValue: [],
-        })
-        .join('\n\n'),
-      codeAhead: this.service
-        .applyPlugins('addEntryCodeAhead', {
-          initialValue: [],
-        })
-        .join('\n\n'),
-      imports: (0, _importsToStr.default)(
-        this.service.applyPlugins('addEntryImport', {
-          initialValue: moduleBeforeRenderer,
-        }),
-      ).join('\n'),
-      importsAhead: (0, _importsToStr.default)(
-        this.service.applyPlugins('addEntryImportAhead', {
-          initialValue: [],
-        }),
-      ).join('\n'),
-      polyfillImports: (0, _importsToStr.default)(
-        this.service.applyPlugins('addEntryPolyfillImports', {
-          initialValue: [],
-        }),
-      ).join('\n'),
+      code: this.service.applyPlugins('addEntryCode', {
+        initialValue: []
+      }).join('\n\n'),
+      codeAhead: this.service.applyPlugins('addEntryCodeAhead', {
+        initialValue: []
+      }).join('\n\n'),
+      imports: (0, _importsToStr.default)(this.service.applyPlugins('addEntryImport', {
+        initialValue: moduleBeforeRenderer
+      })).join('\n'),
+      importsAhead: (0, _importsToStr.default)(this.service.applyPlugins('addEntryImportAhead', {
+        initialValue: []
+      })).join('\n'),
+      polyfillImports: (0, _importsToStr.default)(this.service.applyPlugins('addEntryPolyfillImports', {
+        initialValue: []
+      })).join('\n'),
       moduleBeforeRenderer,
       render: initialRender,
       plugins,
-      validKeys,
+      validKeys
     });
 
-    (0, _fs.writeFileSync)(
-      paths.absLibraryJSPath,
-      `${entryContent.trim()}\n`,
-      'utf-8',
-    );
+    (0, _fs.writeFileSync)(paths.absLibraryJSPath, `${entryContent.trim()}\n`, 'utf-8');
   }
 
   generateHistory() {
@@ -257,15 +213,11 @@ require('depot/_createHistory').default({
 
     const content = _mustache.default.render(tpl, {
       history: this.service.applyPlugins('modifyEntryHistory', {
-        initialValue: initialHistory,
-      }),
+        initialValue: initialHistory
+      })
     });
 
-    (0, _fs.writeFileSync)(
-      (0, _path.join)(paths.absTmpDirPath, 'initHistory.js'),
-      `${content.trim()}\n`,
-      'utf-8',
-    );
+    (0, _fs.writeFileSync)((0, _path.join)(paths.absTmpDirPath, 'initHistory.js'), `${content.trim()}\n`, 'utf-8');
   }
 
   generateRouterJS() {
@@ -275,55 +227,39 @@ require('depot/_createHistory').default({
     const routesContent = this.getRouterJSContent(); // 避免文件写入导致不必要的 webpack 编译
 
     if (this.routesContent !== routesContent) {
-      (0, _fs.writeFileSync)(
-        absRouterJSPath,
-        `${routesContent.trim()}\n`,
-        'utf-8',
-      );
+      (0, _fs.writeFileSync)(absRouterJSPath, `${routesContent.trim()}\n`, 'utf-8');
       this.routesContent = routesContent;
     }
   }
 
   getRouterJSContent() {
     const paths = this.service.paths;
-    const routerTpl = (0, _fs.readFileSync)(
-      paths.defaultRouterTplPath,
-      'utf-8',
-    );
+    const routerTpl = (0, _fs.readFileSync)(paths.defaultRouterTplPath, 'utf-8');
     const json = this.getRoutesJSON({
-      env: process.env.NODE_ENV,
+      env: process.env.NODE_ENV
     });
     const routes = (0, _stripJSONQuote.default)(json);
-    const rendererWrappers = this.service
-      .applyPlugins('addRendererWrapperWithComponent', {
-        initialValue: [],
-      })
-      .map((source, index) => {
-        return {
-          source,
-          specifier: `RendererWrapper${index}`,
-        };
-      });
+    const rendererWrappers = this.service.applyPlugins('addRendererWrapperWithComponent', {
+      initialValue: []
+    }).map((source, index) => {
+      return {
+        source,
+        specifier: `RendererWrapper${index}`
+      };
+    });
     const routerContent = this.getRouterContent(rendererWrappers);
     return _mustache.default.render(routerTpl, {
-      imports: (0, _importsToStr.default)(
-        this.service.applyPlugins('addRouterImport', {
-          initialValue: rendererWrappers,
-        }),
-      ).join('\n'),
-      importsAhead: (0, _importsToStr.default)(
-        this.service.applyPlugins('addRouterImportAhead', {
-          initialValue: [],
-        }),
-      ).join('\n'),
+      imports: (0, _importsToStr.default)(this.service.applyPlugins('addRouterImport', {
+        initialValue: rendererWrappers
+      })).join('\n'),
+      importsAhead: (0, _importsToStr.default)(this.service.applyPlugins('addRouterImportAhead', {
+        initialValue: []
+      })).join('\n'),
       routes,
       routerContent,
-      RouterRootComponent: this.service.applyPlugins(
-        'modifyRouterRootComponent',
-        {
-          initialValue: 'DefaultRouter',
-        },
-      ),
+      RouterRootComponent: this.service.applyPlugins('modifyRouterRootComponent', {
+        initialValue: 'DefaultRouter'
+      })
     });
   }
 
@@ -338,11 +274,7 @@ require('depot/_createHistory').default({
 
   getRoutesJSON(opts = {}) {
     const env = opts.env;
-    return (0, _routesToJSON.default)(
-      this.RoutesManager.routes,
-      this.service,
-      env,
-    );
+    return (0, _routesToJSON.default)(this.RoutesManager.routes, this.service, env);
   }
 
   getRouterContent(rendererWrappers) {
@@ -359,6 +291,7 @@ require('depot/_createHistory').default({
       `.trim();
     }, defaultRenderer);
   }
+
 }
 
 exports.default = FilesGenerator;

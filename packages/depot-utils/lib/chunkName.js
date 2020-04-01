@@ -9,9 +9,5 @@ function stripFirstSlash(path) {
 }
 
 export default function chunkName(cwd, path) {
-  return stripFirstSlash(winPath(path).replace(winPath(cwd), ''))
-    .replace(/\//g, '__')
-    .replace(/^src__/, '')
-    .replace(/^pages__/, 'p__')
-    .replace(/^page__/, 'p__');
+  return stripFirstSlash(winPath(path).replace(winPath(cwd), '')).replace(/\//g, '__').replace(/^src__/, '').replace(/^pages__/, 'p__').replace(/^page__/, 'p__');
 }

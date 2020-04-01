@@ -1,6 +1,6 @@
 import { dirname, join } from 'path';
 import { existsSync } from 'fs';
-export default function(path, cwd, fallback) {
+export default function (path, cwd, fallback) {
   var pkg = findPkg(path, cwd);
   if (pkg) return pkg;
 
@@ -19,9 +19,9 @@ function findPkg(path, cwd) {
 
   if (existsSync(pkgPath)) {
     var _require = require(pkgPath),
-      _require$dependencies = _require.dependencies,
-      dependencies =
-        _require$dependencies === void 0 ? {} : _require$dependencies; // eslint-disable-line
+        _require$dependencies = _require.dependencies,
+        dependencies = _require$dependencies === void 0 ? {} : _require$dependencies; // eslint-disable-line
+
 
     if (dependencies[library]) {
       var _pkgPath = dirname(join(cwd, 'node_modules', path));

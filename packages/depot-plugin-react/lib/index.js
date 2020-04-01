@@ -1,60 +1,17 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
-var _lodash = require('lodash');
+var _lodash = require("lodash");
 
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly)
-      symbols = symbols.filter(function(sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    keys.push.apply(keys, symbols);
-  }
-  return keys;
-}
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    if (i % 2) {
-      ownKeys(source, true).forEach(function(key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(source).forEach(function(key) {
-        Object.defineProperty(
-          target,
-          key,
-          Object.getOwnPropertyDescriptor(source, key),
-        );
-      });
-    }
-  }
-  return target;
-}
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true,
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function toObject(o) {
   if (!(0, _lodash.isPlainObject)(o)) {
@@ -74,9 +31,7 @@ function getPlugins(obj) {
 
 function diffPlugins(newOption, oldOption) {
   return Object.keys(newOption).filter(key => {
-    return (
-      newOption[key] && !(0, _lodash.isEqual)(newOption[key], oldOption[key])
-    );
+    return newOption[key] && !(0, _lodash.isEqual)(newOption[key], oldOption[key]);
   });
 }
 
@@ -119,34 +74,28 @@ function _default(api, option) {
     // polyfills: () => require('./plugins/polyfills').default,
     // routes: () => require('./plugins/routes').default,
     antd: () => require('./plugins/antd').default,
-    title: () => require('./plugins/title').default,
+    title: () => require('./plugins/title').default
   };
   Object.keys(plugins).forEach(key => {
     if (option[key]) {
       let opts = option[key];
 
       if (key === 'locale') {
-        opts = _objectSpread(
-          {
-            antd: option.antd,
-          },
-          opts,
-        );
+        opts = _objectSpread({
+          antd: option.antd
+        }, opts);
       }
 
       if (key === 'dva') {
-        opts = _objectSpread(
-          {
-            dynamicImport: option.dynamicImport,
-          },
-          toObject(opts),
-        );
+        opts = _objectSpread({
+          dynamicImport: option.dynamicImport
+        }, toObject(opts));
       }
 
       api.registerPlugin({
         id: getId(key),
         apply: plugins[key](),
-        opts,
+        opts
       });
     }
   });

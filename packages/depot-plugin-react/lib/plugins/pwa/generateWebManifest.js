@@ -1,66 +1,23 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.prependPublicPath = prependPublicPath;
 exports.default = generateWebManifest;
 exports.DEFAULT_MANIFEST_FILENAME = exports.PWACOMPAT_PATH = void 0;
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _path = require('path');
+var _path = require("path");
 
-var _url = require('url');
+var _url = require("url");
 
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly)
-      symbols = symbols.filter(function(sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    keys.push.apply(keys, symbols);
-  }
-  return keys;
-}
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    if (i % 2) {
-      ownKeys(source, true).forEach(function(key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(source).forEach(function(key) {
-        Object.defineProperty(
-          target,
-          key,
-          Object.getOwnPropertyDescriptor(source, key),
-        );
-      });
-    }
-  }
-  return target;
-}
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true,
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 const PWACOMPAT_PATH = 'pwacompat.min.js';
 exports.PWACOMPAT_PATH = PWACOMPAT_PATH;
@@ -73,23 +30,18 @@ function prependPublicPath(publicPath = '/', src) {
 
 function generateWebManifest(api, options) {
   const publicPath = api.config.publicPath,
-    log = api.log,
-    absSrcPath = api.paths.absSrcPath,
-    addHTMLLink = api.addHTMLLink,
-    addHTMLHeadScript = api.addHTMLHeadScript,
-    addPageWatcher = api.addPageWatcher,
-    onGenerateFiles = api.onGenerateFiles;
+        log = api.log,
+        absSrcPath = api.paths.absSrcPath,
+        addHTMLLink = api.addHTMLLink,
+        addHTMLHeadScript = api.addHTMLHeadScript,
+        addPageWatcher = api.addPageWatcher,
+        onGenerateFiles = api.onGenerateFiles;
   const defaultWebManifestOptions = {
-    srcPath: (0, _path.join)(absSrcPath, DEFAULT_MANIFEST_FILENAME),
+    srcPath: (0, _path.join)(absSrcPath, DEFAULT_MANIFEST_FILENAME)
   };
 
-  let _defaultWebManifestOp = _objectSpread(
-      {},
-      defaultWebManifestOptions,
-      {},
-      options,
-    ),
-    srcPath = _defaultWebManifestOp.srcPath;
+  let _defaultWebManifestOp = _objectSpread({}, defaultWebManifestOptions, {}, options),
+      srcPath = _defaultWebManifestOp.srcPath;
 
   let manifestFilename = (0, _path.basename)(srcPath); // remove path query
 
@@ -110,17 +62,18 @@ function generateWebManifest(api, options) {
     manifestFilename = DEFAULT_MANIFEST_FILENAME;
   } // add <link rel="manifest">
 
+
   addHTMLLink({
     rel: 'manifest',
-    href: prependPublicPath(publicPath, manifestFilename),
+    href: prependPublicPath(publicPath, manifestFilename)
   }); // use PWACompat(https://github.com/GoogleChromeLabs/pwacompat) for non-compliant browsers
 
   addHTMLHeadScript({
     async: '',
-    src: prependPublicPath(publicPath, PWACOMPAT_PATH),
+    src: prependPublicPath(publicPath, PWACOMPAT_PATH)
   });
   return {
     srcPath,
-    outputPath: manifestFilename,
+    outputPath: manifestFilename
   };
 }

@@ -1,191 +1,169 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.default = _default;
 
-var _chalk = _interopRequireDefault(require('chalk'));
+var _chalk = _interopRequireDefault(require("chalk"));
 
-var _createRouteMiddleware = _interopRequireDefault(
-  require('./createRouteMiddleware'),
-);
+var _createRouteMiddleware = _interopRequireDefault(require("./createRouteMiddleware"));
 
-var _watch = require('../../../getConfig/watch');
+var _watch = require("../../../getConfig/watch");
 
-var _getRouteManager = _interopRequireDefault(require('../getRouteManager'));
+var _getRouteManager = _interopRequireDefault(require("../getRouteManager"));
 
-var _getFilesGenerator = _interopRequireDefault(
-  require('../getFilesGenerator'),
-);
+var _getFilesGenerator = _interopRequireDefault(require("../getFilesGenerator"));
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _default(api) {
   const service = api.service,
-    config = api.config,
-    log = api.log,
-    debug = api.debug;
+        config = api.config,
+        log = api.log,
+        debug = api.debug;
   const cwd = service.cwd;
-  api.registerCommand(
-    'dev',
-    {
-      webpack: true,
-      description: 'start a dev server for development',
-    },
-    (args = {}) => {
-      const RoutesManager = (0, _getRouteManager.default)(service);
-      RoutesManager.fetchRoutes();
-      let port = args.port;
+  api.registerCommand('dev', {
+    webpack: true,
+    description: 'start a dev server for development'
+  }, (args = {}) => {
+    const RoutesManager = (0, _getRouteManager.default)(service);
+    RoutesManager.fetchRoutes();
+    let port = args.port;
 
-      if (!port) {
-        port = 8000;
+    if (!port) {
+      port = 8000;
+    }
+
+    if (process.env.PORT) {
+      port = parseInt(process.env.PORT, 10);
+    }
+
+    service.applyPlugins('onStart');
+    const filesGenerator = (0, _getFilesGenerator.default)(service, {
+      RoutesManager,
+      mountElementId: config.mountElementId
+    });
+    debug('generate files');
+    filesGenerator.generate();
+    let server = null; // Add more service methods.
+
+    service.restart = why => {
+      if (!server) {
+        log.debug(`Server is not ready, ${_chalk.default.underline.cyan('api.restart')} does not work.`);
+        return;
       }
 
-      if (process.env.PORT) {
-        port = parseInt(process.env.PORT, 10);
+      if (why) {
+        log.pending(`Since ${_chalk.default.cyan.underline(why)}, try to restart server...`);
+      } else {
+        log.pending(`Try to restart server...`);
       }
 
-      service.applyPlugins('onStart');
-      const filesGenerator = (0, _getFilesGenerator.default)(service, {
-        RoutesManager,
-        mountElementId: config.mountElementId,
+      (0, _watch.unwatch)();
+      filesGenerator.unwatch();
+      server.close();
+      process.send({
+        type: 'RESTART'
       });
-      debug('generate files');
-      filesGenerator.generate();
-      let server = null; // Add more service methods.
+    };
 
-      service.restart = why => {
-        if (!server) {
-          log.debug(
-            `Server is not ready, ${_chalk.default.underline.cyan(
-              'api.restart',
-            )} does not work.`,
-          );
-          return;
-        }
+    service.refreshBrowser = () => {
+      if (!server) return;
+      server.sockWrite(server.sockets, 'content-changed');
+    };
 
-        if (why) {
-          log.pending(
-            `Since ${_chalk.default.cyan.underline(
-              why,
-            )}, try to restart server...`,
-          );
-        } else {
-          log.pending(`Try to restart server...`);
-        }
+    service.printError = messages => {
+      if (!server) return;
+      messages = typeof messages === 'string' ? [messages] : messages;
+      server.sockWrite(server.sockets, 'errors', messages);
+    };
 
-        (0, _watch.unwatch)();
-        filesGenerator.unwatch();
-        server.close();
-        process.send({
-          type: 'RESTART',
-        });
-      };
+    service.printWarn = messages => {
+      if (!server) return;
+      messages = typeof messages === 'string' ? [messages] : messages;
+      server.sockWrite(server.sockets, 'warns', messages);
+    };
 
-      service.refreshBrowser = () => {
-        if (!server) return;
-        server.sockWrite(server.sockets, 'content-changed');
-      };
+    service.rebuildTmpFiles = () => {
+      filesGenerator.rebuild();
+    };
 
-      service.printError = messages => {
-        if (!server) return;
-        messages = typeof messages === 'string' ? [messages] : messages;
-        server.sockWrite(server.sockets, 'errors', messages);
-      };
+    service.rebuildHTML = () => {
+      // Currently, refresh browser will get new HTML.
+      service.applyPlugins('onHTMLRebuild');
+      service.refreshBrowser();
+    };
 
-      service.printWarn = messages => {
-        if (!server) return;
-        messages = typeof messages === 'string' ? [messages] : messages;
-        server.sockWrite(server.sockets, 'warns', messages);
-      };
+    function startWatch() {
+      filesGenerator.watch();
+      service.userConfig.setConfig(service.config);
+      service.userConfig.watchWithDevServer();
+    }
 
-      service.rebuildTmpFiles = () => {
-        filesGenerator.rebuild();
-      };
+    service._applyPluginsAsync('_beforeDevServerAsync').then(() => {
+      debug('start dev server with af-webpack/dev');
 
-      service.rebuildHTML = () => {
-        // Currently, refresh browser will get new HTML.
-        service.applyPlugins('onHTMLRebuild');
-        service.refreshBrowser();
-      };
+      require('af-webpack/dev').default({
+        cwd,
+        port,
+        base: service.config.base,
+        webpackConfig: service.webpackConfig,
+        proxy: service.config.proxy || {},
+        contentBase: './path-do-not-exists',
 
-      function startWatch() {
-        filesGenerator.watch();
-        service.userConfig.setConfig(service.config);
-        service.userConfig.watchWithDevServer();
-      }
-
-      service
-        ._applyPluginsAsync('_beforeDevServerAsync')
-        .then(() => {
-          debug('start dev server with af-webpack/dev');
-
-          require('af-webpack/dev').default({
-            cwd,
-            port,
-            base: service.config.base,
-            webpackConfig: service.webpackConfig,
-            proxy: service.config.proxy || {},
-            contentBase: './path-do-not-exists',
-
-            _beforeServerWithApp(app) {
-              // @private
-              service.applyPlugins('_beforeServerWithApp', {
-                args: {
-                  app,
-                },
-              });
-            },
-
-            beforeMiddlewares: service.applyPlugins('addMiddlewareAhead', {
-              initialValue: [],
-            }),
-            afterMiddlewares: service.applyPlugins('addMiddleware', {
-              initialValue: [
-                ...(process.env.ROUTE_MIDDLEWARE !== 'none'
-                  ? [(0, _createRouteMiddleware.default)(service)]
-                  : []),
-              ],
-            }),
-
-            beforeServer(devServer) {
-              server = devServer;
-              service.applyPlugins('beforeDevServer', {
-                args: {
-                  server: devServer,
-                },
-              });
-            },
-
-            afterServer(devServer) {
-              service.applyPlugins('afterDevServer', {
-                args: {
-                  server: devServer,
-                },
-              });
-              startWatch();
-            },
-
-            onCompileDone({ isFirstCompile, stats }) {
-              service.__chunks = stats.compilation.chunks;
-              service.applyPlugins('onDevCompileDone', {
-                args: {
-                  isFirstCompile,
-                  stats,
-                },
-              });
-
-              if (isFirstCompile) {
-              }
-            },
+        _beforeServerWithApp(app) {
+          // @private
+          service.applyPlugins('_beforeServerWithApp', {
+            args: {
+              app
+            }
           });
-        })
-        .catch(e => {
-          log.error(e);
-        });
-    },
-  );
+        },
+
+        beforeMiddlewares: service.applyPlugins('addMiddlewareAhead', {
+          initialValue: []
+        }),
+        afterMiddlewares: service.applyPlugins('addMiddleware', {
+          initialValue: [...(process.env.ROUTE_MIDDLEWARE !== 'none' ? [(0, _createRouteMiddleware.default)(service)] : [])]
+        }),
+
+        beforeServer(devServer) {
+          server = devServer;
+          service.applyPlugins('beforeDevServer', {
+            args: {
+              server: devServer
+            }
+          });
+        },
+
+        afterServer(devServer) {
+          service.applyPlugins('afterDevServer', {
+            args: {
+              server: devServer
+            }
+          });
+          startWatch();
+        },
+
+        onCompileDone({
+          isFirstCompile,
+          stats
+        }) {
+          service.__chunks = stats.compilation.chunks;
+          service.applyPlugins('onDevCompileDone', {
+            args: {
+              isFirstCompile,
+              stats
+            }
+          });
+
+          if (isFirstCompile) {}
+        }
+
+      });
+    }).catch(e => {
+      log.error(e);
+    });
+  });
 }

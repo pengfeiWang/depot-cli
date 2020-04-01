@@ -1,22 +1,17 @@
 import { register } from 'register-service-worker'; // polyfill the CustomEvent in ie9/10/11
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
 
-(function() {
+(function () {
   if (typeof window.CustomEvent === 'function') return false;
 
   function CustomEvent(event, params) {
     params = params || {
       bubbles: false,
       cancelable: false,
-      detail: undefined,
+      detail: undefined
     };
     var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(
-      event,
-      params.bubbles,
-      params.cancelable,
-      params.detail,
-    );
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
     return evt;
   }
 
@@ -26,18 +21,18 @@ import { register } from 'register-service-worker'; // polyfill the CustomEvent 
 
 function dispatchServiceWorkerEvent(eventName, eventData) {
   var event = new CustomEvent(eventName, {
-    detail: eventData,
+    detail: eventData
   });
   window.dispatchEvent(event);
 }
 
-export default function(swDest) {
-  register(''.concat(process.env.BASE_URL).concat(swDest), {
+export default function (swDest) {
+  register("".concat(process.env.BASE_URL).concat(swDest), {
     updated: function updated(registration) {
       dispatchServiceWorkerEvent('sw.updated', registration);
     },
     offline: function offline() {
       dispatchServiceWorkerEvent('sw.offline', {});
-    },
+    }
   });
 }

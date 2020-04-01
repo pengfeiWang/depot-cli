@@ -1,79 +1,31 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.modifyRoutes = modifyRoutes;
 exports.default = void 0;
 
-var _fs = require('fs');
+var _fs = require("fs");
 
-var _path = require('path');
+var _path = require("path");
 
-var _assert = _interopRequireDefault(require('assert'));
+var _assert = _interopRequireDefault(require("assert"));
 
-var _mustache = _interopRequireDefault(require('mustache'));
+var _mustache = _interopRequireDefault(require("mustache"));
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly)
-      symbols = symbols.filter(function(sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    keys.push.apply(keys, symbols);
-  }
-  return keys;
-}
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    if (i % 2) {
-      ownKeys(source, true).forEach(function(key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(source).forEach(function(key) {
-        Object.defineProperty(
-          target,
-          key,
-          Object.getOwnPropertyDescriptor(source, key),
-        );
-      });
-    }
-  }
-  return target;
-}
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true,
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var _default = (api, option) => {
   const paths = api.paths,
-    config = api.config;
-  const wrapperPath = (0, _path.join)(
-    paths.absTmpDirPath,
-    './TitleWrapper.jsx',
-  );
+        config = api.config;
+  const wrapperPath = (0, _path.join)(paths.absTmpDirPath, './TitleWrapper.jsx');
   api.onGenerateFiles(() => {
     writeTitleWrapper(wrapperPath, option.useLocale, option);
   });
@@ -82,13 +34,15 @@ var _default = (api, option) => {
     api.rebuildTmpFiles();
     api.rebuildHTML();
   });
-  api.modifyHTMLContext((memo, { route }) => {
+  api.modifyHTMLContext((memo, {
+    route
+  }) => {
     if (option) {
       const _parseOption = parseOption(option),
-        defaultTitle = _parseOption.defaultTitle;
+            defaultTitle = _parseOption.defaultTitle;
 
       return _objectSpread({}, memo, {
-        title: config.exportStatic ? route._title : defaultTitle,
+        title: config.exportStatic ? route._title : defaultTitle
       });
     }
 
@@ -97,13 +51,12 @@ var _default = (api, option) => {
   api.modifyRoutes(memo => {
     return modifyRoutes(memo, option);
   });
-  api.onPatchRoute(({ route }) => {
+  api.onPatchRoute(({
+    route
+  }) => {
     if (option && (!route.routes || !route.routes.length) && route.title) {
       // only open this plugin when option exist
-      route.Routes = [
-        ...(route.Routes || []),
-        (0, _path.relative)(paths.cwd, wrapperPath),
-      ];
+      route.Routes = [...(route.Routes || []), (0, _path.relative)(paths.cwd, wrapperPath)];
     }
   });
 };
@@ -111,14 +64,11 @@ var _default = (api, option) => {
 exports.default = _default;
 
 function writeTitleWrapper(targetPath, useLocale, option) {
-  const wrapperTpl = (0, _fs.readFileSync)(
-    (0, _path.join)(__dirname, './template/TitleWrapper.js.tpl'),
-    'utf-8',
-  );
+  const wrapperTpl = (0, _fs.readFileSync)((0, _path.join)(__dirname, './template/TitleWrapper.js.tpl'), 'utf-8');
 
   const wrapperContent = _mustache.default.render(wrapperTpl, {
     useLocale,
-    option,
+    option
   });
 
   (0, _fs.writeFileSync)(targetPath, wrapperContent, 'utf-8');
@@ -132,10 +82,7 @@ function parseOption(option) {
 
   if (typeof option === 'object') {
     defaultTitle = option.defaultTitle;
-    (0, _assert.default)(
-      defaultTitle,
-      'defaultTitle in title option is required.',
-    );
+    (0, _assert.default)(defaultTitle, 'defaultTitle in title option is required.');
     format = option.format || format;
     separator = option.separator || separator;
   }
@@ -143,23 +90,23 @@ function parseOption(option) {
   return {
     defaultTitle,
     format,
-    separator,
+    separator
   };
 }
 
 function modifyRoutes(memo, option) {
   if (option) {
     const _parseOption2 = parseOption(option),
-      defaultTitle = _parseOption2.defaultTitle,
-      format = _parseOption2.format,
-      separator = _parseOption2.separator;
+          defaultTitle = _parseOption2.defaultTitle,
+          format = _parseOption2.format,
+          separator = _parseOption2.separator;
 
     setDefaultTitleToRoutes({
       routes: memo,
       defaultTitle,
       format,
       separator,
-      globalDefaultTitle: defaultTitle,
+      globalDefaultTitle: defaultTitle
     });
   }
 
@@ -172,14 +119,11 @@ function setDefaultTitleToRoutes({
   parentTitle,
   format,
   separator,
-  globalDefaultTitle,
+  globalDefaultTitle
 }) {
   routes.forEach(route => {
     if (route.title) {
-      route._title = format
-        .replace(/\{current\}/g, route.title)
-        .replace(/\{parent\}/g, parentTitle || '')
-        .replace(/\{separator\}/g, parentTitle ? separator : '');
+      route._title = format.replace(/\{current\}/g, route.title).replace(/\{parent\}/g, parentTitle || '').replace(/\{separator\}/g, parentTitle ? separator : '');
     } else {
       // title no exist, use the defaultTitle
       route._title = defaultTitle;
@@ -195,7 +139,7 @@ function setDefaultTitleToRoutes({
         parentTitle: route.title || parentTitle,
         format,
         separator,
-        globalDefaultTitle,
+        globalDefaultTitle
       });
     }
   });

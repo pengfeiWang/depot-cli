@@ -1,6 +1,6 @@
 {
 	"name": "depot-build-dev",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"main": "index.js",
 	"license": "MIT",
 	"repository": {
@@ -30,8 +30,8 @@
 		"debug": "4.1.0",
 		"depot-babel-preset": "0.0.9",
 		"depot-history": "0.0.2",
-		"depot-plugin-react": "0.0.9",
-		"depot-utils": "0.0.4",
+		"depot-plugin-react": "0.0.10",
+		"depot-utils": "0.0.5",
 		"didyoumean": "1.2.1",
 		"dotenv": "6.2.0",
 		"ejs": "2.6.1",

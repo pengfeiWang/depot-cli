@@ -1,6 +1,6 @@
 {
   "name": "depot-babel-preset",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "./lib/index",
   "repository": {
     "type": "git",

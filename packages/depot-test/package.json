@@ -1,6 +1,6 @@
 {
   "name": "depot-test",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "bin": {
     "depot-test": "./bin/depot-test.js"
   },
@@ -26,7 +26,7 @@
     "core-js": "3.1.4",
     "debug": "4.1.1",
     "depot-babel-preset": "0.0.9",
-    "depot-utils": "0.0.4",
+    "depot-utils": "0.0.5",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "identity-obj-proxy": "3.0.0",

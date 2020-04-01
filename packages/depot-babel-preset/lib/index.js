@@ -1,10 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.default = _default;
-
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
@@ -54,9 +47,11 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _default(context, opts = {}) {
-  const nodeEnv = process.env.NODE_ENV;
-  const _opts$useBuiltIns = opts.useBuiltIns,
+export default function(context) {
+  var opts =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var nodeEnv = process.env.NODE_ENV;
+  var _opts$useBuiltIns = opts.useBuiltIns,
     useBuiltIns = _opts$useBuiltIns === void 0 ? false : _opts$useBuiltIns,
     _opts$loose = opts.loose,
     loose = _opts$loose === void 0 ? false : _opts$loose,
@@ -69,9 +64,9 @@ function _default(context, opts = {}) {
         : _opts$targets,
     _opts$env = opts.env,
     env = _opts$env === void 0 ? {} : _opts$env;
-  const transformRuntime =
+  var transformRuntime =
     'transformRuntime' in opts ? opts.transformRuntime : {};
-  const exclude = [
+  var exclude = [
     'transform-typeof-symbol',
     'transform-unicode-regex',
     'transform-sticky-regex',
@@ -81,14 +76,14 @@ function _default(context, opts = {}) {
     'transform-modules-amd',
     'transform-literals',
   ];
-  const plugins = [
+  var plugins = [
     require.resolve('babel-plugin-react-require'),
     require.resolve('@babel/plugin-syntax-dynamic-import'),
     [
       require.resolve('@babel/plugin-proposal-object-rest-spread'),
       {
-        loose,
-        useBuiltIns,
+        loose: loose,
+        useBuiltIns: useBuiltIns,
       },
     ],
     require.resolve('@babel/plugin-proposal-optional-catch-binding'),
@@ -110,13 +105,13 @@ function _default(context, opts = {}) {
     [
       require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
       {
-        loose,
+        loose: loose,
       },
     ],
     [
       require.resolve('@babel/plugin-proposal-optional-chaining'),
       {
-        loose,
+        loose: loose,
       },
     ],
     [
@@ -152,15 +147,15 @@ function _default(context, opts = {}) {
             targets: {
               browsers: ['last 2 versions', 'ie >= 9'],
             },
-            loose,
+            loose: loose,
             modules: 'commonjs',
-            exclude,
+            exclude: exclude,
           },
           env,
         ),
       ],
       require.resolve('@babel/preset-react'),
     ],
-    plugins,
+    plugins: plugins,
   };
 }

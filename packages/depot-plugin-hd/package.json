@@ -1,6 +1,6 @@
 {
   "name": "depot-plugin-hd",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "lib/index.js",
   "repository": {
     "type": "git",

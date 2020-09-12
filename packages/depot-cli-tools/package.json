@@ -33,7 +33,7 @@
     "slash2": "^2.0.0",
     "through2": "^2.0.3",
     "vinyl-fs": "^3.0.3",
-    "yargs-parser": "^11.1.0"
+    "yargs-parser": "^13.1.2"
   },
   "files": [
     "bin",
